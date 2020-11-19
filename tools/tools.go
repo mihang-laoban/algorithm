@@ -1,4 +1,4 @@
-package dp
+package tools
 
 func Min(a int, b int) int {
 	if a > b {
@@ -8,7 +8,7 @@ func Min(a int, b int) int {
 }
 
 func Max(a int, b int) int {
-	if a > b{
+	if a > b {
 		return a
 	}
 	return b
