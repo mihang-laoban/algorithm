@@ -13,9 +13,20 @@ type LinkedList struct {
 }
 
 func (list *LinkedList) Insert(val int) {
-	list.Val = val
+	if list.head == nil {
+		list.head = &Node{Val: val}
+		return
+	}
+	tmp := list.head
+	for tmp.Next != nil {
+		tmp = tmp.Next
+	}
+	tmp.Next = &Node{Val: val}
 }
 
 func (list *LinkedList) Show() {
-	fmt.Println(list.Val)
+	for list.head != nil {
+		fmt.Println(list.head.Val)
+		list.head = list.head.Next
+	}
 }

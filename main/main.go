@@ -16,6 +16,8 @@ func main() {
 
 	test := ds.LinkedList{}
 	test.Insert(15)
+	test.Insert(3215)
+	test.Insert(15)
 	test.Show()
 
 	//head := ds.Node{}
