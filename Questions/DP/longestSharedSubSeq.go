@@ -13,8 +13,8 @@ func FindLongestSharedSubSeq() {
 	size2 := len(str2)
 
 	dp := tools.InitMemo(size1+1, size2+1)
-	for j := 1; j < size2+1; j++ {
-		for i := 1; i < size1+1; i++ {
+	for i := 1; i < size1+1; i++ {
+		for j := 1; j < size2+1; j++ {
 			if str1[i-1] == str2[j-1] {
 				dp[i][j] = 1 + dp[i-1][j-1]
 			} else {
