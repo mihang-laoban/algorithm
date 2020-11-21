@@ -1,6 +1,6 @@
-package dp
+package ds
 
 type Node struct {
 	Next *Node
-	Val int
+	Val  int
 }

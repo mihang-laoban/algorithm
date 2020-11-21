@@ -1,6 +1,7 @@
-package dp
+package test
 
 import (
+	"dp/tools"
 	"fmt"
 	"testing"
 )
@@ -40,8 +41,8 @@ func TestFindLargestArrSum(t *testing.T) {
 	cur := 0
 	res := cur
 	for i := 0; i < len(arr); i++ {
-		tmp := Max(arr[i], arr[i]+cur)
-		res = Max(tmp, res)
+		tmp := tools.Max(arr[i], arr[i]+cur)
+		res = tools.Max(tmp, res)
 		cur = tmp
 	}
 	fmt.Println(res)
@@ -55,7 +56,7 @@ func TestFindLargestSubSeq(t *testing.T) {
 
 func FindLargestSubSeq(str string) {
 	size := len(str)
-	dp := InitMemo(size, size)
+	dp := tools.InitMemo(size, size)
 	for i := 0; i < size; i++ {
 		dp[i][i] = 1
 	}
@@ -65,7 +66,7 @@ func FindLargestSubSeq(str string) {
 			if str[i] == str[j] {
 				dp[i][j] = 2 + dp[i+1][j-1]
 			} else {
-				dp[i][j] = Max(dp[i+1][j], dp[i][j-1])
+				dp[i][j] = tools.Max(dp[i+1][j], dp[i][j-1])
 			}
 		}
 	}
@@ -79,7 +80,7 @@ func TestFindLongestSharedSubSeq(t *testing.T) {
 	size1 := len(text1)
 	size2 := len(text2)
 
-	dp := InitMemo(size1+1, size2+1)
+	dp := tools.InitMemo(size1+1, size2+1)
 	for j := 1; j <= size2; j++ {
 		for i := 1; i <= size1; i++ {
 			str1 := string(text1[i-1])
@@ -87,7 +88,7 @@ func TestFindLongestSharedSubSeq(t *testing.T) {
 			if str1 == str2 {
 				dp[i][j] = dp[i-1][j-1] + 1
 			} else {
-				dp[i][j] = Max(dp[i-1][j], dp[i][j-1])
+				dp[i][j] = tools.Max(dp[i-1][j], dp[i][j-1])
 			}
 		}
 	}
@@ -101,13 +102,13 @@ func TestFindLongestSharedSubSeq2(t *testing.T) {
 	size1 := len(text1)
 	size2 := len(text2)
 
-	dp := InitMemo(size1+1, size2+1)
+	dp := tools.InitMemo(size1+1, size2+1)
 	for i := 1; i <= size1; i++ {
 		for j := 1; j <= size2; j++ {
 			if text1[i-1] == text2[j-1] {
 				dp[i][j] = dp[i-1][j-1] + 1
 			} else {
-				dp[i][j] = Max(dp[i-1][j], dp[i][j-1])
+				dp[i][j] = tools.Max(dp[i-1][j], dp[i][j-1])
 			}
 		}
 	}
