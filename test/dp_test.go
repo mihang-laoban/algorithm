@@ -238,6 +238,7 @@ func TestIncrementalSubSeq(t *testing.T) {
 	arr1 := []int{10, 9, 1, 5, 2, 6, 66, 18}
 	findIncrement(arr1)
 	findIncrementNum(arr1)
+	findBySplit(arr1)
 }
 
 func findIncrement(arr []int) {
@@ -257,6 +258,38 @@ func findIncrement(arr []int) {
 		}
 	}
 	fmt.Println(res)
+}
+
+func findBySplit(arr []int) {
+	length := 1
+	n := len(arr)
+	if n == 0 {
+		fmt.Println(0)
+	}
+	d := make([]int, n+1)
+	d[length] = arr[0]
+
+	for i := 1; i < n; i++ {
+		if arr[i] > d[length] {
+			length++
+			d[length] = arr[i]
+		} else {
+			l := 1
+			r := length
+			pos := 0
+			for l <= r {
+				mid := (l + r) / 2
+				if d[mid] < arr[i] {
+					pos = mid
+					l = mid + 1
+				} else {
+					r = mid - 1
+				}
+			}
+			d[pos+1] = arr[i]
+		}
+	}
+	fmt.Println(length)
 }
 
 func findIncrementNum(arr []int) {
