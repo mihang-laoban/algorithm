@@ -12,6 +12,9 @@ func main() {
 	tmp.Insert(4)
 	tmp.Insert(5)
 	tmp.Display()
+
+	tmp.Reverse1()
 	tmp.Display()
+	tmp.Reverse2()
 	tmp.Display()
 }
