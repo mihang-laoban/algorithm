@@ -8,23 +8,30 @@ type Node struct {
 }
 
 type LinkedList struct {
-	Head *Node
+	head   *Node
+	length int
 }
 
 func (LinkedList *LinkedList) Append(x int) {
-	if LinkedList.Head == nil {
-		LinkedList.Head = &Node{Val: x}
+	if LinkedList.head == nil {
+		LinkedList.length++
+		LinkedList.head = &Node{Val: x}
 		return
 	}
-	tmp := LinkedList.Head
+	tmp := LinkedList.head
+	LinkedList.length++
 	for tmp.Next != nil {
 		tmp = tmp.Next
 	}
 	tmp.Next = &Node{Val: x}
 }
 
+func (LinkedList *LinkedList) Size() int {
+	return LinkedList.length
+}
+
 func (LinkedList *LinkedList) InnerDisplay() {
-	tmp := LinkedList.Head
+	tmp := LinkedList.head
 	for tmp != nil {
 		fmt.Print(tmp.Val)
 		tmp = tmp.Next
@@ -33,7 +40,12 @@ func (LinkedList *LinkedList) InnerDisplay() {
 }
 
 func (LinkedList *LinkedList) Display() {
-	LinkedList._display(LinkedList.Head)
+	LinkedList._display(LinkedList.head)
+}
+
+func (LinkedList *LinkedList) DisplayR() {
+	LinkedList._displayR(LinkedList.head)
+	fmt.Println()
 }
 
 func (LinkedList *LinkedList) _display(node *Node) {
@@ -45,12 +57,19 @@ func (LinkedList *LinkedList) _display(node *Node) {
 	fmt.Println()
 }
 
+func (LinkedList *LinkedList) _displayR(node *Node) {
+	fmt.Print(node.Val)
+	if node.Next != nil {
+		LinkedList._displayR(node.Next)
+	}
+}
+
 func (LinkedList *LinkedList) Reverse1() {
-	LinkedList.Head = LinkedList._reverse1(LinkedList.Head)
+	LinkedList.head = LinkedList._reverse1(LinkedList.head)
 }
 
 func (LinkedList *LinkedList) Reverse2() {
-	LinkedList.Head = LinkedList._reverse2(LinkedList.Head)
+	LinkedList.head = LinkedList._reverse2(LinkedList.head)
 }
 
 func (LinkedList *LinkedList) _reverse1(head *Node) *Node {
@@ -75,4 +94,20 @@ func (LinkedList *LinkedList) _reverse2(head *Node) *Node {
 	return tmp
 }
 
-fun
+func (LinkedList *LinkedList) Prepend(x int) {
+	LinkedList.length++
+	LinkedList.head = LinkedList._prepend(x)
+}
+
+func (LinkedList *LinkedList) _prepend(x int) *Node {
+	tmp := &Node{Val: x}
+	tmp.Next = LinkedList.head
+	return tmp
+}
+
+func (LinkedList *LinkedList) IsEmpty() bool {
+	if LinkedList.head == nil {
+		return true
+	}
+	return false
+}
