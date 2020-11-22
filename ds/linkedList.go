@@ -11,20 +11,20 @@ type LinkedList struct {
 	Head *Node
 }
 
-func (linkedList *LinkedList) Append(x int) {
-	if linkedList.Head == nil {
-		linkedList.Head = &Node{Val: x}
+func (LinkedList *LinkedList) Append(x int) {
+	if LinkedList.Head == nil {
+		LinkedList.Head = &Node{Val: x}
 		return
 	}
-	tmp := linkedList.Head
+	tmp := LinkedList.Head
 	for tmp.Next != nil {
 		tmp = tmp.Next
 	}
 	tmp.Next = &Node{Val: x}
 }
 
-func (linkedList *LinkedList) InnerDisplay() {
-	tmp := linkedList.Head
+func (LinkedList *LinkedList) InnerDisplay() {
+	tmp := LinkedList.Head
 	for tmp != nil {
 		fmt.Print(tmp.Val)
 		tmp = tmp.Next
@@ -32,11 +32,11 @@ func (linkedList *LinkedList) InnerDisplay() {
 	fmt.Println()
 }
 
-func (linkedList *LinkedList) Display() {
-	linkedList._display(linkedList.Head)
+func (LinkedList *LinkedList) Display() {
+	LinkedList._display(LinkedList.Head)
 }
 
-func (linkedList *LinkedList) _display(node *Node) {
+func (LinkedList *LinkedList) _display(node *Node) {
 	tmp := node
 	for tmp != nil {
 		fmt.Print(tmp.Val)
@@ -45,15 +45,15 @@ func (linkedList *LinkedList) _display(node *Node) {
 	fmt.Println()
 }
 
-func (linkedList *LinkedList) Reverse1() {
-	linkedList.Head = linkedList._reverse1(linkedList.Head)
+func (LinkedList *LinkedList) Reverse1() {
+	LinkedList.Head = LinkedList._reverse1(LinkedList.Head)
 }
 
-func (linkedList *LinkedList) Reverse2() {
-	linkedList.Head = linkedList._reverse2(linkedList.Head)
+func (LinkedList *LinkedList) Reverse2() {
+	LinkedList.Head = LinkedList._reverse2(LinkedList.Head)
 }
 
-func (linkedList *LinkedList) _reverse1(head *Node) *Node {
+func (LinkedList *LinkedList) _reverse1(head *Node) *Node {
 	cur := head
 	var pre *Node
 	for cur != nil {
@@ -74,3 +74,5 @@ func (LinkedList *LinkedList) _reverse2(head *Node) *Node {
 	head.Next = nil
 	return tmp
 }
+
+fun
