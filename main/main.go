@@ -6,13 +6,11 @@ import (
 
 func main() {
 	tmp := ds.LinkedList{}
-	tmp.Insert(1)
-	tmp.Insert(2)
-	tmp.Insert(3)
-	tmp.Insert(4)
-	tmp.Insert(5)
+	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	for i := 0; i < len(arr); i++ {
+		tmp.Insert(arr[i])
+	}
 	tmp.Display()
-
 	tmp.Reverse1()
 	tmp.Display()
 	tmp.Reverse2()
