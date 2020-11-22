@@ -237,6 +237,7 @@ func findContinuous(arr []int) {
 func TestIncrementalSubSeq(t *testing.T) {
 	arr1 := []int{10, 9, 1, 5, 2, 6, 66, 18}
 	findIncrement(arr1)
+	findIncrementNum(arr1)
 }
 
 func findIncrement(arr []int) {
@@ -253,6 +254,43 @@ func findIncrement(arr []int) {
 				dp[i] = tools.Max(dp[i], 1+dp[j])
 				res = tools.Max(res, dp[i])
 			}
+		}
+	}
+	fmt.Println(res)
+}
+
+func findIncrementNum(arr []int) {
+	s1 := len(arr)
+	if s1 == 0 {
+		fmt.Println(0)
+	}
+	dp := make([]int, s1)
+	count := make([]int, s1)
+	for i := 0; i < s1; i++ {
+		dp[i] = 1
+		count[i] = 1
+
+	}
+	for i := 1; i < s1; i++ {
+		for j := 0; j < i; j++ {
+			if arr[i] > arr[j] {
+				if dp[j]+1 > dp[i] {
+					dp[i] = dp[j] + 1
+					count[i] = count[j]
+				} else if dp[j]+1 == dp[i] {
+					count[i] += count[j]
+				}
+			}
+		}
+	}
+	maxLen := 0
+	for i := 0; i < s1; i++ {
+		maxLen = tools.Max(dp[i], maxLen)
+	}
+	res := 0
+	for i := 0; i < s1; i++ {
+		if dp[i] == maxLen {
+			res += count[i]
 		}
 	}
 	fmt.Println(res)
