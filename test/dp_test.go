@@ -269,7 +269,6 @@ func findIncrementNum(arr []int) {
 	for i := 0; i < s1; i++ {
 		dp[i] = 1
 		count[i] = 1
-
 	}
 	for i := 1; i < s1; i++ {
 		for j := 0; j < i; j++ {
