@@ -111,3 +111,15 @@ func (LinkedList *LinkedList) IsEmpty() bool {
 	}
 	return false
 }
+
+func (LinkedList *LinkedList) _reverse3(head *Node) *Node {
+	var pre *Node
+	cur := head
+	for cur != nil {
+		tmp := cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = tmp
+	}
+	return pre
+}
