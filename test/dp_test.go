@@ -243,7 +243,7 @@ func TestIncrementalSubSeq(t *testing.T) {
 	}
 
 	res := 1
-	for i := 0; i < s1; i++ {
+	for i := 1; i < s1; i++ {
 		for j := 0; j < i; j++ {
 			if arr1[i] > arr1[j] {
 				dp[i] = tools.Max(dp[i], 1+dp[j])
