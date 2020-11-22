@@ -77,41 +77,179 @@ func FindLargestSubSeq(str string) {
 func TestFindLongestSharedSubSeq(t *testing.T) {
 	text1 := "abcde"
 	text2 := "ade"
-	size1 := len(text1)
-	size2 := len(text2)
 
-	dp := tools.InitMemo(size1+1, size2+1)
-	for j := 1; j <= size2; j++ {
-		for i := 1; i <= size1; i++ {
-			str1 := string(text1[i-1])
-			str2 := string(text2[j-1])
-			if str1 == str2 {
-				dp[i][j] = dp[i-1][j-1] + 1
+	s1 := len(text1)
+	s2 := len(text2)
+	dp := make([][]int, s1+1)
+	for i := 0; i < s1+1; i++ {
+		dp[i] = make([]int, s2+1)
+	}
+	for i := 1; i < s1+1; i++ {
+		for j := 1; j < s2+1; j++ {
+			if text1[i-1] == text2[j-1] {
+				dp[i][j] = 1 + dp[i-1][j-1]
 			} else {
 				dp[i][j] = tools.Max(dp[i-1][j], dp[i][j-1])
 			}
 		}
 	}
-
-	fmt.Println(dp[size1][size2])
+	fmt.Println(dp[s1][s2])
 }
 
-func TestFindLongestSharedSubSeq2(t *testing.T) {
+func TestLongestCommonSubsequence(t *testing.T) {
 	text1 := "abcde"
 	text2 := "ade"
-	size1 := len(text1)
-	size2 := len(text2)
+	m := len(text1)
+	n := len(text2)
 
-	dp := tools.InitMemo(size1+1, size2+1)
-	for i := 1; i <= size1; i++ {
-		for j := 1; j <= size2; j++ {
-			if text1[i-1] == text2[j-1] {
-				dp[i][j] = dp[i-1][j-1] + 1
+	dp := make([][]int, m+1)
+	for i := 0; i < m+1; i++ {
+		dp[i] = make([]int, 2)
+	}
+
+	for j := 1; j <= n; j++ {
+		a := j % 2
+		b := 1 - a
+		for i := 1; i <= m; i++ {
+			if text2[j-1] == text1[i-1] {
+				dp[i][a] = dp[i-1][b] + 1
 			} else {
-				dp[i][j] = tools.Max(dp[i-1][j], dp[i][j-1])
+				dp[i][a] = tools.Max(dp[i-1][a], dp[i][b])
 			}
 		}
 	}
+	fmt.Println(dp[m][n%2])
+}
 
-	fmt.Println(dp[size1][size2])
+func TestRobotPathSum(t *testing.T) {
+	m := 7
+	n := 3
+	dp := make([][]int, m)
+	for i := 0; i < m; i++ {
+		dp[i] = make([]int, n)
+	}
+
+	for i := 0; i < m; i++ {
+		dp[i][0] = 1
+	}
+	for i := 0; i < n; i++ {
+		dp[0][i] = 1
+	}
+
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			dp[i][j] = dp[i-1][j] + dp[i][j-1]
+		}
+	}
+	fmt.Println(dp[m-1][n-1])
+}
+
+func TestRobotPathSumWithObstacle(t *testing.T) {
+	m := 3
+	n := 3
+	arr := make([][]int, m)
+	for i := 0; i < m; i++ {
+		arr[i] = make([]int, n)
+	}
+	arr[1][1] = 1
+
+	dp := make([][]int, m)
+	for i := 0; i < m; i++ {
+		dp[i] = make([]int, n)
+	}
+
+	for i := 0; i < m; i++ {
+		if arr[i][0] == 1 {
+			dp[i][0] = 0
+		} else {
+			dp[i][0] = 1
+		}
+	}
+
+	for i := 0; i < n; i++ {
+		if arr[0][i] == 1 {
+			dp[0][i] = 0
+		} else {
+			dp[0][i] = 1
+		}
+	}
+
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			if arr[i][j] == 1 {
+				dp[i][j] = 0
+			} else {
+				dp[i][j] = dp[i][j-1] + dp[i-1][j]
+			}
+		}
+	}
+	fmt.Println(dp[m-1][n-1])
+}
+
+func TestJump(t *testing.T) {
+	arr1 := []int{2, 3, 1, 1, 6}
+	arr2 := []int{4, 2, 1, 0, 0, 6}
+
+	JumpGame(arr1)
+	JumpGame(arr2)
+}
+
+func JumpGame(arr []int) {
+	index := len(arr) - 1
+	for i := index - 1; i >= 0; i-- {
+		if i+arr[i] >= index {
+			index = i
+		}
+	}
+	if index == 0 {
+		fmt.Println(true)
+		return
+	}
+	fmt.Println(false)
+}
+
+func TestContinuousIncrementalSubSeq(t *testing.T) {
+	arr1 := []int{6, 6, 6, 6, 6, 6}
+	arr2 := []int{1, 3, 5, 0, 7}
+
+	findContinuous(arr1)
+	findContinuous(arr2)
+}
+
+func findContinuous(arr []int) {
+	res := 0
+	s1 := len(arr)
+	dp := make([]int, s1)
+	for i := 0; i < s1; i++ {
+		dp[i] = 1
+	}
+
+	for i := 1; i < s1; i++ {
+		if arr[i] > arr[i-1] {
+			dp[i] = 1 + dp[i-1]
+		}
+		res = tools.Max(dp[i], res)
+	}
+
+	fmt.Println(res)
+}
+
+func TestIncrementalSubSeq(t *testing.T) {
+	arr1 := []int{10, 9, 1, 5, 2, 6, 66, 18}
+	s1 := len(arr1)
+	dp := make([]int, s1)
+	for i := 0; i < s1; i++ {
+		dp[i] = 1
+	}
+
+	res := 1
+	for i := 0; i < s1; i++ {
+		for j := 0; j < i; j++ {
+			if arr1[i] > arr1[j] {
+				dp[i] = tools.Max(dp[i], 1+dp[j])
+				res = tools.Max(res, dp[i])
+			}
+		}
+	}
+	fmt.Println(res)
 }
