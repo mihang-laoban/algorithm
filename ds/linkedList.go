@@ -11,7 +11,7 @@ type LinkedList struct {
 	Head *Node
 }
 
-func (linkedList *LinkedList) Insert(x int) {
+func (linkedList *LinkedList) Append(x int) {
 	if linkedList.Head == nil {
 		linkedList.Head = &Node{Val: x}
 		return
