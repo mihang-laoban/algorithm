@@ -113,13 +113,14 @@ func (LinkedList *LinkedList) IsEmpty() bool {
 }
 
 func (LinkedList *LinkedList) _reverse3(node *Node) *Node {
-	var pre *Node
 	cur := node
+	var pre *Node
 	for cur != nil {
 		tmp := cur.Next
 		cur.Next = pre
 		pre = cur
 		cur = tmp
 	}
+
 	return pre
 }
