@@ -65,7 +65,7 @@ func (LinkedList *LinkedList) _displayR(node *Node) {
 }
 
 func (LinkedList *LinkedList) Reverse1() {
-	LinkedList.head = LinkedList._reverse1(LinkedList.head)
+	LinkedList.head = LinkedList._reverse3(LinkedList.head)
 }
 
 func (LinkedList *LinkedList) Reverse2() {
@@ -112,9 +112,9 @@ func (LinkedList *LinkedList) IsEmpty() bool {
 	return false
 }
 
-func (LinkedList *LinkedList) _reverse3(head *Node) *Node {
+func (LinkedList *LinkedList) _reverse3(node *Node) *Node {
 	var pre *Node
-	cur := head
+	cur := node
 	for cur != nil {
 		tmp := cur.Next
 		cur.Next = pre

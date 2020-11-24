@@ -122,7 +122,7 @@ func TestLongestCommonSubsequence(t *testing.T) {
 }
 
 func TestRobotPathSum(t *testing.T) {
-	m := 7
+	m := 4
 	n := 3
 	dp := make([][]int, m)
 	for i := 0; i < m; i++ {
@@ -326,4 +326,27 @@ func findIncrementNum(arr []int) {
 		}
 	}
 	fmt.Println(res)
+}
+
+func TestFib(t *testing.T) {
+	n := 6
+	dp :=  make([]int, n+1)
+	dp[1] = 1;
+	dp[2] = 1;
+	for i := 3; i < n+1; i++ {
+		dp[i] = dp[i-1] + dp[i-2]
+	}
+	fmt.Println(dp[n])
+}
+
+func TestFibSingle(t *testing.T) {
+	n := 6
+	pre := 1
+	cur := 1
+	for i := 3; i <= n; i++ {
+		sum := pre + cur
+		pre = cur
+		cur = sum
+	}
+	fmt.Println(cur)
 }
