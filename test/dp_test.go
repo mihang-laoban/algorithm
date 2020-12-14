@@ -77,41 +77,67 @@ func FindLargestSubSeq(str string) {
 func TestFindLongestSharedSubSeq(t *testing.T) {
 	text1 := "abcde"
 	text2 := "ade"
-	size1 := len(text1)
-	size2 := len(text2)
 
-	dp := tools.InitMemo(size1+1, size2+1)
-	for j := 1; j <= size2; j++ {
-		for i := 1; i <= size1; i++ {
-			str1 := string(text1[i-1])
-			str2 := string(text2[j-1])
-			if str1 == str2 {
-				dp[i][j] = dp[i-1][j-1] + 1
+	s1 := len(text1)
+	s2 := len(text2)
+	dp := make([][]int, s1+1)
+	for i := 0; i < s1+1; i++ {
+		dp[i] = make([]int, s2+1)
+	}
+	for i := 1; i < s1+1; i++ {
+		for j := 1; j < s2+1; j++ {
+			if text1[i-1] == text2[j-1] {
+				dp[i][j] = 1 + dp[i-1][j-1]
 			} else {
 				dp[i][j] = tools.Max(dp[i-1][j], dp[i][j-1])
 			}
 		}
 	}
-
-	fmt.Println(dp[size1][size2])
+	fmt.Println(dp[s1][s2])
 }
 
-func TestFindLongestSharedSubSeq2(t *testing.T) {
+func TestLongestCommonSubsequence(t *testing.T) {
 	text1 := "abcde"
 	text2 := "ade"
-	size1 := len(text1)
-	size2 := len(text2)
+	m := len(text1)
+	n := len(text2)
 
-	dp := tools.InitMemo(size1+1, size2+1)
-	for i := 1; i <= size1; i++ {
-		for j := 1; j <= size2; j++ {
-			if text1[i-1] == text2[j-1] {
-				dp[i][j] = dp[i-1][j-1] + 1
+	dp := make([][]int, m+1)
+	for i := 0; i < m+1; i++ {
+		dp[i] = make([]int, 2)
+	}
+
+	for j := 1; j <= n; j++ {
+		a := j % 2
+		b := (j - 1) % 2
+		for i := 1; i < m; i++ {
+			if text2[j-1] == text1[i-1] {
+				dp[i][a] = dp[i-1][b] + 1
 			} else {
-				dp[i][j] = tools.Max(dp[i-1][j], dp[i][j-1])
+				dp[i][a] = tools.Max(dp[i-1][a], dp[i][b])
 			}
 		}
 	}
+	fmt.Println(dp[m][n%2])
+	//
+	//int[][] dp = new int[m + 1][2];
+	//for (int[] row: dp) { Arrays.fill(row, 0); }
+	//
+	//for (int j = 1; j <= n; j++) {
+	//	int a = j % 2;
+	//	int b = (j - 1) % 2;
+	//	for (int i = 1; i <= m; i++) {
+	//		if (text2.charAt(j - 1) == text1.charAt(i - 1)) {
+	//			dp[i][a] = dp[i - 1][b] + 1;
+	//		} else {
+	//			dp[i][a] = Math.max(dp[i - 1][a], dp[i][b]);
+	//		}
+	//	}
+	//}
+	//
+	//return dp[m][n%2];
+}
 
-	fmt.Println(dp[size1][size2])
+func TestRobotPathSum(t *testing.T) {
+
 }
