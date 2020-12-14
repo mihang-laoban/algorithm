@@ -139,5 +139,231 @@ func TestLongestCommonSubsequence(t *testing.T) {
 }
 
 func TestRobotPathSum(t *testing.T) {
+	m := 4
+	n := 3
+	dp := make([][]int, m)
+	for i := 0; i < m; i++ {
+		dp[i] = make([]int, n)
+	}
 
+	for i := 0; i < m; i++ {
+		dp[i][0] = 1
+	}
+	for i := 0; i < n; i++ {
+		dp[0][i] = 1
+	}
+
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			dp[i][j] = dp[i-1][j] + dp[i][j-1]
+		}
+	}
+	fmt.Println(dp[m-1][n-1])
+}
+
+func TestRobotPathSumWithObstacle(t *testing.T) {
+	m := 3
+	n := 3
+	arr := make([][]int, m)
+	for i := 0; i < m; i++ {
+		arr[i] = make([]int, n)
+	}
+	arr[1][1] = 1
+
+	dp := make([][]int, m)
+	for i := 0; i < m; i++ {
+		dp[i] = make([]int, n)
+	}
+
+	for i := 0; i < m; i++ {
+		if arr[i][0] == 1 {
+			dp[i][0] = 0
+		} else {
+			dp[i][0] = 1
+		}
+	}
+
+	for i := 0; i < n; i++ {
+		if arr[0][i] == 1 {
+			dp[0][i] = 0
+		} else {
+			dp[0][i] = 1
+		}
+	}
+
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			if arr[i][j] == 1 {
+				dp[i][j] = 0
+			} else {
+				dp[i][j] = dp[i][j-1] + dp[i-1][j]
+			}
+		}
+	}
+	fmt.Println(dp[m-1][n-1])
+}
+
+func TestJump(t *testing.T) {
+	arr1 := []int{2, 3, 1, 1, 6}
+	arr2 := []int{4, 2, 1, 0, 0, 6}
+
+	JumpGame(arr1)
+	JumpGame(arr2)
+}
+
+func JumpGame(arr []int) {
+	index := len(arr) - 1
+	for i := index - 1; i >= 0; i-- {
+		if i+arr[i] >= index {
+			index = i
+		}
+	}
+	if index == 0 {
+		fmt.Println(true)
+		return
+	}
+	fmt.Println(false)
+}
+
+func TestContinuousIncrementalSubSeq(t *testing.T) {
+	arr1 := []int{6, 6, 6, 6, 6, 6}
+	arr2 := []int{1, 3, 5, 0, 7}
+
+	findContinuous(arr1)
+	findContinuous(arr2)
+}
+
+func findContinuous(arr []int) {
+	res := 0
+	s1 := len(arr)
+	dp := make([]int, s1)
+	for i := 0; i < s1; i++ {
+		dp[i] = 1
+	}
+
+	for i := 1; i < s1; i++ {
+		if arr[i] > arr[i-1] {
+			dp[i] = 1 + dp[i-1]
+		}
+		res = tools.Max(dp[i], res)
+	}
+
+	fmt.Println(res)
+}
+
+func TestIncrementalSubSeq(t *testing.T) {
+	arr1 := []int{10, 9, 1, 5, 2, 6, 66, 18}
+	findIncrement(arr1)
+	findIncrementNum(arr1)
+	findBySplit(arr1)
+}
+
+func findIncrement(arr []int) {
+	s1 := len(arr)
+	dp := make([]int, s1)
+	for i := 0; i < s1; i++ {
+		dp[i] = 1
+	}
+
+	res := 1
+	for i := 1; i < s1; i++ {
+		for j := 0; j < i; j++ {
+			if arr[i] > arr[j] {
+				dp[i] = tools.Max(dp[i], 1+dp[j])
+				res = tools.Max(res, dp[i])
+			}
+		}
+	}
+	fmt.Println(res)
+}
+
+func findBySplit(arr []int) {
+	length := 1
+	n := len(arr)
+	if n == 0 {
+		fmt.Println(0)
+	}
+	d := make([]int, n+1)
+	d[length] = arr[0]
+
+	for i := 1; i < n; i++ {
+		if arr[i] > d[length] {
+			length++
+			d[length] = arr[i]
+		} else {
+			l := 1
+			r := length
+			pos := 0
+			for l <= r {
+				mid := (l + r) / 2
+				if d[mid] < arr[i] {
+					pos = mid
+					l = mid + 1
+				} else {
+					r = mid - 1
+				}
+			}
+			d[pos+1] = arr[i]
+		}
+	}
+	fmt.Println(length)
+}
+
+func findIncrementNum(arr []int) {
+	s1 := len(arr)
+	if s1 == 0 {
+		fmt.Println(0)
+	}
+	dp := make([]int, s1)
+	count := make([]int, s1)
+	for i := 0; i < s1; i++ {
+		dp[i] = 1
+		count[i] = 1
+	}
+	for i := 1; i < s1; i++ {
+		for j := 0; j < i; j++ {
+			if arr[i] > arr[j] {
+				if dp[j]+1 > dp[i] {
+					dp[i] = dp[j] + 1
+					count[i] = count[j]
+				} else if dp[j]+1 == dp[i] {
+					count[i] += count[j]
+				}
+			}
+		}
+	}
+	maxLen := 0
+	for i := 0; i < s1; i++ {
+		maxLen = tools.Max(dp[i], maxLen)
+	}
+	res := 0
+	for i := 0; i < s1; i++ {
+		if dp[i] == maxLen {
+			res += count[i]
+		}
+	}
+	fmt.Println(res)
+}
+
+func TestFib(t *testing.T) {
+	n := 6
+	dp := make([]int, n+1)
+	dp[1] = 1
+	dp[2] = 1
+	for i := 3; i < n+1; i++ {
+		dp[i] = dp[i-1] + dp[i-2]
+	}
+	fmt.Println(dp[n])
+}
+
+func TestFibSingle(t *testing.T) {
+	n := 6
+	pre := 1
+	cur := 1
+	for i := 3; i <= n; i++ {
+		sum := pre + cur
+		pre = cur
+		cur = sum
+	}
+	fmt.Println(cur)
 }

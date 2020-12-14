@@ -6,5 +6,6 @@ type Node struct {
 }
 
 type LinkedList struct {
-	head *Node
+	Head   *Node
+	Length int
 }
