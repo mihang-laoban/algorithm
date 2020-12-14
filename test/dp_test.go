@@ -367,3 +367,87 @@ func TestFibSingle(t *testing.T) {
 	}
 	fmt.Println(cur)
 }
+
+func TestFindLargestSubArray(t *testing.T){
+	nums := []int{-1, 4, -2, 3, -2, 3}
+	k := 2
+	// 4 + (3 + -2 + 3) = 8
+	n := len(nums)
+
+	m := make([][]int, n+1)
+	dp := make([][]int, n+1)
+
+	for i := 0; i < n + 1; i++ {
+		m[i] = make([]int, k+1)
+		dp[i] = make([]int, k+1)
+	}
+
+	for i := 0; i < n+1; i++ {
+		for j := 0; j < k+1; j++ {
+			m[i][j] = 0
+			dp[i][j] = 0
+		}
+	}
+
+	for i := 1; i < n+1; i++ {
+		for j := tools.Min(i, k); j > 0; j-- {
+			if i == j {
+				m[i][j] = m[i-1][j-1] + nums[i-1]; dp[i][j] = dp[i-1][j-1] + nums[i-1]
+			} else {
+				m[i][j] = tools.Max(m[i-1][j], dp[i-1][j-1]) + nums[i-1]
+				dp[i][j] = tools.Max(dp[i-1][j], m[i][j])
+			}
+		}
+	}
+	fmt.Println(dp[n][k])
+}
+
+func TestLargestProductSubArr1(t *testing.T) {
+	nums := []int{2,8,-2,4} // [-2, 0, -1] > 0
+//	16
+	n := len(nums)
+	dp_max := make([]int, n)
+	dp_min := make([]int, n)
+	dp_max[0] = nums[0]
+	dp_min[0] = nums[0]
+
+	res := nums[0]
+	for i := 1; i < n; i++ {
+		if nums[i] < 0 {
+			temp := dp_max[i-1]
+			dp_max[i-1] = dp_min[i-1]
+			dp_min[i-1] = temp
+		}
+		dp_max[i] = tools.Max(nums[i], dp_max[i-1] * nums[i])
+		dp_min[i] = tools.Min(nums[i], dp_min[i-1] * nums[i])
+		res = tools.Max(res, dp_max[i]);
+	}
+	fmt.Println(res)
+}
+
+func TestLargestProductSubArr2(t *testing.T) {
+	nums := []int{2,8,-2,4} // [-2, 0, -1] > 0
+	n := len(nums)
+
+	dp := make([][]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([]int, 2)
+	}
+
+	for i := 0; i < n; i++ {
+		dp[i][0] = nums[i]
+		dp[i][1] = nums[i]
+	}
+
+	for i := 1; i < n; i ++ {
+		// 决策求解
+		dp[i][0] = tools.Max(dp[i - 1][0] * nums[i], tools.Max(nums[i], dp[i - 1][1] * nums[i]))
+		dp[i][1] = tools.Min(dp[i - 1][1] * nums[i], tools.Min(nums[i], dp[i - 1][0] * nums[i]))
+	}
+
+	res := dp[0][0]
+	for i := 1; i < n; i ++ {
+		res = tools.Max(res, dp[i][0])
+	}
+	fmt.Println(res)
+}
