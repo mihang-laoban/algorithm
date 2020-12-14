@@ -392,7 +392,8 @@ func TestFindLargestSubArray(t *testing.T){
 	for i := 1; i < n+1; i++ {
 		for j := tools.Min(i, k); j > 0; j-- {
 			if i == j {
-				m[i][j] = m[i-1][j-1] + nums[i-1]; dp[i][j] = dp[i-1][j-1] + nums[i-1]
+				m[i][j] = m[i-1][j-1] + nums[i-1]
+				dp[i][j] = dp[i-1][j-1] + nums[i-1]
 			} else {
 				m[i][j] = tools.Max(m[i-1][j], dp[i-1][j-1]) + nums[i-1]
 				dp[i][j] = tools.Max(dp[i-1][j], m[i][j])
