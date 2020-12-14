@@ -62,17 +62,20 @@ func (LinkedList *LinkedList) Reverse2() {
 	LinkedList.Head = LinkedList._reverse2(LinkedList.Head)
 }
 
-func (LinkedList *LinkedList) _reverse1(head *Node) *Node {
-	cur := head
-	var pre *Node
-	for cur != nil {
-		tmp := cur.Next
-		cur.Next = pre
-		pre = cur
-		cur = tmp
-	}
-	return pre
-}
+//func (LinkedList *LinkedList) _reverse1(head *Node) *Node {
+//}
+
+//func (LinkedList *LinkedList) _reverse1(head *Node) *Node {
+//	cur := head
+//	var pre *Node
+//	for cur != nil {
+//		tmp := cur.Next
+//		cur.Next = pre
+//		pre = cur
+//		cur = tmp
+//	}
+//	return pre
+//}
 
 func (LinkedList *LinkedList) _reverse2(head *Node) *Node {
 	if head == nil || head.Next == nil {
