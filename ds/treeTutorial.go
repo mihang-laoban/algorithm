@@ -2,11 +2,11 @@ package ds
 
 import "fmt"
 
-// TreeNode 二叉树节点，采用链表的形式表示
-type TreeNode struct {
-	Left  *TreeNode
+// TreeNode1 二叉树节点，采用链表的形式表示
+type TreeNode1 struct {
+	Left  *TreeNode1
 	Data  interface{}
-	Right *TreeNode
+	Right *TreeNode1
 }
 
 /**
@@ -42,27 +42,27 @@ type Order interface {
  * 接口方法的实现，通过底层函数实现
  */
 
-func (n *TreeNode) SetData(data interface{}) { n.Data = data }
-func (n *TreeNode) PrintBT()                 { PrintBT(n) }
-func (n *TreeNode) Depth() int               { return Depth(n) }
-func (n *TreeNode) LeafCount() int           { return LeafCount(n) }
-func (n *TreeNode) PreOrder()                { PreOrder(n) }
-func (n *TreeNode) InOrder()                 { InOrder(n) }
-func (n *TreeNode) PostOrder()               { PostOrder(n) }
-func (n *TreeNode) BreadthTravel()           { BreadthTravel(n) }
+func (n *TreeNode1) SetData(data interface{}) { n.Data = data }
+func (n *TreeNode1) PrintBT()                 { PrintBT(n) }
+func (n *TreeNode1) Depth() int               { return Depth(n) }
+func (n *TreeNode1) LeafCount() int           { return LeafCount(n) }
+func (n *TreeNode1) PreOrder()                { PreOrder(n) }
+func (n *TreeNode1) InOrder()                 { InOrder(n) }
+func (n *TreeNode1) PostOrder()               { PostOrder(n) }
+func (n *TreeNode1) BreadthTravel()           { BreadthTravel(n) }
 
 /**
  * 底层函数的实现
  */
 
-// NewTreeNode 创建一个新的节点
-func NewTreeNode(left, right *TreeNode) *TreeNode {
-	return &TreeNode{left, nil, right}
+// NewTreeNode1 创建一个新的节点
+func NewTreeNode1(left, right *TreeNode1) *TreeNode1 {
+	return &TreeNode1{left, nil, right}
 }
 
 // PrintBT 用于输出一个给定二叉树的嵌套括号表示，采用递归的算法
 // 根节点-->左子树-->右子树
-func PrintBT(n *TreeNode) {
+func PrintBT(n *TreeNode1) {
 	if n != nil {
 		fmt.Printf("%v ", n.Data)
 		if n.Left != nil || n.Right != nil {
@@ -80,7 +80,7 @@ func PrintBT(n *TreeNode) {
 // Depth 用于计算二叉树的深度，采用递归算法
 // 若一个二叉树为空，则其深度为0；
 // 否则其深度等于左子树或右子树的最大深度加1
-func Depth(n *TreeNode) int {
+func Depth(n *TreeNode1) int {
 	var depthleft, depthright int
 	if n == nil {
 		return 0
@@ -97,7 +97,7 @@ func Depth(n *TreeNode) int {
 // 若一个二叉树为空，则其叶子节点数为 0；
 // 若一棵二叉树的左右字数均为空，则其叶子节点数为 1；
 // 否则叶子节点数等于左子树和右子树叶子节点总数之和
-func LeafCount(n *TreeNode) int {
+func LeafCount(n *TreeNode1) int {
 	if n == nil {
 		return 0
 	} else if n.Left == nil && n.Right == nil {
@@ -109,7 +109,7 @@ func LeafCount(n *TreeNode) int {
 
 // PreOrder 先序遍历，采用递归算法
 // 根节点-->左子树-->右子树
-func PreOrder(n *TreeNode) {
+func PreOrder(n *TreeNode1) {
 	if n != nil {
 		fmt.Printf("%v ", n.Data)
 		PreOrder(n.Left)
@@ -119,7 +119,7 @@ func PreOrder(n *TreeNode) {
 
 // InOrder 中序遍历，采用递归算法
 // 左子树-->根节点-->右子树
-func InOrder(n *TreeNode) {
+func InOrder(n *TreeNode1) {
 	if n != nil {
 		InOrder(n.Left)
 		fmt.Printf("%v ", n.Data)
@@ -129,7 +129,7 @@ func InOrder(n *TreeNode) {
 
 // PostOrder 后序遍历，采用递归算法
 // 左子树-->右子树-->根节点
-func PostOrder(n *TreeNode) {
+func PostOrder(n *TreeNode1) {
 	if n != nil {
 		PostOrder(n.Left)
 		PostOrder(n.Right)
@@ -138,9 +138,9 @@ func PostOrder(n *TreeNode) {
 }
 
 // BreadthTravel 广度遍历
-func BreadthTravel(n *TreeNode) {
-	var queue []*TreeNode
-	queue = []*TreeNode{n}
+func BreadthTravel(n *TreeNode1) {
+	var queue []*TreeNode1
+	queue = []*TreeNode1{n}
 
 	for len(queue) > 0 {
 		root := queue[0]
@@ -157,22 +157,22 @@ func BreadthTravel(n *TreeNode) {
 
 func RunTree() {
 	//创建二叉树
-	root := NewTreeNode(nil, nil)
+	root := NewTreeNode1(nil, nil)
 	root.SetData("root")
 
-	a := NewTreeNode(nil, nil)
+	a := NewTreeNode1(nil, nil)
 	a.SetData("left")
 
-	al := NewTreeNode(nil, nil)
+	al := NewTreeNode1(nil, nil)
 	al.SetData(100)
 
-	ar := NewTreeNode(nil, nil)
+	ar := NewTreeNode1(nil, nil)
 	ar.SetData(3.14)
 
 	a.Left = al
 	a.Right = ar
 
-	b := NewTreeNode(nil, nil)
+	b := NewTreeNode1(nil, nil)
 	b.SetData("right")
 
 	root.Left = a
@@ -183,7 +183,7 @@ func RunTree() {
 
 	// 使用 Order 接口实现对二叉树的基本操作
 	var it Order  // 定义接口类型
-	it = root     // 将*TreeNode类型变量赋值给接口，*TreeNode实现了接口的所有方法
+	it = root     // 将*TreeNode1类型变量赋值给接口，*TreeNode1实现了接口的所有方法
 	it.PreOrder() // 先序遍历
 	fmt.Println()
 	it.InOrder() // 中序遍历
