@@ -486,7 +486,6 @@ func TestStock(t *testing.T) {
 		dp[i][1][1] = tools.Max(dp[i-1][0][1]-prices[i], dp[i-1][1][1])
 		dp[i][1][2] = 0
 	}
-
 	res := tools.Max(dp[length-1][0][1], dp[length-1][0][2])
 	fmt.Println(res)
 }
