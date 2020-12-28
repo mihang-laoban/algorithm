@@ -1,7 +1,7 @@
 package dp
 
 import (
-	"dp/tools"
+	. "dp/tools"
 	"fmt"
 	"testing"
 )
@@ -21,7 +21,7 @@ func TestExchangeMinCount(t *testing.T) {
 			if i-values[j] < 0 {
 				continue
 			}
-			dp[i] = tools.Min(dp[i], dp[i-values[j]]+1)
+			dp[i] = Min(dp[i], dp[i-values[j]]+1)
 		}
 	}
 
@@ -67,8 +67,8 @@ func TestFindLargestArrSum(t *testing.T) {
 	cur := 0
 	res := cur
 	for i := 0; i < len(arr); i++ {
-		tmp := tools.Max(arr[i], arr[i]+cur)
-		res = tools.Max(tmp, res)
+		tmp := Max(arr[i], arr[i]+cur)
+		res = Max(tmp, res)
 		cur = tmp
 	}
 	fmt.Println(res)
@@ -82,7 +82,7 @@ func TestFindLargestSubSeq(t *testing.T) {
 
 func FindLargestSubSeq(str string) {
 	size := len(str)
-	dp := tools.InitMemo(size, size)
+	dp := InitMemo(size, size)
 	for i := 0; i < size; i++ {
 		dp[i][i] = 1
 	}
@@ -92,7 +92,7 @@ func FindLargestSubSeq(str string) {
 			if str[i] == str[j] {
 				dp[i][j] = 2 + dp[i+1][j-1]
 			} else {
-				dp[i][j] = tools.Max(dp[i+1][j], dp[i][j-1])
+				dp[i][j] = Max(dp[i+1][j], dp[i][j-1])
 			}
 		}
 	}
@@ -115,7 +115,7 @@ func TestFindLongestSharedSubSeq(t *testing.T) {
 			if text1[i-1] == text2[j-1] {
 				dp[i][j] = 1 + dp[i-1][j-1]
 			} else {
-				dp[i][j] = tools.Max(dp[i-1][j], dp[i][j-1])
+				dp[i][j] = Max(dp[i-1][j], dp[i][j-1])
 			}
 		}
 	}
@@ -140,7 +140,7 @@ func TestLongestCommonSubsequence(t *testing.T) {
 			if text2[j-1] == text1[i-1] {
 				dp[i][a] = dp[i-1][b] + 1
 			} else {
-				dp[i][a] = tools.Max(dp[i-1][a], dp[i][b])
+				dp[i][a] = Max(dp[i-1][a], dp[i][b])
 			}
 		}
 	}
@@ -271,7 +271,7 @@ func findContinuous(arr []int) {
 		if arr[i] > arr[i-1] {
 			dp[i] = 1 + dp[i-1]
 		}
-		res = tools.Max(dp[i], res)
+		res = Max(dp[i], res)
 	}
 
 	fmt.Println(res)
@@ -295,8 +295,8 @@ func findIncrement(arr []int) {
 	for i := 1; i < s1; i++ {
 		for j := 0; j < i; j++ {
 			if arr[i] > arr[j] {
-				dp[i] = tools.Max(dp[i], 1+dp[j])
-				res = tools.Max(res, dp[i])
+				dp[i] = Max(dp[i], 1+dp[j])
+				res = Max(res, dp[i])
 			}
 		}
 	}
@@ -360,7 +360,7 @@ func findIncrementNum(arr []int) {
 	}
 	maxLen := 0
 	for i := 0; i < s1; i++ {
-		maxLen = tools.Max(dp[i], maxLen)
+		maxLen = Max(dp[i], maxLen)
 	}
 	res := 0
 	for i := 0; i < s1; i++ {
@@ -416,13 +416,13 @@ func TestFindLargestSubArray(t *testing.T) {
 	}
 
 	for i := 1; i < n+1; i++ {
-		for j := tools.Min(i, k); j > 0; j-- {
+		for j := Min(i, k); j > 0; j-- {
 			if i == j {
 				m[i][j] = m[i-1][j-1] + nums[i-1]
 				dp[i][j] = dp[i-1][j-1] + nums[i-1]
 			} else {
-				m[i][j] = tools.Max(m[i-1][j], dp[i-1][j-1]) + nums[i-1]
-				dp[i][j] = tools.Max(dp[i-1][j], m[i][j])
+				m[i][j] = Max(m[i-1][j], dp[i-1][j-1]) + nums[i-1]
+				dp[i][j] = Max(dp[i-1][j], m[i][j])
 			}
 		}
 	}
@@ -445,9 +445,9 @@ func TestLargestProductSubArr1(t *testing.T) {
 			dp_max[i-1] = dp_min[i-1]
 			dp_min[i-1] = temp
 		}
-		dp_max[i] = tools.Max(nums[i], dp_max[i-1]*nums[i])
-		dp_min[i] = tools.Min(nums[i], dp_min[i-1]*nums[i])
-		res = tools.Max(res, dp_max[i])
+		dp_max[i] = Max(nums[i], dp_max[i-1]*nums[i])
+		dp_min[i] = Min(nums[i], dp_min[i-1]*nums[i])
+		res = Max(res, dp_max[i])
 	}
 	fmt.Println(res)
 }
@@ -468,13 +468,13 @@ func TestLargestProductSubArr2(t *testing.T) {
 
 	for i := 1; i < n; i++ {
 		// 决策求解
-		dp[i][0] = tools.Max(dp[i-1][0]*nums[i], tools.Max(nums[i], dp[i-1][1]*nums[i]))
-		dp[i][1] = tools.Min(dp[i-1][1]*nums[i], tools.Min(nums[i], dp[i-1][0]*nums[i]))
+		dp[i][0] = Max(dp[i-1][0]*nums[i], Max(nums[i], dp[i-1][1]*nums[i]))
+		dp[i][1] = Min(dp[i-1][1]*nums[i], Min(nums[i], dp[i-1][0]*nums[i]))
 	}
 
 	res := dp[0][0]
 	for i := 1; i < n; i++ {
-		res = tools.Max(res, dp[i][0])
+		res = Max(res, dp[i][0])
 	}
 	fmt.Println(res)
 }
@@ -506,12 +506,12 @@ func TestStock(t *testing.T) {
 	// 处理后续日期
 	for i := 1; i < length; i++ {
 		dp[i][0][0] = 0
-		dp[i][0][1] = tools.Max(dp[i-1][1][0]+prices[i], dp[i-1][0][1])
-		dp[i][0][2] = tools.Max(dp[i-1][1][1]+prices[i], dp[i-1][0][2])
-		dp[i][1][0] = tools.Max(dp[i-1][0][0]-prices[i], dp[i-1][1][0])
-		dp[i][1][1] = tools.Max(dp[i-1][0][1]-prices[i], dp[i-1][1][1])
+		dp[i][0][1] = Max(dp[i-1][1][0]+prices[i], dp[i-1][0][1])
+		dp[i][0][2] = Max(dp[i-1][1][1]+prices[i], dp[i-1][0][2])
+		dp[i][1][0] = Max(dp[i-1][0][0]-prices[i], dp[i-1][1][0])
+		dp[i][1][1] = Max(dp[i-1][0][1]-prices[i], dp[i-1][1][1])
 		dp[i][1][2] = 0
 	}
-	res := tools.Max(dp[length-1][0][1], dp[length-1][0][2])
+	res := Max(dp[length-1][0][1], dp[length-1][0][2])
 	fmt.Println(res)
 }
