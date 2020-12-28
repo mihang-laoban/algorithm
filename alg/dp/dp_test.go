@@ -101,7 +101,8 @@ func packImproved(weights []int, values []int, totalWeight int, totalCount int) 
 		for j := 1; j < totalWeight + 1; j++ {
 			dp[i%2][j] = dp[(i-1)%2][j]
 			if j - weights[i] >= 0 {
-				dp[i%2][j] = Max(dp[i%2][j], dp[i%2][j-weights[i]] + values[i])
+				dp[i%2][j] = Max(dp[i%2][j], dp[i%2][j-weights[i]] + values[i]) // 可重复放入
+				//dp[i%2][j] = Max(dp[(i-1)%2][j], dp[(i-1)%2][j-weights[i]] + values[i]) // 只可放入一次
 			}
 		}
 	}
