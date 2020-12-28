@@ -12,25 +12,24 @@ func TestExchangeMinCount(t *testing.T) {
 
 	dp := make([]int, total+1)
 	for i := 1; i < total+1; i++ {
-		dp[i] = total + 1
+		dp[i] = total+1
 	}
-	dp[0] = 0
+	dp[0]= 0
 
 	for i := 1; i < total+1; i++ {
-		for j := 0; j < len(values); j++ {
-			if i-values[j] < 0 {
+		for _, value := range values {
+			if i - value < 0 {
 				continue
 			}
-			dp[i] = Min(dp[i], dp[i-values[j]]+1)
+			dp[i] = Min(dp[i-value]+1, dp[i])
 		}
 	}
-
 	if dp[total] == total+1 {
 		fmt.Println(-1)
-	} else {
-		fmt.Println(dp[total])
 	}
+	fmt.Println(dp[total])
 }
+
 
 func TestDp(t *testing.T) {
 	str := "aaa"
