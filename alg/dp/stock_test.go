@@ -47,7 +47,7 @@ func TestStock2(t *testing.T) {
 	prices := []int{3, 3, 5, 0, 0, 3, 1, 4}
 	size := len(prices)
 
-	dp := make([][2][3]int, size)
+	dp := [2][2][3]int{}
 	dp[0][0][0] = 0
 	dp[0][0][1] = 0
 	dp[0][0][2] = 0
@@ -57,14 +57,14 @@ func TestStock2(t *testing.T) {
 	dp[0][1][2] = -prices[0]
 
 	for i := 1; i < size; i++ {
-		dp[i][0][0] = 0
-		dp[i][0][1] = Max(dp[i-1][1][0]+prices[i], dp[i-1][0][1])
-		dp[i][0][2] = Max(dp[i-1][1][1]+prices[i], dp[i-1][0][2])
-		dp[i][1][0] = Max(dp[i-1][0][0]-prices[i], dp[i-1][1][0])
-		dp[i][1][1] = Max(dp[i-1][0][1]-prices[i], dp[i-1][1][1])
-		dp[i][1][2] = 0
+		dp[i%2][0][0] = 0
+		dp[i%2][0][1] = Max(dp[(i-1)%2][1][0]+prices[i], dp[(i-1)%2][0][1])
+		dp[i%2][0][2] = Max(dp[(i-1)%2][1][1]+prices[i], dp[(i-1)%2][0][2])
+		dp[i%2][1][0] = Max(dp[(i-1)%2][0][0]-prices[i], dp[(i-1)%2][1][0])
+		dp[i%2][1][1] = Max(dp[(i-1)%2][0][1]-prices[i], dp[(i-1)%2][1][1])
+		dp[i%2][1][2] = 0
 	}
-	res := Max(dp[size-1][0][1], dp[size-1][0][2])
+	res := Max(dp[(size-1)%2][0][1], dp[(size-1)%2][0][2])
 	fmt.Println(res)
 }
 
