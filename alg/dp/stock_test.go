@@ -86,7 +86,7 @@ func TestStock2(t *testing.T) {
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
-func TestMaxProfit(t *testing.T) {
+func TestMaxProfit1(t *testing.T) {
 	prices := []int{7,1,5,3,6,4}
 	fmt.Println(maxProfit2(prices))
 }
@@ -143,3 +143,34 @@ func maxProfit2(prices []int) int {
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestMaxProfit2(t *testing.T) {
+	prices := []int{7,1,5,3,6,4}
+	fmt.Println(stockDp(prices))
+}
+
+func stockDp(prices []int) (s int) {
+	s = 0
+	e := -prices[0]
+	for i := 1; i < len(prices); i++ {
+		s = Max(s, e+prices[i])
+		e = Max(e, s-prices[i])
+	}
+	return
+/*	dp := make([][2]int, size)
+	dp[0][0] = 0
+	dp[0][1] = -prices[0]
+	for i := 1; i < size; i++ {
+		dp[i][0] = Max(dp[i-1][1]+prices[i], dp[i-1][0])
+		dp[i][1] = Max(dp[i-1][0]-prices[i], dp[i-1][1])
+	}
+	return dp[size-1][0]
+*/
+}
+
+func stockGreed(prices []int) (ans int){
+	for i := 1; i < len(prices); i++ {
+		ans += Max(0, prices[i]-prices[i-1])
+	}
+	return
+}
