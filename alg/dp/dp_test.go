@@ -60,6 +60,55 @@ func largestSubArr(str string) {
 	fmt.Println(res)
 }
 
+
+/*示例：
+
+输入：W = 5, N = 3
+w = [3, 2, 1], v = [5, 2, 3]
+输出：15
+解释：当 i = 2 时，选取 5 次，总价值为 5 * 3 = 15。
+*/
+func TestPackage(t *testing.T) {
+	weights, values := []int{0, 3, 2, 1}, []int{0, 5, 2, 3}
+	totalWeight, totalCount := 5, 3
+	packImproved(weights, values, totalWeight, totalCount)
+}
+
+func pack(weights []int, values []int, totalWeight int, totalCount int) {
+	dp:=make([][]int, totalCount+1)
+	for i := 0; i < totalCount+1; i++ {	dp[i] = make([]int, totalWeight+1) }
+	for i := 0; i < totalCount+1; i++ { dp[i][0] = 0 }
+	for i := 0; i < totalWeight+1; i++ { dp[0][i] = 0 }
+
+	for i := 1; i < totalCount + 1; i++ {
+		for j := 1; j < totalWeight + 1; j++ {
+			dp[i][j] = dp[i-1][j]
+			if j - weights[i] >= 0 {
+				dp[i][j] = Max(dp[i][j], dp[i][j-weights[i]] + values[i])
+			}
+		}
+	}
+	fmt.Println(dp[totalCount][totalWeight])
+}
+
+func packImproved(weights []int, values []int, totalWeight int, totalCount int) {
+	dp:=make([][]int, 2)
+	for i := 0; i < 2; i++ { dp[i] = make([]int, totalWeight+1) }
+	for i := 0; i < 2; i++ { dp[i][0] = 0 }
+	for i := 0; i < totalWeight+1; i++ { dp[0][i] = 0 }
+
+	for i := 1; i < totalCount + 1; i++ {
+		for j := 1; j < totalWeight + 1; j++ {
+			dp[i%2][j] = dp[(i-1)%2][j]
+			if j - weights[i] >= 0 {
+				dp[i%2][j] = Max(dp[i%2][j], dp[i%2][j-weights[i]] + values[i])
+			}
+		}
+	}
+	fmt.Println(dp[totalCount%2][totalWeight])
+}
+
+
 func TestFindLargestArrSum(t *testing.T) {
 	arr := []int{-2, 1, -3, 4, -1, 3, -5, 1, 2}
 
