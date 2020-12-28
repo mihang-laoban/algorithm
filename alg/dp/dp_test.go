@@ -30,37 +30,6 @@ func TestExchangeMinCount(t *testing.T) {
 	fmt.Println(dp[total])
 }
 
-
-func TestDp(t *testing.T) {
-	str := "aaa"
-	largestSubArr(str)
-}
-
-func largestSubArr(str string) {
-	size := len(str)
-	dp := make([][]bool, size)
-	for i := 0; i < size; i++ {
-		dp[i] = make([]bool, size)
-	}
-	res := 0
-	for i := 0; i < size; i++ {
-		dp[i][i] = true
-		res++
-	}
-
-	for i := 1; i < size; i++ {
-		for j := 0; j < i; j++ {
-			dp[j][i] = str[i] == str[j] && (i-j <= 3 || dp[j+1][i-1])
-			if dp[j][i] {
-				res++
-			}
-		}
-	}
-
-	fmt.Println(res)
-}
-
-
 /*示例：
 
 输入：W = 5, N = 3
@@ -110,6 +79,37 @@ func packImproved(weights []int, values []int, totalWeight int, totalCount int) 
 }
 
 
+
+func TestDp(t *testing.T) {
+	str := "aaa"
+	largestSubArr(str)
+}
+
+func largestSubArr(str string) {
+	size := len(str)
+	dp := make([][]bool, size)
+	for i := 0; i < size; i++ {
+		dp[i] = make([]bool, size)
+	}
+	res := 0
+	for i := 0; i < size; i++ {
+		dp[i][i] = true
+		res++
+	}
+
+	for i := 1; i < size; i++ {
+		for j := 0; j < i; j++ {
+			dp[j][i] = str[i] == str[j] && (i-j <= 3 || dp[j+1][i-1])
+			if dp[j][i] {
+				res++
+			}
+		}
+	}
+
+	fmt.Println(res)
+}
+
+
 func TestFindLargestArrSum(t *testing.T) {
 	arr := []int{-2, 1, -3, 4, -1, 3, -5, 1, 2}
 
@@ -124,8 +124,7 @@ func TestFindLargestArrSum(t *testing.T) {
 }
 
 func TestFindLargestSubSeq(t *testing.T) {
-	str := "asssasms"
-
+	str := "asssasms" // 5
 	FindLargestSubSeq(str)
 }
 
@@ -194,23 +193,6 @@ func TestLongestCommonSubsequence(t *testing.T) {
 		}
 	}
 	fmt.Println(dp[m][n%2])
-	//
-	//int[][] dp = new int[m + 1][2];
-	//for (int[] row: dp) { Arrays.fill(row, 0); }
-	//
-	//for (int j = 1; j <= n; j++) {
-	//	int a = j % 2;
-	//	int b = (j - 1) % 2;
-	//	for (int i = 1; i <= m; i++) {
-	//		if (text2.charAt(j - 1) == text1.charAt(i - 1)) {
-	//			dp[i][a] = dp[i - 1][b] + 1;
-	//		} else {
-	//			dp[i][a] = Math.max(dp[i - 1][a], dp[i][b]);
-	//		}
-	//	}
-	//}
-	//
-	//return dp[m][n%2];
 }
 
 func TestRobotPathSum(t *testing.T) {
@@ -236,6 +218,20 @@ func TestRobotPathSum(t *testing.T) {
 	fmt.Println(dp[m-1][n-1])
 }
 
+
+/*示例：
+
+输入：
+[
+[0, 0, 0],
+[0, 1, 0],
+[0, 0, 0]
+]
+输出: 2
+解释：3 * 3 网格的正中间有一个障碍物。
+从左上角到右下角一共有 2 条不同的路径：
+1. 向右 -> 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右 -> 向右*/
 func TestRobotPathSumWithObstacle(t *testing.T) {
 	m := 3
 	n := 3
@@ -300,6 +296,14 @@ func JumpGame(arr []int) {
 	fmt.Println(false)
 }
 
+
+/*示例2：
+
+输入: nums = [1, 3, 5, 0, 7]
+输出: 3
+解释: 最长连续递增序列是 [1, 3, 5], 长度为 3。
+你会发现 [1, 3, 5, 7] 也是升序的子序列, 但它不是连续的。
+因为 5 和 7 在原数组中被 0 隔开。因此，这不是原问题的答案。*/
 func TestContinuousIncrementalSubSeq(t *testing.T) {
 	arr1 := []int{6, 6, 6, 6, 6, 6}
 	arr2 := []int{1, 3, 5, 0, 7}
@@ -326,6 +330,12 @@ func findContinuous(arr []int) {
 	fmt.Println(res)
 }
 
+
+/*示例：
+
+输入: nums = [10, 9, 1, 5, 2, 6, 66, 18]
+输出: 4
+解释: 其中一个最长的上升子序列是 [1, 2, 6, 66]，它的长度是 4。*/
 func TestIncrementalSubSeq(t *testing.T) {
 	arr1 := []int{10, 9, 1, 5, 2, 6, 66, 18}
 	findIncrement(arr1)
@@ -383,7 +393,7 @@ func findBySplit(arr []int) {
 	}
 	fmt.Println(length)
 }
-
+//最长上升子序列共有几个，你该怎么解呢？
 func findIncrementNum(arr []int) {
 	s1 := len(arr)
 	if s1 == 0 {
