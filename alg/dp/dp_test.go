@@ -515,3 +515,78 @@ func TestStock(t *testing.T) {
 	res := Max(dp[length-1][0][1], dp[length-1][0][2])
 	fmt.Println(res)
 }
+
+func TestStock2(t *testing.T) {
+	prices := []int{3, 3, 5, 0, 0, 3, 1, 4}
+	size := len(prices)
+
+	dp := make([][2][3]int, size)
+	dp[0][0][0] = 0
+	dp[0][0][1] = 0
+	dp[0][0][2] = 0
+
+	dp[0][1][0] = -prices[0]
+	dp[0][1][1] = -prices[0]
+	dp[0][1][2] = -prices[0]
+
+	for i := 1; i < size; i++ {
+		dp[i][0][0] = 0
+		dp[i][0][1] = Max(dp[i-1][1][0]+prices[i], dp[i-1][0][1])
+		dp[i][0][2] = Max(dp[i-1][1][1]+prices[i], dp[i-1][0][2])
+		dp[i][1][0] = Max(dp[i-1][0][0]-prices[i], dp[i-1][1][0])
+		dp[i][1][1] = Max(dp[i-1][0][1]-prices[i], dp[i-1][1][1])
+		dp[i][1][2] = 0
+	}
+	res := Max(dp[size-1][0][1], dp[size-1][0][2])
+	fmt.Println(res)
+}
+
+/*给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+如果你最多只允许完成一笔交易（即买入和卖出一支股票一次），设计一个算法来计算你所能获取的最大利润。
+注意：你不能在买入股票前卖出股票。
+
+示例 1:
+输入: [7,1,5,3,6,4]
+输出: 5
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。
+
+示例 2:
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestMaxProfit(t *testing.T) {
+	prices := []int{7,1,5,3,6,4}
+	fmt.Println(maxProfit2(prices))
+}
+
+func maxProfit(prices []int) int {
+	mi := INT_MAX
+	//mi := int(1e9)
+	ma := 0
+
+	for _, price := range prices{
+		ma = Max(price - mi, ma)
+		mi = Min(price, mi)
+	}
+
+	return ma
+}
+
+func maxProfit2(prices []int) int {
+	mi := int(1e9)
+	ma := 0
+
+	for i := 0; i < len(prices); i++ {
+		if prices[i] < mi {
+			mi = prices[i]
+		} else if prices[i] - mi > ma {
+			ma = prices[i] - mi
+		}
+	}
+	return ma
+}
