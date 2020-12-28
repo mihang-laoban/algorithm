@@ -45,3 +45,27 @@ func InitMemo(col int, row int) (dp [][]int) {
 	}
 	return
 }
+
+func LoopPrint(a interface{}){
+	switch a.(type) {
+	case []int:
+		for _, value := range a.([]int) {
+			fmt.Printf("%d ", value)
+		}
+		fmt.Println()
+	case []string:
+		for _, value := range a.([]string) {
+			fmt.Printf("%s ", value)
+		}
+		fmt.Println()
+	default:
+		fmt.Println("unknown type")
+	}
+}
+
+func FindX(a []int, x func(a, b int) int) (res int) {
+	for _, value := range a {
+		res = x(res, value)
+	}
+	return
+}
