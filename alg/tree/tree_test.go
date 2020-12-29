@@ -340,13 +340,14 @@ func (bst *BiSearchTree) Clear() {
 			 9   14
 */
 
-func Test(t *testing.T) {
-	var bst BiSearchTree
-	arr := []int{15, 6, 18, 3, 7, 17, 20, 2, 4, 13, 9, 14}
+func initTree(arr []int) (bst BiSearchTree) {
 	for _, v := range arr {
 		bst.Add(v)
 	}
+	return
+}
 
+func run(bst BiSearchTree) {
 	fmt.Println("[in]The nodes of the BiSearchTree is: ")
 	bst.InOrderTravel()
 	fmt.Println()
@@ -372,4 +373,10 @@ func Test(t *testing.T) {
 	fmt.Printf("Nodes after delete the 13: ")
 	bst.InOrderTravel()
 	fmt.Printf("\n")
+}
+
+func Test(t *testing.T) {
+	arr := []int{15, 6, 18, 3, 7, 17, 20, 2, 4, 13, 9, 14}
+	tmp := initTree(arr)
+	run(tmp)
 }
