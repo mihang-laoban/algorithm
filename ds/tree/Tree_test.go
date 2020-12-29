@@ -6,11 +6,11 @@ import (
 )
 
 // TreeNode 二叉树节点，采用链表的形式表示
-type TreeNode struct {
-	Left  *TreeNode
-	Data  interface{}
-	Right *TreeNode
-}
+//type TreeNode struct {
+//	Left  *TreeNode
+//	Data  interface{}
+//	Right *TreeNode
+//}
 
 type Operations interface {
 	PreOrder()
