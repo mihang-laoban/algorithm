@@ -6,10 +6,10 @@ import (
 )
 
 type TreeNode struct {
-	data   int
-	left   *TreeNode
-	right  *TreeNode
-	parent *TreeNode
+	Val    int
+	Left   *TreeNode
+	Right  *TreeNode
+	Parent *TreeNode
 }
 
 type BiSearchTree struct {
@@ -20,31 +20,31 @@ type BiSearchTree struct {
 
 func (bst *BiSearchTree) Add(data int) {
 	bst.create = new(TreeNode)
-	bst.create.data = data
+	bst.create.Val = data
 
 	if !bst.IsEmpty() {
 		bst.cur = bst.root
 		for {
-			if data < bst.cur.data {
+			if data < bst.cur.Val {
 				//如果要插入的值比当前节点的值小，则当前节点指向当前节点的左孩子，如果
 				//左孩子为空，就在这个左孩子上插入新值
-				if bst.cur.left == nil {
-					bst.cur.left = bst.create
-					bst.create.parent = bst.cur
+				if bst.cur.Left == nil {
+					bst.cur.Left = bst.create
+					bst.create.Parent = bst.cur
 					break
 				} else {
-					bst.cur = bst.cur.left
+					bst.cur = bst.cur.Left
 				}
 
-			} else if data > bst.cur.data {
+			} else if data > bst.cur.Val {
 				//如果要插入的值比当前节点的值大，则当前节点指向当前节点的右孩子，如果
 				//右孩子为空，就在这个右孩子上插入新值
-				if bst.cur.right == nil {
-					bst.cur.right = bst.create
-					bst.create.parent = bst.cur
+				if bst.cur.Right == nil {
+					bst.cur.Right = bst.create
+					bst.create.Parent = bst.cur
 					break
 				} else {
-					bst.cur = bst.cur.right
+					bst.cur = bst.cur.Right
 				}
 
 			} else {
@@ -55,7 +55,7 @@ func (bst *BiSearchTree) Add(data int) {
 
 	} else {
 		bst.root = bst.create
-		bst.root.parent = nil
+		bst.root.Parent = nil
 	}
 }
 
@@ -70,51 +70,51 @@ func (bst *BiSearchTree) Delete(data int) {
 			return
 		}
 
-		if node.left == nil && node.right == nil {
+		if node.Left == nil && node.Right == nil {
 			//如果要删除的节点没有孩子，直接删掉它就可以(毫无挂念~.~!)
 			if node == bst.root {
 				bst.root = nil
 			} else {
-				if node.parent.left == node {
-					node.parent.left = nil
+				if node.Parent.Left == node {
+					node.Parent.Left = nil
 				} else {
-					node.parent.right = nil
+					node.Parent.Right = nil
 				}
 			}
 
-		} else if node.left != nil && node.right == nil {
+		} else if node.Left != nil && node.Right == nil {
 			//如果要删除的节点只有左孩子或右孩子，让这个节点的父节点指向它的指针指向它的
 			//孩子即可
 			if node == bst.root {
-				node.left.parent = nil
-				bst.root = node.left
+				node.Left.Parent = nil
+				bst.root = node.Left
 			} else {
-				node.left.parent = node.parent
-				if node.parent.left == node {
-					node.parent.left = node.left
+				node.Left.Parent = node.Parent
+				if node.Parent.Left == node {
+					node.Parent.Left = node.Left
 				} else {
-					node.parent.right = node.left
+					node.Parent.Right = node.Left
 				}
 			}
 
-		} else if node.left == nil && node.right != nil {
+		} else if node.Left == nil && node.Right != nil {
 			if node == bst.root {
-				node.right.parent = nil
-				bst.root = node.right
+				node.Right.Parent = nil
+				bst.root = node.Right
 			} else {
-				node.right.parent = node.parent
-				if node.parent.left == node {
-					node.parent.left = node.right
+				node.Right.Parent = node.Parent
+				if node.Parent.Left == node {
+					node.Parent.Left = node.Right
 				} else {
-					node.parent.right = node.right
+					node.Parent.Right = node.Right
 				}
 			}
 
 		} else {
 			//如果要删除的节点既有左孩子又有右孩子，就把这个节点的直接后继的值赋给这个节
 			//点，然后删除直接后继节点即可
-			successor := bst.GetSuccessor(node.data)
-			node.data = successor.data
+			successor := bst.GetSuccessor(node.Val)
+			node.Val = successor.Val
 			deleteNode(successor)
 		}
 	}
@@ -139,9 +139,9 @@ func (bst BiSearchTree) InOrderTravel() {
 
 	inOrderTravel = func(node *TreeNode) {
 		if node != nil {
-			inOrderTravel(node.left)
-			fmt.Printf("%d ", node.data)
-			inOrderTravel(node.right)
+			inOrderTravel(node.Left)
+			fmt.Printf("%d ", node.Val)
+			inOrderTravel(node.Right)
 		}
 	}
 
@@ -153,9 +153,9 @@ func (bst BiSearchTree) PreOrderTravel() {
 
 	PreOrderTravel = func(node *TreeNode) {
 		if node != nil {
-			fmt.Printf("%d ", node.data)
-			PreOrderTravel(node.left)
-			PreOrderTravel(node.right)
+			fmt.Printf("%d ", node.Val)
+			PreOrderTravel(node.Left)
+			PreOrderTravel(node.Right)
 		}
 	}
 
@@ -167,9 +167,9 @@ func (bst BiSearchTree) PostOrderTravel() {
 
 	PostOrderTravel = func(node *TreeNode) {
 		if node != nil {
-			PostOrderTravel(node.left)
-			PostOrderTravel(node.right)
-			fmt.Printf("%d ", node.data)
+			PostOrderTravel(node.Left)
+			PostOrderTravel(node.Right)
+			fmt.Printf("%d ", node.Val)
 		}
 	}
 
@@ -185,10 +185,10 @@ func (bst BiSearchTree) Search(data int) *TreeNode {
 			return nil
 		}
 
-		if data < bst.cur.data {
-			bst.cur = bst.cur.left
-		} else if data > bst.cur.data {
-			bst.cur = bst.cur.right
+		if data < bst.cur.Val {
+			bst.cur = bst.cur.Left
+		} else if data > bst.cur.Val {
+			bst.cur = bst.cur.Right
 		} else {
 			return bst.cur
 		}
@@ -202,12 +202,12 @@ func (bst BiSearchTree) GetDeepth() int {
 		if node == nil {
 			return 0
 		}
-		if node.left == nil && node.right == nil {
+		if node.Left == nil && node.Right == nil {
 			return 1
 		}
 		var (
-			lDepth = getDepth(node.left)
-			rDepth = getDepth(node.right)
+			lDepth = getDepth(node.Left)
+			rDepth = getDepth(node.Right)
 		)
 		if lDepth > rDepth {
 			return lDepth + 1
@@ -226,10 +226,10 @@ func (bst BiSearchTree) GetMin() int {
 	}
 	bst.cur = bst.root
 	for {
-		if bst.cur.left != nil {
-			bst.cur = bst.cur.left
+		if bst.cur.Left != nil {
+			bst.cur = bst.cur.Left
 		} else {
-			return bst.cur.data
+			return bst.cur.Val
 		}
 	}
 }
@@ -241,10 +241,10 @@ func (bst BiSearchTree) GetMax() int {
 	}
 	bst.cur = bst.root
 	for {
-		if bst.cur.right != nil {
-			bst.cur = bst.cur.right
+		if bst.cur.Right != nil {
+			bst.cur = bst.cur.Right
 		} else {
-			return bst.cur.data
+			return bst.cur.Val
 		}
 	}
 }
@@ -255,8 +255,8 @@ func (bst BiSearchTree) GetPredecessor(data int) *TreeNode {
 			return nil
 		}
 		for {
-			if node.right != nil {
-				node = node.right
+			if node.Right != nil {
+				node = node.Right
 			} else {
 				return node
 			}
@@ -265,21 +265,21 @@ func (bst BiSearchTree) GetPredecessor(data int) *TreeNode {
 
 	node := bst.Search(data)
 	if node != nil {
-		if node.left != nil {
+		if node.Left != nil {
 			//如果这个节点有左孩子，那么它的直接前驱就是它左子树的最右边的节点，因为比这
 			//个节点值小的节点都在左子树，而这些节点中值最大的就是这个最右边的节点
-			return getMax(node.left)
+			return getMax(node.Left)
 		} else {
 			//如果这个节点没有左孩子，那么就沿着它的父节点找，知道某个父节点的父节点的右
 			//孩子就是这个父节点，那么这个父节点的父节点就是直接前驱
 			for {
-				if node == nil || node.parent == nil {
+				if node == nil || node.Parent == nil {
 					break
 				}
-				if node == node.parent.right {
-					return node.parent
+				if node == node.Parent.Right {
+					return node.Parent
 				}
-				node = node.parent
+				node = node.Parent
 			}
 		}
 	}
@@ -293,8 +293,8 @@ func (bst BiSearchTree) GetSuccessor(data int) *TreeNode {
 			return nil
 		}
 		for {
-			if node.left != nil {
-				node = node.left
+			if node.Left != nil {
+				node = node.Left
 			} else {
 				return node
 			}
@@ -304,17 +304,17 @@ func (bst BiSearchTree) GetSuccessor(data int) *TreeNode {
 	//参照寻找直接前驱的函数对比着看
 	node := bst.Search(data)
 	if node != nil {
-		if node.right != nil {
-			return getMin(node.right)
+		if node.Right != nil {
+			return getMin(node.Right)
 		} else {
 			for {
-				if node == nil || node.parent == nil {
+				if node == nil || node.Parent == nil {
 					break
 				}
-				if node == node.parent.left {
-					return node.parent
+				if node == node.Parent.Left {
+					return node.Parent
 				}
-				node = node.parent
+				node = node.Parent
 			}
 		}
 	}
@@ -366,8 +366,8 @@ func run(bst BiSearchTree) {
 		fmt.Printf("The 17 exists.\n")
 	}
 
-	fmt.Printf("root node's predecessor is: %d\n", bst.GetPredecessor(bst.GetRoot().data).data)
-	fmt.Printf("root node's successor is: %d\n", bst.GetSuccessor(bst.GetRoot().data).data)
+	fmt.Printf("root node's predecessor is: %d\n", bst.GetPredecessor(bst.GetRoot().Val).Val)
+	fmt.Printf("root node's successor is: %d\n", bst.GetSuccessor(bst.GetRoot().Val).Val)
 
 	bst.Delete(13)
 	fmt.Printf("Nodes after delete the 13: ")
