@@ -19,7 +19,6 @@ func Max(a, b int) int {
 	return b
 }
 
-
 func FindX(a []int, x func(a, b int) int) (res int) {
 	for _, value := range a {
 		res = x(res, value)
@@ -27,13 +26,12 @@ func FindX(a []int, x func(a, b int) int) (res int) {
 	return
 }
 
-func IsSameType(a, b interface{})  bool{
+func IsSameType(a, b interface{}) bool {
 	return TypeOf(a) == TypeOf(b)
 }
 
-
 func Swap(a, b interface{}) {
-	if IsSameType(a,  b) {
+	if IsSameType(a, b) {
 		switch a.(type) {
 		case *int:
 			*a.(*int), *b.(*int) = *b.(*int), *a.(*int)
@@ -53,7 +51,7 @@ func InitMemo(col, row int) (dp [][]int) {
 	return
 }
 
-func LoopPrint(a interface{}){
+func LoopPrint(a interface{}) {
 	switch a.(type) {
 	case []int:
 		for _, value := range a.([]int) {
@@ -88,4 +86,11 @@ func Mini(a ...int) (res int) {
 		}
 	}
 	return
+}
+
+func Abs(x int) int {
+	if x < 0 {
+		return -1 * x
+	}
+	return x
 }

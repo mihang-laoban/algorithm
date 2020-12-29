@@ -67,20 +67,20 @@ func (t *Tree) Delete(target int) {
 }
 
 const (
-	BEGIN_SORT = iota
-	MIDDLE_SORT
-	END_SORT
+	PRE = iota
+	IN
+	POST
 )
 
 func (t *Tree) Traverse(sortType int) {
 	switch sortType {
-	case BEGIN_SORT:
+	case PRE:
 		fmt.Print("前序遍历:")
 		t.PreOrder(t.root)
-	case MIDDLE_SORT:
+	case IN:
 		fmt.Print("中序遍历:")
 		t.InOrder(t.root)
-	case END_SORT:
+	case POST:
 		fmt.Print("后序遍历:")
 		t.PostOrder(t.root)
 	}
@@ -117,10 +117,10 @@ func InitBinaryTree() {
 	tree.Insert(5)
 	tree.Insert(9)
 
-	tree.Traverse(BEGIN_SORT)
+	tree.Traverse(PRE)
 	fmt.Print("\n")
-	tree.Traverse(MIDDLE_SORT)
+	tree.Traverse(IN)
 	fmt.Print("\n")
-	tree.Traverse(END_SORT)
+	tree.Traverse(POST)
 	fmt.Print("\n")
 }
