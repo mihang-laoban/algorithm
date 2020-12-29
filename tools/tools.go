@@ -5,14 +5,14 @@ import (
 	. "reflect"
 )
 
-func Min(a int, b int) int {
+func Min(a, b int) int {
 	if a > b {
 		return b
 	}
 	return a
 }
 
-func Max(a int, b int) int {
+func Max(a, b int) int {
 	if a > b {
 		return a
 	}
@@ -20,12 +20,12 @@ func Max(a int, b int) int {
 }
 
 
-func IsSameType(a interface{}, b interface{})  bool{
+func IsSameType(a, b interface{})  bool{
 	return TypeOf(a) == TypeOf(b)
 }
 
 
-func Swap(a interface{}, b interface{}) {
+func Swap(a, b interface{}) {
 	if IsSameType(a,  b) {
 		switch a.(type) {
 		case *int:
@@ -38,7 +38,7 @@ func Swap(a interface{}, b interface{}) {
 	}
 }
 
-func InitMemo(col int, row int) (dp [][]int) {
+func InitMemo(col, row int) (dp [][]int) {
 	dp = make([][]int, col)
 	for i := 0; i < col; i++ {
 		dp[i] = make([]int, row)
@@ -66,6 +66,26 @@ func LoopPrint(a interface{}){
 func FindX(a []int, x func(a, b int) int) (res int) {
 	for _, value := range a {
 		res = x(res, value)
+	}
+	return
+}
+
+func Maxi(a ...int) (res int) {
+	res = a[0]
+	for _, v := range a[1:] {
+		if v > res {
+			res = v
+		}
+	}
+	return res
+}
+
+func Mini(a ...int) (res int) {
+	res = a[0]
+	for _, v := range a[1:] {
+		if v < res {
+			res = v
+		}
 	}
 	return
 }
