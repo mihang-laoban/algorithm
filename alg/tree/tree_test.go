@@ -7,8 +7,8 @@ import (
 
 type TreeNode struct {
 	data   float64
-	lchild *TreeNode
-	rchild *TreeNode
+	left   *TreeNode
+	right  *TreeNode
 	parent *TreeNode
 }
 
@@ -28,23 +28,23 @@ func (bst *BiSearchTree) Add(data float64) {
 			if data < bst.cur.data {
 				//如果要插入的值比当前节点的值小，则当前节点指向当前节点的左孩子，如果
 				//左孩子为空，就在这个左孩子上插入新值
-				if bst.cur.lchild == nil {
-					bst.cur.lchild = bst.create
+				if bst.cur.left == nil {
+					bst.cur.left = bst.create
 					bst.create.parent = bst.cur
 					break
 				} else {
-					bst.cur = bst.cur.lchild
+					bst.cur = bst.cur.left
 				}
 
 			} else if data > bst.cur.data {
 				//如果要插入的值比当前节点的值大，则当前节点指向当前节点的右孩子，如果
 				//右孩子为空，就在这个右孩子上插入新值
-				if bst.cur.rchild == nil {
-					bst.cur.rchild = bst.create
+				if bst.cur.right == nil {
+					bst.cur.right = bst.create
 					bst.create.parent = bst.cur
 					break
 				} else {
-					bst.cur = bst.cur.rchild
+					bst.cur = bst.cur.right
 				}
 
 			} else {
@@ -62,7 +62,7 @@ func (bst *BiSearchTree) Add(data float64) {
 func (bst *BiSearchTree) Delete(data float64) {
 	var (
 		deleteNode func(node *TreeNode)
-		node       *TreeNode = bst.Search(data)
+		node       = bst.Search(data)
 	)
 
 	deleteNode = func(node *TreeNode) {
@@ -70,43 +70,43 @@ func (bst *BiSearchTree) Delete(data float64) {
 			return
 		}
 
-		if node.lchild == nil && node.rchild == nil {
+		if node.left == nil && node.right == nil {
 			//如果要删除的节点没有孩子，直接删掉它就可以(毫无挂念~.~!)
 			if node == bst.root {
 				bst.root = nil
 			} else {
-				if node.parent.lchild == node {
-					node.parent.lchild = nil
+				if node.parent.left == node {
+					node.parent.left = nil
 				} else {
-					node.parent.rchild = nil
+					node.parent.right = nil
 				}
 			}
 
-		} else if node.lchild != nil && node.rchild == nil {
+		} else if node.left != nil && node.right == nil {
 			//如果要删除的节点只有左孩子或右孩子，让这个节点的父节点指向它的指针指向它的
 			//孩子即可
 			if node == bst.root {
-				node.lchild.parent = nil
-				bst.root = node.lchild
+				node.left.parent = nil
+				bst.root = node.left
 			} else {
-				node.lchild.parent = node.parent
-				if node.parent.lchild == node {
-					node.parent.lchild = node.lchild
+				node.left.parent = node.parent
+				if node.parent.left == node {
+					node.parent.left = node.left
 				} else {
-					node.parent.rchild = node.lchild
+					node.parent.right = node.left
 				}
 			}
 
-		} else if node.lchild == nil && node.rchild != nil {
+		} else if node.left == nil && node.right != nil {
 			if node == bst.root {
-				node.rchild.parent = nil
-				bst.root = node.rchild
+				node.right.parent = nil
+				bst.root = node.right
 			} else {
-				node.rchild.parent = node.parent
-				if node.parent.lchild == node {
-					node.parent.lchild = node.rchild
+				node.right.parent = node.parent
+				if node.parent.left == node {
+					node.parent.left = node.right
 				} else {
-					node.parent.rchild = node.rchild
+					node.parent.right = node.right
 				}
 			}
 
@@ -139,9 +139,9 @@ func (bst BiSearchTree) InOrderTravel() {
 
 	inOrderTravel = func(node *TreeNode) {
 		if node != nil {
-			inOrderTravel(node.lchild)
+			inOrderTravel(node.left)
 			fmt.Printf("%g ", node.data)
-			inOrderTravel(node.rchild)
+			inOrderTravel(node.right)
 		}
 	}
 
@@ -154,8 +154,8 @@ func (bst BiSearchTree) PreOrderTravel() {
 	PreOrderTravel = func(node *TreeNode) {
 		if node != nil {
 			fmt.Printf("%g ", node.data)
-			PreOrderTravel(node.lchild)
-			PreOrderTravel(node.rchild)
+			PreOrderTravel(node.left)
+			PreOrderTravel(node.right)
 		}
 	}
 
@@ -167,8 +167,8 @@ func (bst BiSearchTree) PostOrderTravel() {
 
 	PostOrderTravel = func(node *TreeNode) {
 		if node != nil {
-			PostOrderTravel(node.lchild)
-			PostOrderTravel(node.rchild)
+			PostOrderTravel(node.left)
+			PostOrderTravel(node.right)
 			fmt.Printf("%g ", node.data)
 		}
 	}
@@ -186,9 +186,9 @@ func (bst BiSearchTree) Search(data float64) *TreeNode {
 		}
 
 		if data < bst.cur.data {
-			bst.cur = bst.cur.lchild
+			bst.cur = bst.cur.left
 		} else if data > bst.cur.data {
-			bst.cur = bst.cur.rchild
+			bst.cur = bst.cur.right
 		} else {
 			return bst.cur
 		}
@@ -196,27 +196,27 @@ func (bst BiSearchTree) Search(data float64) *TreeNode {
 }
 
 func (bst BiSearchTree) GetDeepth() int {
-	var getDeepth func(node *TreeNode) int
+	var getDepth func(node *TreeNode) int
 
-	getDeepth = func(node *TreeNode) int {
+	getDepth = func(node *TreeNode) int {
 		if node == nil {
 			return 0
 		}
-		if node.lchild == nil && node.rchild == nil {
+		if node.left == nil && node.right == nil {
 			return 1
 		}
 		var (
-			ldeepth int = getDeepth(node.lchild)
-			rdeepth int = getDeepth(node.rchild)
+			lDepth = getDepth(node.left)
+			rDepth = getDepth(node.right)
 		)
-		if ldeepth > rdeepth {
-			return ldeepth + 1
+		if lDepth > rDepth {
+			return lDepth + 1
 		} else {
-			return rdeepth + 1
+			return rDepth + 1
 		}
 	}
 
-	return getDeepth(bst.root)
+	return getDepth(bst.root)
 }
 
 func (bst BiSearchTree) GetMin() float64 {
@@ -226,8 +226,8 @@ func (bst BiSearchTree) GetMin() float64 {
 	}
 	bst.cur = bst.root
 	for {
-		if bst.cur.lchild != nil {
-			bst.cur = bst.cur.lchild
+		if bst.cur.left != nil {
+			bst.cur = bst.cur.left
 		} else {
 			return bst.cur.data
 		}
@@ -241,8 +241,8 @@ func (bst BiSearchTree) GetMax() float64 {
 	}
 	bst.cur = bst.root
 	for {
-		if bst.cur.rchild != nil {
-			bst.cur = bst.cur.rchild
+		if bst.cur.right != nil {
+			bst.cur = bst.cur.right
 		} else {
 			return bst.cur.data
 		}
@@ -255,8 +255,8 @@ func (bst BiSearchTree) GetPredecessor(data float64) *TreeNode {
 			return nil
 		}
 		for {
-			if node.rchild != nil {
-				node = node.rchild
+			if node.right != nil {
+				node = node.right
 			} else {
 				return node
 			}
@@ -265,10 +265,10 @@ func (bst BiSearchTree) GetPredecessor(data float64) *TreeNode {
 
 	node := bst.Search(data)
 	if node != nil {
-		if node.lchild != nil {
+		if node.left != nil {
 			//如果这个节点有左孩子，那么它的直接前驱就是它左子树的最右边的节点，因为比这
 			//个节点值小的节点都在左子树，而这些节点中值最大的就是这个最右边的节点
-			return getMax(node.lchild)
+			return getMax(node.left)
 		} else {
 			//如果这个节点没有左孩子，那么就沿着它的父节点找，知道某个父节点的父节点的右
 			//孩子就是这个父节点，那么这个父节点的父节点就是直接前驱
@@ -276,7 +276,7 @@ func (bst BiSearchTree) GetPredecessor(data float64) *TreeNode {
 				if node == nil || node.parent == nil {
 					break
 				}
-				if node == node.parent.rchild {
+				if node == node.parent.right {
 					return node.parent
 				}
 				node = node.parent
@@ -293,8 +293,8 @@ func (bst BiSearchTree) GetSuccessor(data float64) *TreeNode {
 			return nil
 		}
 		for {
-			if node.lchild != nil {
-				node = node.lchild
+			if node.left != nil {
+				node = node.left
 			} else {
 				return node
 			}
@@ -304,14 +304,14 @@ func (bst BiSearchTree) GetSuccessor(data float64) *TreeNode {
 	//参照寻找直接前驱的函数对比着看
 	node := bst.Search(data)
 	if node != nil {
-		if node.rchild != nil {
-			return getMin(node.rchild)
+		if node.right != nil {
+			return getMin(node.right)
 		} else {
 			for {
 				if node == nil || node.parent == nil {
 					break
 				}
-				if node == node.parent.lchild {
+				if node == node.parent.left {
 					return node.parent
 				}
 				node = node.parent
