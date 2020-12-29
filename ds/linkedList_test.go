@@ -114,7 +114,7 @@ func TestRun(t *testing.T) {
 	}
 	node.Prepend(0)
 	node.Display()
-	node.ReverseR()
+	node.Reverse()
 	node.DisplayR()
 	fmt.Println()
 	fmt.Println(node.IsEmpty())
