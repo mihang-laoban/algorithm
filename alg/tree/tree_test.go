@@ -6,7 +6,7 @@ import (
 )
 
 type TreeNode struct {
-	data   float64
+	data   int
 	left   *TreeNode
 	right  *TreeNode
 	parent *TreeNode
@@ -18,7 +18,7 @@ type BiSearchTree struct {
 	create *TreeNode
 }
 
-func (bst *BiSearchTree) Add(data float64) {
+func (bst *BiSearchTree) Add(data int) {
 	bst.create = new(TreeNode)
 	bst.create.data = data
 
@@ -59,7 +59,7 @@ func (bst *BiSearchTree) Add(data float64) {
 	}
 }
 
-func (bst *BiSearchTree) Delete(data float64) {
+func (bst *BiSearchTree) Delete(data int) {
 	var (
 		deleteNode func(node *TreeNode)
 		node       = bst.Search(data)
@@ -140,7 +140,7 @@ func (bst BiSearchTree) InOrderTravel() {
 	inOrderTravel = func(node *TreeNode) {
 		if node != nil {
 			inOrderTravel(node.left)
-			fmt.Printf("%g ", node.data)
+			fmt.Printf("%d ", node.data)
 			inOrderTravel(node.right)
 		}
 	}
@@ -153,7 +153,7 @@ func (bst BiSearchTree) PreOrderTravel() {
 
 	PreOrderTravel = func(node *TreeNode) {
 		if node != nil {
-			fmt.Printf("%g ", node.data)
+			fmt.Printf("%d ", node.data)
 			PreOrderTravel(node.left)
 			PreOrderTravel(node.right)
 		}
@@ -169,14 +169,14 @@ func (bst BiSearchTree) PostOrderTravel() {
 		if node != nil {
 			PostOrderTravel(node.left)
 			PostOrderTravel(node.right)
-			fmt.Printf("%g ", node.data)
+			fmt.Printf("%d ", node.data)
 		}
 	}
 
 	PostOrderTravel(bst.root)
 }
 
-func (bst BiSearchTree) Search(data float64) *TreeNode {
+func (bst BiSearchTree) Search(data int) *TreeNode {
 	//和Add操作类似，只要按照比当前节点小就往左孩子上拐，比当前节点大就往右孩子上拐的思路
 	//一路找下去，知道找到要查找的值返回即可
 	bst.cur = bst.root
@@ -219,7 +219,7 @@ func (bst BiSearchTree) GetDeepth() int {
 	return getDepth(bst.root)
 }
 
-func (bst BiSearchTree) GetMin() float64 {
+func (bst BiSearchTree) GetMin() int {
 	//根据二叉查找树的性质，树中最左边的节点就是值最小的节点
 	if bst.root == nil {
 		return -1
@@ -234,7 +234,7 @@ func (bst BiSearchTree) GetMin() float64 {
 	}
 }
 
-func (bst BiSearchTree) GetMax() float64 {
+func (bst BiSearchTree) GetMax() int {
 	//根据二叉查找树的性质，树中最右边的节点就是值最大的节点
 	if bst.root == nil {
 		return -1
@@ -249,7 +249,7 @@ func (bst BiSearchTree) GetMax() float64 {
 	}
 }
 
-func (bst BiSearchTree) GetPredecessor(data float64) *TreeNode {
+func (bst BiSearchTree) GetPredecessor(data int) *TreeNode {
 	getMax := func(node *TreeNode) *TreeNode {
 		if node == nil {
 			return nil
@@ -287,7 +287,7 @@ func (bst BiSearchTree) GetPredecessor(data float64) *TreeNode {
 	return nil
 }
 
-func (bst BiSearchTree) GetSuccessor(data float64) *TreeNode {
+func (bst BiSearchTree) GetSuccessor(data int) *TreeNode {
 	getMin := func(node *TreeNode) *TreeNode {
 		if node == nil {
 			return nil
@@ -342,18 +342,10 @@ func (bst *BiSearchTree) Clear() {
 
 func Test(t *testing.T) {
 	var bst BiSearchTree
-	bst.Add(15)
-	bst.Add(6)
-	bst.Add(18)
-	bst.Add(3)
-	bst.Add(7)
-	bst.Add(17)
-	bst.Add(20)
-	bst.Add(2)
-	bst.Add(4)
-	bst.Add(13)
-	bst.Add(9)
-	bst.Add(14)
+	arr := []int{15, 6, 18, 3, 7, 17, 20, 2, 4, 13, 9, 14}
+	for _, v := range arr {
+		bst.Add(v)
+	}
 
 	fmt.Println("[in]The nodes of the BiSearchTree is: ")
 	bst.InOrderTravel()
@@ -366,15 +358,15 @@ func Test(t *testing.T) {
 	fmt.Println()
 
 	fmt.Printf("The deepth of the tree is: %d\n", bst.GetDeepth())
-	fmt.Printf("The min is: %g\n", bst.GetMin())
-	fmt.Printf("The max is: %g\n", bst.GetMax())
+	fmt.Printf("The min is: %d\n", bst.GetMin())
+	fmt.Printf("The max is: %d\n", bst.GetMax())
 
 	if bst.Search(17) != nil {
 		fmt.Printf("The 17 exists.\n")
 	}
 
-	fmt.Printf("root node's predecessor is: %g\n", bst.GetPredecessor(bst.GetRoot().data).data)
-	fmt.Printf("root node's successor is: %g\n", bst.GetSuccessor(bst.GetRoot().data).data)
+	fmt.Printf("root node's predecessor is: %d\n", bst.GetPredecessor(bst.GetRoot().data).data)
+	fmt.Printf("root node's successor is: %d\n", bst.GetSuccessor(bst.GetRoot().data).data)
 
 	bst.Delete(13)
 	fmt.Printf("Nodes after delete the 13: ")
