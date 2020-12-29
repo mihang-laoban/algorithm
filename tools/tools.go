@@ -20,6 +20,13 @@ func Max(a, b int) int {
 }
 
 
+func FindX(a []int, x func(a, b int) int) (res int) {
+	for _, value := range a {
+		res = x(res, value)
+	}
+	return
+}
+
 func IsSameType(a, b interface{})  bool{
 	return TypeOf(a) == TypeOf(b)
 }
@@ -61,13 +68,6 @@ func LoopPrint(a interface{}){
 	default:
 		fmt.Println("unknown type")
 	}
-}
-
-func FindX(a []int, x func(a, b int) int) (res int) {
-	for _, value := range a {
-		res = x(res, value)
-	}
-	return
 }
 
 func Maxi(a ...int) (res int) {
