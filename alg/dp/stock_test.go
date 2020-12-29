@@ -18,6 +18,7 @@ import (
 输入：[7, 6, 4, 3, 1]
 输出：0
 解释：在这个情况下, 没有交易完成, 所以最大利润为 0。*/
+// Q17
 func TestStock(t *testing.T) {
 	prices := []int{3, 3, 5, 0, 0, 3, 1, 4}
 	length := len(prices)
@@ -42,6 +43,7 @@ func TestStock(t *testing.T) {
 	res := Max(dp[length-1][0][1], dp[length-1][0][2])
 	fmt.Println(res)
 }
+
 
 func TestStock2(t *testing.T) {
 	prices := []int{3, 3, 5, 0, 0, 3, 1, 4}
@@ -86,6 +88,7 @@ func TestStock2(t *testing.T) {
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+// Q18
 func TestMaxProfit1(t *testing.T) {
 	prices := []int{7,1,5,3,6,4}
 	fmt.Println(maxProfit2(prices))
@@ -143,7 +146,7 @@ func maxProfit2(prices []int) int {
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
-
+// Q19
 func TestMaxProfit2(t *testing.T) {
 	prices := []int{7,1,5,3,6,4}
 	fmt.Println(stockDp(prices))

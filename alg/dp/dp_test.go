@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// Q1
 func TestExchangeMinCount(t *testing.T) {
 	values := []int{3, 5}
 	total := 11
@@ -37,6 +38,7 @@ w = [3, 2, 1], v = [5, 2, 3]
 输出：15
 解释：当 i = 2 时，选取 5 次，总价值为 5 * 3 = 15。
 */
+// Q2
 func TestPackage(t *testing.T) {
 	weights, values := []int{0, 3, 2, 1}, []int{0, 5, 2, 3}
 	totalWeight, totalCount := 5, 3
@@ -79,7 +81,7 @@ func packImproved(weights []int, values []int, totalWeight int, totalCount int) 
 }
 
 
-
+// Q3
 func TestDp(t *testing.T) {
 	str := "aaa"
 	largestSubArr(str)
@@ -109,7 +111,7 @@ func largestSubArr(str string) {
 	fmt.Println(res)
 }
 
-
+// Q4
 func TestFindLargestArrSum(t *testing.T) {
 	arr := []int{-2, 1, -3, 4, -1, 3, -5, 1, 2}
 
@@ -123,6 +125,7 @@ func TestFindLargestArrSum(t *testing.T) {
 	fmt.Println(res)
 }
 
+// Q5
 func TestFindLargestSubSeq(t *testing.T) {
 	str := "asssasms" // 5
 	FindLargestSubSeq(str)
@@ -148,6 +151,7 @@ func FindLargestSubSeq(str string) {
 	fmt.Println(dp[0][size-1])
 }
 
+// Q6
 func TestFindLongestSharedSubSeq(t *testing.T) {
 	text1 := "abcde"
 	text2 := "ade"
@@ -170,6 +174,7 @@ func TestFindLongestSharedSubSeq(t *testing.T) {
 	fmt.Println(dp[s1][s2])
 }
 
+// Q7
 func TestLongestCommonSubsequence(t *testing.T) {
 	text1 := "abcde"
 	text2 := "ade"
@@ -195,6 +200,7 @@ func TestLongestCommonSubsequence(t *testing.T) {
 	fmt.Println(dp[m][n%2])
 }
 
+// Q8
 func TestRobotPathSum(t *testing.T) {
 	m := 4
 	n := 3
@@ -232,6 +238,7 @@ func TestRobotPathSum(t *testing.T) {
 从左上角到右下角一共有 2 条不同的路径：
 1. 向右 -> 向右 -> 向下 -> 向下
 2. 向下 -> 向下 -> 向右 -> 向右*/
+// Q9
 func TestRobotPathSumWithObstacle(t *testing.T) {
 	m := 3
 	n := 3
@@ -274,6 +281,7 @@ func TestRobotPathSumWithObstacle(t *testing.T) {
 	fmt.Println(dp[m-1][n-1])
 }
 
+// Q10
 func TestJump(t *testing.T) {
 	arr1 := []int{2, 3, 1, 1, 6}
 	arr2 := []int{4, 2, 1, 0, 0, 6}
@@ -304,6 +312,7 @@ func JumpGame(arr []int) {
 解释: 最长连续递增序列是 [1, 3, 5], 长度为 3。
 你会发现 [1, 3, 5, 7] 也是升序的子序列, 但它不是连续的。
 因为 5 和 7 在原数组中被 0 隔开。因此，这不是原问题的答案。*/
+// Q11
 func TestContinuousIncrementalSubSeq(t *testing.T) {
 	arr1 := []int{6, 6, 6, 6, 6, 6}
 	arr2 := []int{1, 3, 5, 0, 7}
@@ -336,6 +345,7 @@ func findContinuous(arr []int) {
 输入: nums = [10, 9, 1, 5, 2, 6, 66, 18]
 输出: 4
 解释: 其中一个最长的上升子序列是 [1, 2, 6, 66]，它的长度是 4。*/
+// Q12
 func TestIncrementalSubSeq(t *testing.T) {
 	arr1 := []int{10, 9, 1, 5, 2, 6, 66, 18}
 	findIncrement(arr1)
@@ -430,6 +440,7 @@ func findIncrementNum(arr []int) {
 	fmt.Println(res)
 }
 
+// Q13
 func TestFib(t *testing.T) {
 	n := 6
 	dp := make([]int, n+1)
@@ -453,6 +464,7 @@ func TestFibSingle(t *testing.T) {
 	fmt.Println(cur)
 }
 
+// Q14
 func TestFindLargestSubArray(t *testing.T) {
 	nums := []int{-1, 4, -2, 3, -2, 3}
 	k := 2
@@ -488,6 +500,7 @@ func TestFindLargestSubArray(t *testing.T) {
 	fmt.Println(dp[n][k])
 }
 
+// Q15
 func TestLargestProductSubArr1(t *testing.T) {
 	nums := []int{2, 8, -2, 4} // [-2, 0, -1] > 0
 	//	16
@@ -511,6 +524,7 @@ func TestLargestProductSubArr1(t *testing.T) {
 	fmt.Println(res)
 }
 
+// Q16
 func TestLargestProductSubArr2(t *testing.T) {
 	nums := []int{2, 8, -2, 4} // [-2, 0, -1] > 0
 	n := len(nums)
