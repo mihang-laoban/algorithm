@@ -10,7 +10,7 @@ import (
 
 注意：答案中不可以包含重复的三元组。
 
- 
+
 
 示例：
 
@@ -31,28 +31,27 @@ func TestThree(t *testing.T) {
 	fmt.Println(res)
 }
 
-func threeSum(nums []int) [][]int {
+func threeSum(nums []int) (res [][]int) {
 	n := len(nums)
 	sort.Ints(nums)
-	ans := make([][]int, 0)
 
 	// 枚举 a
 	for first := 0; first < n; first++ {
 		// 需要和上一次枚举的数不相同
-		if first > 0 && nums[first] == nums[first - 1] {
+		if first > 0 && nums[first] == nums[first-1] {
 			continue
 		}
 		// c 对应的指针初始指向数组的最右端
 		third := n - 1
-		target := -1 * nums[first]
+		target := -nums[first]
 		// 枚举 b
 		for second := first + 1; second < n; second++ {
 			// 需要和上一次枚举的数不相同
-			if second > first + 1 && nums[second] == nums[second - 1] {
+			if second > first+1 && nums[second] == nums[second-1] {
 				continue
 			}
 			// 需要保证 b 的指针在 c 的指针的左侧
-			for second < third && nums[second] + nums[third] > target {
+			for second < third && nums[second]+nums[third] > target {
 				third--
 			}
 			// 如果指针重合，随着 b 后续的增加
@@ -60,37 +59,37 @@ func threeSum(nums []int) [][]int {
 			if second == third {
 				break
 			}
-			if nums[second] + nums[third] == target {
-				ans = append(ans, []int{nums[first], nums[second], nums[third]})
+			if nums[second]+nums[third] == target {
+				res = append(res, []int{nums[first], nums[second], nums[third]})
 			}
 		}
 	}
-	return ans
+	return
 }
 
 func threesome(nums []int) (res [][]int) {
 	n := len(nums)
 	sort.Ints(nums)
-	third := n-1
-
+	third := n - 1
 	for first := 0; first < n; first++ {
 		if first > 0 && nums[first] == nums[first-1] {
 			continue
 		}
+		target := -nums[first]
 		for second := first + 1; second < n; second++ {
-			if second > first + 1 && nums[second] == nums[second-1] {
+			if second > first+1 && nums[second] == nums[second-1] {
 				continue
 			}
-			for second < third && nums[second] + nums[third] > -nums[first] {
+			for second < third && nums[third]+nums[second] > target {
 				third--
 			}
 			if second == third {
 				break
 			}
-			if nums[second] + nums[third] == -nums[first] {
+			if nums[third]+nums[second] == target {
 				res = append(res, []int{nums[first], nums[second], nums[third]})
 			}
 		}
 	}
-	return res
+	return
 }
