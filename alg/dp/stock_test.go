@@ -99,12 +99,10 @@ func maxProfit(prices []int) int {
 	mi := INT_MAX
 	//mi := int(1e9)
 	ma := 0
-
 	for _, price := range prices{
 		ma = Max(price - mi, ma)
 		mi = Min(price, mi)
 	}
-
 	return ma
 }
 
@@ -112,13 +110,14 @@ func maxProfit2(prices []int) int {
 	mi := int(1e9)
 	ma := 0
 
-	for i := 0; i < len(prices); i++ {
-		if prices[i] < mi {
-			mi = prices[i]
-		} else if prices[i] - mi > ma {
-			ma = prices[i] - mi
+	for _, v := range prices{
+		if v  < mi {
+			mi  = v
+		} else if v - mi > ma {
+			ma = v - mi
 		}
 	}
+
 	return ma
 }
 
