@@ -1,7 +1,6 @@
 package dp
 
 import (
-	. "dp/tools"
 	"fmt"
 	"testing"
 )
@@ -23,54 +22,6 @@ func TestStock(t *testing.T) {
 	prices := []int{3, 3, 5, 0, 0, 3, 1, 4}
 	Stock(prices)
 	ImprovedStock(prices)
-}
-
-func Stock(prices []int) {
-	length := len(prices)
-	dp := make([][2][3]int, length)
-	// 假设第一天没有买入
-	dp[0][0][0] = 0
-	dp[0][0][1] = 0
-	dp[0][0][2] = 0
-	// 第一天不可能已卖出
-	dp[0][1][0] = -prices[0]
-	dp[0][1][1] = -prices[0]
-	dp[0][1][2] = -prices[0]
-	// 处理后续日期
-	for i := 1; i < length; i++ {
-		dp[i][0][0] = 0
-		dp[i][0][1] = Max(dp[i-1][1][0]+prices[i], dp[i-1][0][1])
-		dp[i][0][2] = Max(dp[i-1][1][1]+prices[i], dp[i-1][0][2])
-		dp[i][1][0] = Max(dp[i-1][0][0]-prices[i], dp[i-1][1][0])
-		dp[i][1][1] = Max(dp[i-1][0][1]-prices[i], dp[i-1][1][1])
-		dp[i][1][2] = 0
-	}
-	res := Max(dp[length-1][0][1], dp[length-1][0][2])
-	fmt.Println(res)
-}
-
-func ImprovedStock(prices []int) {
-	size := len(prices)
-
-	dp := [2][2][3]int{}
-	dp[0][0][0] = 0
-	dp[0][0][1] = 0
-	dp[0][0][2] = 0
-
-	dp[0][1][0] = -prices[0]
-	dp[0][1][1] = -prices[0]
-	dp[0][1][2] = -prices[0]
-
-	for i := 1; i < size; i++ {
-		dp[i%2][0][0] = 0
-		dp[i%2][0][1] = Max(dp[(i-1)%2][1][0]+prices[i], dp[(i-1)%2][0][1])
-		dp[i%2][0][2] = Max(dp[(i-1)%2][1][1]+prices[i], dp[(i-1)%2][0][2])
-		dp[i%2][1][0] = Max(dp[(i-1)%2][0][0]-prices[i], dp[(i-1)%2][1][0])
-		dp[i%2][1][1] = Max(dp[(i-1)%2][0][1]-prices[i], dp[(i-1)%2][1][1])
-		dp[i%2][1][2] = 0
-	}
-	res := Max(dp[(size-1)%2][0][1], dp[(size-1)%2][0][2])
-	fmt.Println(res)
 }
 
 /*给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
