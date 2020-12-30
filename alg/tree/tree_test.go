@@ -376,25 +376,39 @@ func run(bst BiSearchTree) {
 	fmt.Printf("\n")
 }
 
-func isBalanced(root *TreeNode) bool {
-	return height(root) >= 0
+func isBalancedBottom(root *TreeNode) bool {
+	return heightBottom(root) >= 0
 }
 
-func height(root *TreeNode) int {
+func heightBottom(root *TreeNode) int {
 	if root == nil {
 		return 0
 	}
-	leftHeight := height(root.Left)
-	rightHeight := height(root.Right)
-	if leftHeight == -1 || rightHeight == -1 || Abs(leftHeight-rightHeight) > 1 {
+	left := heightBottom(root.Left)
+	right := heightBottom(root.Right)
+	if left == -1 || right == -1 || Abs(left-right) > 1 {
 		return -1
 	}
-	return Max(leftHeight, rightHeight) + 1
+	return Max(left, right) + 1
+}
+
+func isBalancedTop(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	return isBalancedTop(root.Left) && isBalancedTop(root.Right) && Abs(heightTop(root.Left)-heightTop(root.Right)) < 2
+}
+
+func heightTop(node *TreeNode) int {
+	if node == nil {
+		return 0
+	}
+	return Max(heightTop(node.Right), heightTop(node.Left)) + 1
 }
 
 func Test(t *testing.T) {
 	arr := []int{15, 6, 18, 3, 7, 17, 20, 2, 4, 13, 9, 14}
 	tmp := initTree(arr)
 	root := tmp.GetRoot()
-	fmt.Println(isBalanced(root))
+	fmt.Println(isBalancedBottom(root))
 }
