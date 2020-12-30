@@ -45,7 +45,6 @@ func TestStock(t *testing.T) {
 	fmt.Println(res)
 }
 
-
 func TestStock2(t *testing.T) {
 	prices := []int{3, 3, 5, 0, 0, 3, 1, 4}
 	size := len(prices)
@@ -91,7 +90,7 @@ func TestStock2(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 // Q18
 func TestMaxProfit1(t *testing.T) {
-	prices := []int{7,1,5,3,6,4}
+	prices := []int{7, 1, 5, 3, 6, 4}
 	fmt.Println(maxProfit2(prices))
 }
 
@@ -99,8 +98,8 @@ func maxProfit(prices []int) int {
 	mi := INT_MAX
 	//mi := int(1e9)
 	ma := 0
-	for _, price := range prices{
-		ma = Max(price - mi, ma)
+	for _, price := range prices {
+		ma = Max(price-mi, ma)
 		mi = Min(price, mi)
 	}
 	return ma
@@ -110,10 +109,10 @@ func maxProfit2(prices []int) int {
 	mi := int(1e9)
 	ma := 0
 
-	for _, v := range prices{
+	for _, v := range prices {
 		if v < mi {
-			mi  = v
-		} else if v - mi > ma {
+			mi = v
+		} else if v-mi > ma {
 			ma = v - mi
 		}
 	}
@@ -148,7 +147,7 @@ func maxProfit2(prices []int) int {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 // Q19
 func TestMaxProfit2(t *testing.T) {
-	prices := []int{7,1,5,3,6,4}
+	prices := []int{7, 1, 5, 3, 6, 4}
 	fmt.Println(stockDp(prices))
 }
 
@@ -160,24 +159,23 @@ func stockDp(prices []int) (s int) {
 		e = Max(e, s-prices[i])
 	}
 	return
-/*	dp := make([][2]int, size)
-	dp[0][0] = 0
-	dp[0][1] = -prices[0]
-	for i := 1; i < size; i++ {
-		dp[i][0] = Max(dp[i-1][1]+prices[i], dp[i-1][0])
-		dp[i][1] = Max(dp[i-1][0]-prices[i], dp[i-1][1])
-	}
-	return dp[size-1][0]
-*/
+	/*	dp := make([][2]int, size)
+		dp[0][0] = 0
+		dp[0][1] = -prices[0]
+		for i := 1; i < size; i++ {
+			dp[i][0] = Max(dp[i-1][1]+prices[i], dp[i-1][0])
+			dp[i][1] = Max(dp[i-1][0]-prices[i], dp[i-1][1])
+		}
+		return dp[size-1][0]
+	*/
 }
 
-func stockGreed(prices []int) (ans int){
+func stockGreed(prices []int) (ans int) {
 	for i := 1; i < len(prices); i++ {
 		ans += Max(0, prices[i]-prices[i-1])
 	}
 	return
 }
-
 
 /*给定一个整数数组 prices ，它的第 i 个元素 prices[i] 是一支给定的股票在第 i 天的价格。
 
@@ -185,7 +183,7 @@ func stockGreed(prices []int) (ans int){
 
 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
 
- 
+
 
 示例 1：
 
@@ -198,7 +196,7 @@ func stockGreed(prices []int) (ans int){
 输出：7
 解释：在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 这笔交易所能获得利润 = 6-2 = 4 。
 随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 这笔交易所能获得利润 = 3-0 = 3 。
- 
+
 
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv
@@ -216,8 +214,10 @@ func maxProfitK1(k int, prices []int) int {
 	}
 
 	k = Mini(k, n/2)
+
 	buy := make([]int, k+1)
 	sell := make([]int, k+1)
+
 	buy[0] = -prices[0]
 	for i := 1; i <= k; i++ {
 		buy[i] = math.MinInt64 / 2
