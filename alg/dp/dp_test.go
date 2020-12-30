@@ -13,13 +13,13 @@ func TestExchangeMinCount(t *testing.T) {
 
 	dp := make([]int, total+1)
 	for i := 1; i < total+1; i++ {
-		dp[i] = total+1
+		dp[i] = total + 1
 	}
-	dp[0]= 0
+	dp[0] = 0
 
 	for i := 1; i < total+1; i++ {
 		for _, value := range values {
-			if i - value < 0 {
+			if i-value < 0 {
 				continue
 			}
 			dp[i] = Min(dp[i-value]+1, dp[i])
@@ -46,16 +46,22 @@ func TestPackage(t *testing.T) {
 }
 
 func pack(weights []int, values []int, totalWeight int, totalCount int) {
-	dp:=make([][]int, totalCount+1)
-	for i := 0; i < totalCount+1; i++ {	dp[i] = make([]int, totalWeight+1) }
-	for i := 0; i < totalCount+1; i++ { dp[i][0] = 0 }
-	for i := 0; i < totalWeight+1; i++ { dp[0][i] = 0 }
+	dp := make([][]int, totalCount+1)
+	for i := 0; i < totalCount+1; i++ {
+		dp[i] = make([]int, totalWeight+1)
+	}
+	for i := 0; i < totalCount+1; i++ {
+		dp[i][0] = 0
+	}
+	for i := 0; i < totalWeight+1; i++ {
+		dp[0][i] = 0
+	}
 
-	for i := 1; i < totalCount + 1; i++ {
-		for j := 1; j < totalWeight + 1; j++ {
+	for i := 1; i < totalCount+1; i++ {
+		for j := 1; j < totalWeight+1; j++ {
 			dp[i][j] = dp[i-1][j]
-			if j - weights[i] >= 0 {
-				dp[i][j] = Max(dp[i][j], dp[i][j-weights[i]] + values[i])
+			if j-weights[i] >= 0 {
+				dp[i][j] = Max(dp[i][j], dp[i][j-weights[i]]+values[i])
 			}
 		}
 	}
@@ -63,23 +69,28 @@ func pack(weights []int, values []int, totalWeight int, totalCount int) {
 }
 
 func packImproved(weights []int, values []int, totalWeight int, totalCount int) {
-	dp:=make([][]int, 2)
-	for i := 0; i < 2; i++ { dp[i] = make([]int, totalWeight+1) }
-	for i := 0; i < 2; i++ { dp[i][0] = 0 }
-	for i := 0; i < totalWeight+1; i++ { dp[0][i] = 0 }
+	dp := make([][]int, 2)
+	for i := 0; i < 2; i++ {
+		dp[i] = make([]int, totalWeight+1)
+	}
+	for i := 0; i < 2; i++ {
+		dp[i][0] = 0
+	}
+	for i := 0; i < totalWeight+1; i++ {
+		dp[0][i] = 0
+	}
 
-	for i := 1; i < totalCount + 1; i++ {
-		for j := 1; j < totalWeight + 1; j++ {
+	for i := 1; i < totalCount+1; i++ {
+		for j := 1; j < totalWeight+1; j++ {
 			dp[i%2][j] = dp[(i-1)%2][j]
-			if j - weights[i] >= 0 {
-				dp[i%2][j] = Max(dp[i%2][j], dp[i%2][j-weights[i]] + values[i]) // 可重复放入
+			if j-weights[i] >= 0 {
+				dp[i%2][j] = Max(dp[i%2][j], dp[i%2][j-weights[i]]+values[i]) // 可重复放入
 				//dp[i%2][j] = Max(dp[(i-1)%2][j], dp[(i-1)%2][j-weights[i]] + values[i]) // 只可放入一次
 			}
 		}
 	}
 	fmt.Println(dp[totalCount%2][totalWeight])
 }
-
 
 // Q3
 func TestDp(t *testing.T) {
@@ -224,7 +235,6 @@ func TestRobotPathSum(t *testing.T) {
 	fmt.Println(dp[m-1][n-1])
 }
 
-
 /*示例：
 
 输入：
@@ -304,7 +314,6 @@ func JumpGame(arr []int) {
 	fmt.Println(false)
 }
 
-
 /*示例2：
 
 输入: nums = [1, 3, 5, 0, 7]
@@ -338,7 +347,6 @@ func findContinuous(arr []int) {
 
 	fmt.Println(res)
 }
-
 
 /*示例：
 
@@ -403,6 +411,7 @@ func findBySplit(arr []int) {
 	}
 	fmt.Println(length)
 }
+
 //最长上升子序列共有几个，你该怎么解呢？
 func findIncrementNum(arr []int) {
 	s1 := len(arr)
@@ -505,21 +514,21 @@ func TestLargestProductSubArr1(t *testing.T) {
 	nums := []int{2, 8, -2, 4} // [-2, 0, -1] > 0
 	//	16
 	n := len(nums)
-	dp_max := make([]int, n)
-	dp_min := make([]int, n)
-	dp_max[0] = nums[0]
-	dp_min[0] = nums[0]
+	ma := make([]int, n)
+	mi := make([]int, n)
+	ma[0] = nums[0]
+	mi[0] = nums[0]
 
 	res := nums[0]
 	for i := 1; i < n; i++ {
 		if nums[i] < 0 {
-			temp := dp_max[i-1]
-			dp_max[i-1] = dp_min[i-1]
-			dp_min[i-1] = temp
+			temp := ma[i-1]
+			ma[i-1] = mi[i-1]
+			mi[i-1] = temp
 		}
-		dp_max[i] = Max(nums[i], dp_max[i-1]*nums[i])
-		dp_min[i] = Min(nums[i], dp_min[i-1]*nums[i])
-		res = Max(res, dp_max[i])
+		ma[i] = Max(nums[i], ma[i-1]*nums[i])
+		mi[i] = Min(nums[i], mi[i-1]*nums[i])
+		res = Max(res, ma[i])
 	}
 	fmt.Println(res)
 }
