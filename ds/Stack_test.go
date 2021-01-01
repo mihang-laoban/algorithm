@@ -32,7 +32,7 @@ func (stack *Stack) pop() (last interface{}) {
 		stack.size--
 		return
 	}
-	return -1
+	return nil
 }
 
 func (stack *Stack) peek() interface{} {
@@ -55,8 +55,9 @@ func (stack *Stack) search(val interface{}) int {
 	return -1
 }
 
-func Test(t *testing.T) {
+func TestStack(t *testing.T) {
 	stack := Stack{}
 	fmt.Println(stack.empty())
 	stack.push(1)
+	fmt.Println(stack.pop())
 }
