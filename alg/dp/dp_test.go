@@ -1,6 +1,7 @@
 package dp
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -38,23 +39,35 @@ func pk(weights []int, values []int, totalWeight int, totalCount int) {
 // 具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被视作不同的子串。
 func TestDp(t *testing.T) {
 	str := "aaa"
-	largest(str)
-	LargestSubArr(str)
+	fmt.Println(lg(str))
+	fmt.Println(LargestSubArr(str))
 }
 
-func largest(str string) {
-
+func lg(str string) int {
+	n := len(str)
+	return n
 }
 
 // Q4
 func TestFindLargestArrSum(t *testing.T) {
-	FindLargest([]int{-2, 1, -3, 4, -1, 3, -5, 1, 2})
+	fmt.Println(MaxSubArray([]int{-2, 1, -3, 4, -1, 3, -5, 1, 2}))
+	fdLg([]int{-2, 1, -3, 4, -1, 3, -5, 1, 2})
+}
+
+func fdLg(arr []int) {
+
 }
 
 // Q5
 //问题：给定一个字符串 s ，找到其中最长的回文子序列，并返回该序列的长度。可以假设 s 的最大长度为 1000。
+//输入："asssasms"输出：5解释：一个可能的最长回文子序列为 "sssss"，另一种可能的答案是 "asssa"。
 func TestFindLargestSubSeq(t *testing.T) {
 	FindLargestSubSeq("asssasms") // 5
+	findSubSeq("asssasms")
+}
+
+func findSubSeq(str string) {
+
 }
 
 // Q6

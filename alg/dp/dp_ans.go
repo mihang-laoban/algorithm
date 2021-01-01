@@ -77,7 +77,7 @@ func PackImproved(weights []int, values []int, totalWeight int, totalCount int) 
 	fmt.Println(dp[totalCount%2][totalWeight])
 }
 
-func LargestSubArr(str string) {
+func LargestSubArr(str string) int {
 	size := len(str)
 	dp := make([][]bool, size)
 	for i := 0; i < size; i++ {
@@ -97,19 +97,17 @@ func LargestSubArr(str string) {
 			}
 		}
 	}
-
-	fmt.Println(res)
+	return res
 }
 
-func FindLargest(arr []int) {
-	cur := 0
-	res := cur
-	for i := 0; i < len(arr); i++ {
-		tmp := Max(arr[i], arr[i]+cur)
-		res = Max(tmp, res)
+func MaxSubArray(nums []int) int {
+	cur, res := 0, nums[0]
+	for i := 0; i < len(nums); i++ {
+		tmp := Max(nums[i], nums[i]+cur)
+		res = Max(res, tmp)
 		cur = tmp
 	}
-	fmt.Println(res)
+	return res
 }
 
 func FindLargestSubSeq(str string) {

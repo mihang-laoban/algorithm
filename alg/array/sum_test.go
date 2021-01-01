@@ -2,7 +2,6 @@ package array
 
 import (
 	"fmt"
-	"sort"
 	"testing"
 )
 
@@ -27,69 +26,6 @@ func TestThree(t *testing.T) {
 	nums := []int{-1, 0, 1, 2, -1, -4}
 	res := three(nums)
 	fmt.Println(res)
-}
-
-func threeSum(nums []int) (res [][]int) {
-	n := len(nums)
-	sort.Ints(nums)
-
-	// 枚举 a
-	for first := 0; first < n; first++ {
-		// 需要和上一次枚举的数不相同
-		if first > 0 && nums[first] == nums[first-1] {
-			continue
-		}
-		// c 对应的指针初始指向数组的最右端
-		third := n - 1
-		target := -nums[first]
-		// 枚举 b
-		for second := first + 1; second < n; second++ {
-			// 需要和上一次枚举的数不相同
-			if second > first+1 && nums[second] == nums[second-1] {
-				continue
-			}
-			// 需要保证 b 的指针在 c 的指针的左侧
-			for second < third && nums[second]+nums[third] > target {
-				third--
-			}
-			// 如果指针重合，随着 b 后续的增加
-			// 就不会有满足 a+b+c=0 并且 b<c 的 c 了，可以退出循环
-			if second == third {
-				break
-			}
-			if nums[second]+nums[third] == target {
-				res = append(res, []int{nums[first], nums[second], nums[third]})
-			}
-		}
-	}
-	return
-}
-
-func threesome(nums []int) (res [][]int) {
-	n := len(nums)
-	sort.Ints(nums)
-	third := n - 1
-	for first := 0; first < n; first++ {
-		if first > 0 && nums[first] == nums[first-1] {
-			continue
-		}
-		target := -nums[first]
-		for second := first + 1; second < n; second++ {
-			if second > first+1 && nums[second] == nums[second-1] {
-				continue
-			}
-			for second < third && nums[third]+nums[second] > target {
-				third--
-			}
-			if second == third {
-				break
-			}
-			if nums[third]+nums[second] == target {
-				res = append(res, []int{nums[first], nums[second], nums[third]})
-			}
-		}
-	}
-	return
 }
 
 func three(nums []int) (res [][]int) {
@@ -120,4 +56,76 @@ func TestTwoSum(t *testing.T) {
 
 func twoSum(nums []int, target int) []int {
 	return nil
+}
+
+/*给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+
+示例:
+
+输入: [0,1,0,3,12]
+输出: [1,3,12,0,0]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/move-zeroes
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestMoveZero(t *testing.T) {
+	fmt.Println(MoveZeroes([]int{1, 0, 0, 3, 12}))
+}
+
+/*给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+说明：你不能倾斜容器。
+
+输入：[1,8,6,2,5,4,8,3,7]
+输出：49
+解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
+示例 2：
+
+输入：height = [1,1]
+输出：1
+示例 3：
+
+输入：height = [4,3,2,1,4]
+输出：16
+示例 4：
+
+输入：height = [1,2,1]
+输出：2
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/container-with-most-water
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestLargestContainer(t *testing.T) {
+	fmt.Println(LargeCon([]int{1, 8, 6, 2, 5, 4, 8, 3, 7}))
+}
+
+/*假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+注意：给定 n 是一个正整数。
+
+示例 1：
+
+输入： 2
+输出： 2
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶
+示例 2：
+
+输入： 3
+输出： 3
+解释： 有三种方法可以爬到楼顶。
+1.  1 阶 + 1 阶 + 1 阶
+2.  1 阶 + 2 阶
+3.  2 阶 + 1 阶
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/climbing-stairs
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestClimb(t *testing.T) {
+	fmt.Println(Climb(2))
 }

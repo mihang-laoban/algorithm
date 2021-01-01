@@ -1,12 +1,13 @@
 package ds
 
+// first in last out
 type Stack struct {
 }
 
 type StackOperations interface {
-	pop()
-	top()
-	size()
-	empty()
 	push()
+	pop()
+	peek()
+	empty()
+	search()
 }

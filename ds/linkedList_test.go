@@ -16,7 +16,7 @@ type LinkedList struct {
 }
 
 type Operation interface {
-	Append(x interface{})
+	Add(x interface{})
 	Size() int
 	InnerDisplay()
 	Display()
@@ -27,7 +27,7 @@ type Operation interface {
 	IsEmpty() bool
 }
 
-func (LinkedList *LinkedList) Append(x interface{})  { LinkedList._append(x) }
+func (LinkedList *LinkedList) Add(x interface{})     { LinkedList._append(x) }
 func (LinkedList *LinkedList) Size() int             { return LinkedList.Length }
 func (LinkedList *LinkedList) InnerDisplay()         { _innerDisplay(LinkedList) }
 func (LinkedList *LinkedList) Display()              { LinkedList._display(LinkedList.Head) }
@@ -63,7 +63,7 @@ func _innerDisplay(LinkedList *LinkedList) {
 func (LinkedList *LinkedList) _display(node *Node) {
 	tmp := node
 	for tmp != nil {
-		fmt.Print(tmp.Val)
+		fmt.Printf("%d => ", tmp.Val)
 		tmp = tmp.Next
 	}
 	fmt.Println()
@@ -105,12 +105,12 @@ func (LinkedList *LinkedList) _prepend(x interface{}) *Node {
 	return tmp
 }
 
-func TestRun(t *testing.T) {
+func test() {
 	node := LinkedList{}
 	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	fmt.Println(node.IsEmpty())
 	for i := 0; i < len(arr); i++ {
-		node.Append(arr[i])
+		node.Add(arr[i])
 	}
 	node.Prepend(0)
 	node.Display()
@@ -119,4 +119,40 @@ func TestRun(t *testing.T) {
 	fmt.Println()
 	fmt.Println(node.IsEmpty())
 	fmt.Println(node.Size())
+}
+
+func isCircular(head *Node) bool {
+	if head == nil || head.Next == nil {
+		return false
+	}
+	slow, fast := head, head.Next
+	for slow != fast {
+		if fast == nil || fast.Next == nil {
+			return false
+		}
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	return true
+}
+
+func circle(root *Node) {
+	second := root.Next
+	for root.Next != nil {
+		root = root.Next
+	}
+	root.Next = second
+}
+
+func TestRun(t *testing.T) {
+	node := LinkedList{}
+	arr := []int{3, 2, 0, -4}
+	for _, v := range arr {
+		node.Add(v)
+	}
+	circle(node.Head)
+	fmt.Println(isCircular(node.Head))
+
+	//node.Display()
+
 }
