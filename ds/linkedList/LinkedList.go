@@ -2,7 +2,6 @@ package linkedList
 
 import (
 	"fmt"
-	"testing"
 )
 
 type Node struct {
@@ -121,7 +120,7 @@ func test() {
 	fmt.Println(node.Size())
 }
 
-func isCircular(head *Node) bool {
+func IsCircular(head *Node) bool {
 	if head == nil || head.Next == nil {
 		return false
 	}
@@ -144,15 +143,12 @@ func circle(root *Node) {
 	root.Next = second
 }
 
-func TestRun(t *testing.T) {
+func GetCircleLink() *Node {
 	node := LinkedList{}
 	arr := []int{3, 2, 0, -4}
 	for _, v := range arr {
 		node.Add(v)
 	}
 	circle(node.Head)
-	fmt.Println(isCircular(node.Head))
-
-	//node.Display()
-
+	return node.Head
 }

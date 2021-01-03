@@ -6,6 +6,17 @@ import (
 	"sort"
 )
 
+func TwoSum(nums []int, target int) (res []int) {
+	hashTable := map[int]int{}
+	for i, x := range nums {
+		if p, ok := hashTable[target-x]; ok {
+			return []int{p, i}
+		}
+		hashTable[x] = i
+	}
+	return nil
+}
+
 func threesome(nums []int) (res [][]int) {
 	n := len(nums)
 	sort.Ints(nums)

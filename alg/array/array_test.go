@@ -83,12 +83,19 @@ func three(nums []int) (res [][]int) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestTwoSum(t *testing.T) {
-	res := twoSum([]int{2, 7, 11, 15}, 9)
-	fmt.Println(res)
+	fmt.Println(TwoSum([]int{2, 7, 11, 15}, 9))
+	fmt.Println(twoSum([]int{2, 7, 11, 15}, 9))
 }
 
-func twoSum(nums []int, target int) []int {
-	return nil
+func twoSum(nums []int, target int) (res []int) {
+	rec := map[int]int{}
+	for i := 0; i < len(nums); i++ {
+		if k, ok := rec[target-nums[i]]; ok {
+			res = []int{k, i}
+		}
+		rec[nums[i]] = i
+	}
+	return
 }
 
 /*给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
