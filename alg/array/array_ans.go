@@ -91,7 +91,7 @@ func LargestRectangleArea(heights []int) (res int) {
 }
 
 func MyLargestRectangleArea(heights []int) (res int) {
-	heights = PreInt(0, AppInt(heights, 0))
+	heights = PreInt(0, append(heights, 0))
 	size, stack := len(heights), Deque{}
 	stack.Append(0)
 	for i := 1; i < size; i++ {

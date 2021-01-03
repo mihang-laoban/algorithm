@@ -217,29 +217,54 @@ func TestLargestRectangle(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestSliding(t *testing.T) {
+	fmt.Println(MaxSlidingWindow([]int{7, 2, 4}, 2))
+	fmt.Println(MyMaxSlidingWindow([]int{7, 2, 4}, 2))
 	fmt.Println(MaxSlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
 	fmt.Println(MyMaxSlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
+	fmt.Println(SlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
+}
+
+func SlidingWindow(nums []int, k int) (res []int) {
+	queue := make([]int, 0, k)
+	push := func(v int) {
+		for len(queue) > 0 && v > queue[len(queue)-1] {
+			queue = queue[:len(queue)-1]
+		}
+		queue = append(queue, v)
+	}
+
+	pop := func(v int) {
+		if len(queue) > 0 && queue[0] == v {
+			queue = queue[1:]
+		}
+	}
+	for i := 0; i < len(nums); i++ {
+		push(nums[i])
+		if i >= k-1 {
+			res = append(res, queue[0])
+			pop(nums[i-k+1])
+		}
+	}
+	return
 }
 
 func push(arr []int, v int) []int {
 	for len(arr) > 0 && arr[len(arr)-1] < v {
 		arr = arr[:len(arr)-1]
 	}
-	return AppInt(arr, v)
+	return append(arr, v)
 }
 
 func MyMaxSlidingWindow(nums []int, k int) (res []int) {
 	queue := []int{}
 	for i := 0; i < len(nums); i++ {
-		// 前K个元素加入队列
-		if i < k-1 {
-			queue = push(queue, nums[i])
-		} else {
-			queue = push(queue, nums[i])
-			res = AppInt(res, queue[0])
-			// 如果队列不为空，队列头部与数组
+		queue = push(queue, nums[i])
+		// K个元素之后开始添加最大值到结果集
+		if i >= k-1 {
+			res = append(res, queue[0])
+			// 如果队列不为空，并且队列头部与数组当前元素相等，则弹出队头
 			if len(queue) > 0 && queue[0] == nums[i-k+1] {
-				queue = queue[:len(queue)-1]
+				queue = queue[1:]
 			}
 		}
 	}

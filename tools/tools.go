@@ -98,7 +98,3 @@ func Abs(x int) int {
 func PreInt(val int, arr []int) []int {
 	return append([]int{val}, arr...)
 }
-
-func AppInt(arr []int, val int) []int {
-	return append(arr, val)
-}
