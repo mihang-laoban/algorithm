@@ -1,6 +1,8 @@
-package ds
+package linkedList
 
 type Deque struct {
+	data []interface{}
+	size int
 }
 
 type DequeOperations interface {
@@ -60,4 +62,57 @@ type DequeOperations interface {
 	//Removes the last occurrence of the specified element from this deque.
 	size()
 	//Returns the number of elements in this deque.
+}
+
+type DequeMyOperation interface {
+	Prepend(interface{})
+	Append(interface{})
+	Pop() interface{}
+	PeekFirst() interface{}
+	PeekLast() interface{}
+	IsEmpty() bool
+	GetSize() int
+	Search(interface{}) int
+}
+
+func (deque *Deque) Append(val interface{}) {
+	deque.data = append(deque.data, val)
+	deque.size++
+}
+
+func (deque *Deque) Prepend(val interface{}) {
+	//deque.data = append([]interface{}{val}, deque.data)
+	deque.data = append([]interface{}{val}, deque.data...)
+	deque.size++
+}
+
+func (deque *Deque) Pop() interface{} {
+	if deque.size > 0 {
+		res := deque.data[deque.size-1]
+		deque.data = deque.data[:deque.size-1]
+		deque.size--
+		return res
+	}
+	return -1
+}
+
+func (deque *Deque) PeekFirst() interface{} {
+	return deque.data[0]
+}
+func (deque *Deque) PeekLast() interface{} {
+	return deque.data[deque.size-1]
+}
+func (deque *Deque) IsEmpty() bool {
+	return deque.size == 0
+}
+func (deque *Deque) GetSize() int {
+	return deque.size
+}
+func (deque *Deque) Search(val interface{}) int {
+	for k, v := range deque.data {
+		if v == val {
+			return k
+		}
+	}
+	return -1
 }

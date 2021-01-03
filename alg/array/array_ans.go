@@ -1,6 +1,7 @@
 package array
 
 import (
+	. "dp/ds/linkedList"
 	. "dp/tools"
 	"sort"
 )
@@ -65,4 +66,41 @@ func Climb(n int) int {
 		i, j = i+j, i
 	}
 	return i
+}
+
+func LargestRectangleArea(heights []int) (res int) {
+	// extend the length of the array to add sentinel
+	size := len(heights) + 2
+	heights = append([]int{0}, heights...)
+	heights = append(heights, 0)
+	stack := []int{0} // create a stack with 0 as the base
+	for i := 1; i < size; i++ {
+		// try to find the index whose height is lower than the one at the stack tail
+		//- the element is the right boundary of the rectangle
+		for heights[i] < heights[stack[len(stack)-1]] {
+			curHeight := heights[stack[len(stack)-1]]
+			stack = stack[:len(stack)-1]
+			curWidth := i - stack[len(stack)-1] - 1
+			res = Max(res, curHeight*curWidth)
+		}
+		// if the current height is higher that of the stack tail,
+		// add the index to the stack to continue finding the right boundary
+		stack = append(stack, i)
+	}
+	return
+}
+
+func MyLargestRectangleArea(heights []int) (res int) {
+	heights = PreInt(0, AppInt(heights, 0))
+	size, stack := len(heights), Deque{}
+	stack.Append(0)
+	for i := 1; i < size; i++ {
+		for heights[i] < heights[stack.PeekLast().(int)] {
+			curHeight := heights[stack.Pop().(int)]
+			curWidth := i - stack.PeekLast().(int) - 1
+			res = Max(res, curWidth*curHeight)
+		}
+		stack.Append(i)
+	}
+	return res
 }
