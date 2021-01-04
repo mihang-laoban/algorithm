@@ -409,3 +409,59 @@ func Test(t *testing.T) {
 	root := tmp.GetRoot()
 	fmt.Println(IsBalancedBottom(root))
 }
+
+func InOrderTraversal1(root *TreeNode) (res []int) {
+	type Node struct {
+		isCur bool
+		node  *TreeNode
+	}
+
+	stack := []*Node{{isCur: true, node: root}}
+	for len(stack) > 0 {
+		cur := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if cur.node != nil {
+			if cur.isCur {
+				stack = append(stack, &Node{isCur: true, node: cur.node.Right})
+				stack = append(stack, &Node{isCur: false, node: cur.node})
+				stack = append(stack, &Node{isCur: true, node: cur.node.Left})
+			} else {
+				res = append(res, cur.node.Val)
+			}
+		}
+	}
+	return
+}
+
+func InOrderTraversal2(root *TreeNode) (res []int) {
+	var inOrder func(node *TreeNode)
+	inOrder = func(node *TreeNode) {
+		if node != nil {
+			inOrder(node.Left)
+			res = append(res, node.Val)
+			inOrder(node.Right)
+		}
+	}
+	inOrder(root)
+	return
+}
+
+func InOrderTraversalLoop(root *TreeNode) []int {
+	res, stack := []int{}, []*TreeNode{}
+	// 如果根节点不为空，并且栈中有元素
+	for root != nil || len(stack) > 0 {
+		// 遍历到最左边的叶子节点，并一直添加左子节点到栈中
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		// 弹出栈中最后一个元素，等价于root = stack.pop（）
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		// 将最后一个元素添加到结果集
+		res = append(res, root.Val)
+		// 切换到右子树
+		root = root.Right
+	}
+	return res
+}
