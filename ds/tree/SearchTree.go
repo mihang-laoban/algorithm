@@ -420,14 +420,15 @@ func InOrderTraversal1(root *TreeNode) (res []int) {
 	for len(stack) > 0 {
 		cur := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
-		if cur.node != nil {
-			if cur.isCur {
-				stack = append(stack, &Node{isCur: true, node: cur.node.Right})
-				stack = append(stack, &Node{isCur: false, node: cur.node})
-				stack = append(stack, &Node{isCur: true, node: cur.node.Left})
-			} else {
-				res = append(res, cur.node.Val)
-			}
+		if cur.node == nil {
+			continue
+		}
+		if cur.isCur {
+			stack = append(stack, &Node{isCur: true, node: cur.node.Right})
+			stack = append(stack, &Node{isCur: false, node: cur.node})
+			stack = append(stack, &Node{isCur: true, node: cur.node.Left})
+		} else {
+			res = append(res, cur.node.Val)
 		}
 	}
 	return
