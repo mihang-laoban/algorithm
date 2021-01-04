@@ -206,10 +206,7 @@ func (bst BiSearchTree) GetDeepth() int {
 		if node.Left == nil && node.Right == nil {
 			return 1
 		}
-		var (
-			lDepth = getDepth(node.Left)
-			rDepth = getDepth(node.Right)
-		)
+		lDepth, rDepth := getDepth(node.Left), getDepth(node.Right)
 		if lDepth > rDepth {
 			return lDepth + 1
 		} else {
