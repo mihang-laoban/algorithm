@@ -457,3 +457,18 @@ func Product2(nums []int) {
 	}
 	fmt.Println(res)
 }
+
+func Rob(nums []int) int {
+	size := len(nums)
+	if size == 0 {
+		return 0
+	}
+	if size == 1 {
+		return nums[0]
+	}
+	first, second := nums[0], Max(nums[0], nums[1])
+	for i := 2; i < size; i++ {
+		first, second = second, Max(first+nums[i], second)
+	}
+	return second
+}
