@@ -12,15 +12,17 @@ func IsValid(s string) bool {
 		']': '[',
 		'}': '{',
 	}
+	// 正括号容器
 	stack := []byte{}
 	for i := 0; i < n; i++ {
-		if pairs[s[i]] > 0 { // 如果当前元素存在括号对中
-			// 如果栈已经为空，或者栈中最后一个元素与当前元素不匹配，则匹配失败
+		if pairs[s[i]] > 0 { // 反括号进这里
+			// 如果进反括号的时候正括号为空，或正反括号不匹配，匹配失败
 			if len(stack) == 0 || stack[len(stack)-1] != pairs[s[i]] {
 				return false
 			}
+			// 匹配成功，弹出匹配成功的正括号
 			stack = stack[:len(stack)-1]
-		} else { // 如果当前元素不在括号对中，则压栈
+		} else { // 正括号进这里
 			stack = append(stack, s[i])
 		}
 	}
