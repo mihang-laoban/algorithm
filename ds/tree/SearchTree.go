@@ -415,17 +415,19 @@ func InOrderTraversal1(root *TreeNode) (res []int) {
 		isCur bool
 		node  *TreeNode
 	}
-
+	// 根节点入栈，标记为不记录结果，继续遍历
 	stack := []*Node{{isCur: true, node: root}}
 	for len(stack) > 0 {
+		// 处理栈中弹出的最后一个节点
 		cur := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
+		// 如果节点为空则跳过
 		if cur.node == nil {
 			continue
 		}
 		if cur.isCur {
 			stack = append(stack, &Node{isCur: true, node: cur.node.Right})
-			stack = append(stack, &Node{isCur: false, node: cur.node})
+			stack = append(stack, &Node{isCur: false, node: cur.node}) // 标记下一个添加结果集的节点
 			stack = append(stack, &Node{isCur: true, node: cur.node.Left})
 		} else {
 			res = append(res, cur.node.Val)
