@@ -38,11 +38,34 @@ import (
 链接：https://leetcode-cn.com/problems/valid-parentheses
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 func Test(t *testing.T) {
-	fmt.Println(valid("([()()])"))
+
+	fmt.Println(valid("){"))
 	fmt.Println(IsValid("([()()])"))
 }
 
 func valid(s string) interface{} {
-
-	return true
+	// 奇数个，匹配失败
+	if len(s)%2 == 1 {
+		return false
+	}
+	pairs := map[byte]byte{
+		')': '(',
+		']': '[',
+		'}': '{',
+	}
+	stack := []byte{}
+	// 下一个括号与前一个不匹配，匹配失败
+	for i := 0; i < len(s); i++ {
+		x := s[i]
+		if pairs[x] > 0 {
+			if len(stack) == 0 && stack[len(stack)-1] != pairs[s[i]] {
+				return false
+			}
+			stack = stack[:len(stack)-1]
+		} else {
+			stack = append(stack, s[i])
+		}
+	}
+	//  匹配完，成功
+	return len(stack) == 0
 }
