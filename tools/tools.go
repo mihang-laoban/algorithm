@@ -3,6 +3,7 @@ package tools
 import (
 	"fmt"
 	. "reflect"
+	"strconv"
 )
 
 func Min(a, b int) int {
@@ -97,4 +98,12 @@ func Abs(x int) int {
 
 func PreInt(val int, arr []int) []int {
 	return append([]int{val}, arr...)
+}
+
+func ToInt(str string) int {
+	if res, err := strconv.Atoi(str); err == nil {
+		return res
+	} else {
+		panic(err)
+	}
 }

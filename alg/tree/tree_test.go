@@ -7,43 +7,48 @@ import (
 	"testing"
 )
 
-const PRE = 0
-const IN = 1
-const POST = 2
-
 func init() {
 	Max(1, 2)
 }
 
-func run(root *TreeNode, functions []func(*TreeNode) []int) {
-	for _, fun := range functions {
-		fmt.Println(fun(root))
-	}
-}
-
 func traverse(order int) {
-	roots := GetRootExample()
-	inFunc := []func(*TreeNode) []int{InOrderLabel, InOrderRecur, InOrderLoop}
-	preFunc := []func(*TreeNode) []int{PreOrderLabel, PreOrderRecur, PreOrderLoop}
-	postFunc := []func(*TreeNode) []int{PostOrderLabel, PostOrderRecur, PostOrderLoop}
+	preFunc := []func(*TreeNode) []int{PreOrderLabel, PreOrderRecur, PreOrderLoop, MyPreOrder}
+	inFunc := []func(*TreeNode) []int{InOrderLabel, InOrderRecur, InOrderLoop, MyInOrder}
+	postFunc := []func(*TreeNode) []int{PostOrderLabel, PostOrderRecur, PostOrderLoop, MyPostOrder}
 
-	for _, root := range roots {
+	for _, root := range GetRootForTraverse() {
 		switch order {
 		case PRE:
-			run(root, preFunc)
+			fmt.Println("Pre:")
+			Ordering(root, preFunc)
 		case IN:
-			run(root, inFunc)
+			fmt.Println("In:")
+			Ordering(root, inFunc)
 		case POST:
-			run(root, postFunc)
+			fmt.Println("Post:")
+			Ordering(root, postFunc)
 		}
 	}
 }
 
+func MyPreOrder(root *TreeNode) (res []int)  { return }
+func MyInOrder(root *TreeNode) (res []int)   { return }
+func MyPostOrder(root *TreeNode) (res []int) { return }
+
+func AllOrderTraverse() {
+	for _, v := range []int{PRE, IN, POST} {
+		traverse(v)
+	}
+}
+
+func SerAndDes() {
+	// "[1,2,3,nil,nil,4,5,nil,nil,nil,nil]"
+	root := GetRootForSerialize()
+	str := Serialize(root)
+	res := Deserialize(str)
+	fmt.Println(Serialize(res))
+}
+
 func TestGo(t *testing.T) {
-	fmt.Println("Pre:")
-	traverse(PRE)
-	fmt.Println("In:")
-	traverse(IN)
-	fmt.Println("Post:")
-	traverse(POST)
+
 }
