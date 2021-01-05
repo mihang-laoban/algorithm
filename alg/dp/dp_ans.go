@@ -380,6 +380,24 @@ func FibSingle(n int) {
 	fmt.Println(cur)
 }
 
+func ClimbRecur(n int) int {
+	if n == 1 {
+		return 1
+	}
+	if n == 0 {
+		return 0
+	}
+	return ClimbRecur(n-1) + ClimbRecur(n-2)
+}
+
+func Climb(n int) int {
+	a, b := 0, 1
+	for i := 0; i < n+1; i++ {
+		a, b = a+b, a
+	}
+	return a
+}
+
 func FindLargestKArray(nums []int, k int) {
 	n := len(nums)
 
@@ -471,4 +489,13 @@ func Rob(nums []int) int {
 		first, second = second, Max(first+nums[i], second)
 	}
 	return second
+}
+
+func MinCostClimbingStairs(cost []int) int {
+	n := len(cost)
+	pre, cur := 0, 0
+	for i := 2; i <= n; i++ {
+		pre, cur = cur, Min(cur+cost[i-1], pre+cost[i-2])
+	}
+	return cur
 }

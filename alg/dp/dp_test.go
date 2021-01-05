@@ -210,3 +210,91 @@ func Rob2(nums []int) interface{} {
 	}
 	return dp[size-1]
 }
+
+/*数组的每个下标作为一个阶梯，第 i 个阶梯对应着一个非负数的体力花费值 cost[i]（下标从 0 开始）。
+每当你爬上一个阶梯你都要花费对应的体力值，一旦支付了相应的体力值，你就可以选择向上爬一个阶梯或者爬两个阶梯。
+请你找出达到楼层顶部的最低花费。在开始时，你可以选择从下标为 0 或 1 的元素作为初始阶梯。
+
+示例 1：
+输入：cost = [10, 15, 20]
+输出：15
+解释：最低花费是从 cost[1] 开始，然后走两步即可到阶梯顶，一共花费 15 。
+
+示例 2：
+输入：cost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
+输出：6
+解释：最低花费方式是从 cost[0] 开始，逐个经过那些 1 ，跳过 cost[3] ，一共花费 6 。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/min-cost-climbing-stairs
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestClimbMinCost(t *testing.T) {
+
+}
+
+/*假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+注意：给定 n 是一个正整数。
+
+示例 1：
+
+输入： 2
+输出： 2
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶
+示例 2：
+
+输入： 3
+输出： 3
+解释： 有三种方法可以爬到楼顶。
+1.  1 阶 + 1 阶 + 1 阶
+2.  1 阶 + 2 阶
+3.  2 阶 + 1 阶*/
+
+func TestClimb(t *testing.T) {
+	fmt.Println(ClimbRecur(3 + 1))
+	fmt.Println(Climb(3))
+}
+
+/*数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+
+示例：
+输入：n = 3
+输出：[
+"((()))",
+"(()())",
+"(())()",
+"()(())",
+"()()()"
+]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/generate-parentheses
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestGenBrackets(t *testing.T) {
+	n := 3
+	fmt.Println(generateParenthesis(n))
+}
+
+func generateParenthesis(n int) (res []string) {
+	var GenBrackets func(int, int, int, string)
+	s := ""
+
+	GenBrackets = func(left int, right int, n int, s string) {
+		if left == n && right == n {
+			res = append(res, s)
+			return
+		}
+		if left < n {
+			GenBrackets(left+1, right, n, s+"(")
+		}
+		if right < left {
+			GenBrackets(left, right+1, n, s+")")
+		}
+	}
+	GenBrackets(0, 0, n, s)
+	return
+}
