@@ -25,15 +25,17 @@ func inOrder() {
 	root3.Right = &TreeNode{Val: 2}
 	// [1 2]
 
-	fmt.Println(InOrderTraversal1(root1))
-	fmt.Println(InOrderTraversal1(root2))
-	fmt.Println(InOrderTraversal1(root3))
+	fmt.Println(InOrderLabel(root1))
 
-	//fmt.Println(InOrderTraversal2(root1))
+	fmt.Println(InOrderTraversal1(root1))
+	//fmt.Println(InOrderTraversal1(root2))
+	//fmt.Println(InOrderTraversal1(root3))
+
+	fmt.Println(InOrderTraversal2(root1))
 	//fmt.Println(InOrderTraversal2(root2))
 	//fmt.Println(InOrderTraversal2(root3))
 	//
-	//fmt.Println(InOrderTraversalLoop(root1))
+	fmt.Println(InOrderTraversalLoop(root1))
 	//fmt.Println(InOrderTraversalLoop(root2))
 	//fmt.Println(InOrderTraversalLoop(root3))
 }
@@ -75,13 +77,14 @@ func postOrder() {
 	root3.Right = &TreeNode{Val: 2}
 	// [1 2]
 
+	fmt.Println(InOrderLabel(root1))
 	fmt.Println(PostOrderRecursion(root1))
-	fmt.Println(PostOrderRecursion(root2))
-	fmt.Println(PostOrderRecursion(root3))
+	//fmt.Println(PostOrderRecursion(root2))
+	//fmt.Println(PostOrderRecursion(root3))
 
 	fmt.Println(PostOrderLoop(root1))
-	fmt.Println(PostOrderLoop(root2))
-	fmt.Println(PostOrderLoop(root3))
+	//fmt.Println(PostOrderLoop(root2))
+	//fmt.Println(PostOrderLoop(root3))
 }
 
 func PostOrderRecursion(root *TreeNode) (res []int) {
@@ -159,6 +162,6 @@ func PostOrderLoop(root *TreeNode) (res []int) {
 
 func TestGo(t *testing.T) {
 	//preOrder()
-	//postOrder()
-	inOrder()
+	postOrder()
+	//inOrder()
 }
