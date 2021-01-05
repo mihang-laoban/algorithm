@@ -279,6 +279,7 @@ func TestGenBrackets(t *testing.T) {
 	fmt.Println(generateParenthesis(n))
 }
 
+// https://leetcode-cn.com/problems/generate-parentheses/solution/zui-jian-dan-yi-dong-de-dong-tai-gui-hua-bu-lun-da/
 func generateParenthesis(n int) (res []string) {
 	var GenBrackets func(int, int, int, string)
 	s := ""
