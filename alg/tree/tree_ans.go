@@ -63,6 +63,7 @@ func Deserialize(data string) (root *TreeNode) {
 }
 
 func IsBalancedBottom(root *TreeNode) bool {
+	// =0的情况针对数组为空
 	return HeightBottom(root) >= 0
 }
 

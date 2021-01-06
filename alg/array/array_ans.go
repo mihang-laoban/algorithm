@@ -45,8 +45,8 @@ func threesome(nums []int) (res [][]int) {
 }
 
 func MoveZeroes(nums []int) []int {
-	j := 0
-	for i := 0; i < len(nums); i++ {
+	// j 记录最后一个不为0元素的下一个位置，每交换一次向前移动一位
+	for i, j := 0, 0; i < len(nums); i++ {
 		if nums[i] != 0 {
 			nums[i], nums[j] = nums[j], nums[i]
 			j++
