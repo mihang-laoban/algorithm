@@ -296,7 +296,9 @@ func dpGenerateParenthesis(n int) []string {
 	dp[0], dp[1] = []string{""}, []string{"()"}
 	for i := 2; i < n+1; i++ {
 		for j := 0; j < i; j++ {
+			// 正向遍历dp备忘录
 			for _, p := range dp[j] {
+				// 反向遍历dp备忘录
 				for _, q := range dp[i-j-1] {
 					dp[i] = append(dp[i], "("+p+")"+q)
 				}
@@ -322,7 +324,6 @@ func generateParenthesis(n int) (res []string) {
 			GenBrackets(left, right+1, n, s+")")
 		}
 	}
-
 	GenBrackets(0, 0, n, "")
 	return
 }
