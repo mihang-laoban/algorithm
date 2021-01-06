@@ -155,7 +155,9 @@ func TestGo(t *testing.T) {
 }
 
 func Test(t *testing.T) {
-	root := ArrayToTree()
-	arr := TreeToArray(root)
+	arr := []interface{}{5, 1, 4, nil, nil, 3, 6}
 	fmt.Println(arr)
+	root := ArrayToTree(arr)
+	res := TreeToArray(root)
+	fmt.Println(res)
 }
