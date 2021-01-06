@@ -371,11 +371,6 @@ func Run(bst BiSearchTree) {
 	fmt.Printf("\n")
 }
 
-func TreeToArray(root *TreeNode) (res []int) {
-
-	return
-}
-
 func create(nums []interface{}) *TreeNode {
 	size := len(nums)
 	if len(nums) == 0 {
@@ -405,5 +400,10 @@ func ArrayToTree() (root *TreeNode) {
 	test := []interface{}{5, 1, 4, nil, nil, 3, 6}
 	root = create(test)
 	fmt.Println(root)
+	return
+}
+
+func TreeToArray(root *TreeNode) (res []int) {
+
 	return
 }
