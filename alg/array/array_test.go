@@ -88,13 +88,6 @@ func TestTwoSum(t *testing.T) {
 }
 
 func twoSum(nums []int, target int) (res []int) {
-	rec := map[int]int{}
-	for i := 0; i < len(nums); i++ {
-		if k, ok := rec[target-nums[i]]; ok {
-			res = []int{k, i}
-		}
-		rec[nums[i]] = i
-	}
 	return
 }
 
