@@ -376,12 +376,34 @@ func TreeToArray(root *TreeNode) (res []int) {
 	return
 }
 
-func create(nums []int) {
+func create(nums []interface{}) *TreeNode {
+	size := len(nums)
+	if len(nums) == 0 {
+		return nil
+	}
+	root := &TreeNode{Val: nums[0].(int)}
+	build(root, nums, size, 0)
+	return root
+}
 
+func build(node *TreeNode, nums []interface{}, size int, cur int) {
+	left, right := cur*2+1, cur*2+2
+	if left > size {
+		return
+	}
+	if nums[left] != nil {
+		node.Left = &TreeNode{Val: nums[left].(int)}
+		build(node.Left, nums, size, left)
+	}
+	if nums[right] != nil {
+		node.Right = &TreeNode{Val: nums[right].(int)}
+		build(node.Right, nums, size, right)
+	}
 }
 
 func ArrayToTree() (root *TreeNode) {
 	test := []interface{}{5, 1, 4, nil, nil, 3, 6}
-	fmt.Println(test)
+	root = create(test)
+	fmt.Println(root)
 	return
 }
