@@ -277,12 +277,38 @@ func TestClimb(t *testing.T) {
 func TestGenBrackets(t *testing.T) {
 	n := 3
 	fmt.Println(generateParenthesis(n))
+	fmt.Println(dpGenerateParenthesis(n))
+}
+
+/*
+动态规划：
+dp[i]表示i组括号的所有有效组合
+dp[i] = "(dp[p]的所有有效组合)+【dp[q]的组合】"，其中 1 + p + q = i , p从0遍历到i-1, q则相应从i-1到0
+*/
+func dpGenerateParenthesis(n int) []string {
+	if n == 0 {
+		return []string{}
+	}
+	if n == 1 {
+		return []string{"()"}
+	}
+	dp := make([][]string, n+1)
+	dp[0], dp[1] = []string{""}, []string{"()"}
+	for i := 2; i < n+1; i++ {
+		for j := 0; j < i; j++ {
+			for _, p := range dp[j] {
+				for _, q := range dp[i-j-1] {
+					dp[i] = append(dp[i], "("+p+")"+q)
+				}
+			}
+		}
+	}
+	return dp[n]
 }
 
 // https://leetcode-cn.com/problems/generate-parentheses/solution/zui-jian-dan-yi-dong-de-dong-tai-gui-hua-bu-lun-da/
 func generateParenthesis(n int) (res []string) {
 	var GenBrackets func(int, int, int, string)
-	s := ""
 
 	GenBrackets = func(left int, right int, n int, s string) {
 		if left == n && right == n {
@@ -296,6 +322,7 @@ func generateParenthesis(n int) (res []string) {
 			GenBrackets(left, right+1, n, s+")")
 		}
 	}
-	GenBrackets(0, 0, n, s)
+
+	GenBrackets(0, 0, n, "")
 	return
 }
