@@ -402,7 +402,35 @@ func ArrayToTree() (root *TreeNode) {
 	return create(test)
 }
 
-func TreeToArray(root *TreeNode) (res []int) {
+func TreeToArray(root *TreeNode) (res []interface{}) {
+	queue := []*TreeNode{root}
 
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		if cur != nil {
+			res = append(res, cur.Val)
+			queue = append(queue, cur.Left)
+			queue = append(queue, cur.Right)
+		} else {
+			if cur == nil {
+				res = append(res, nil)
+			} else {
+				res = append(res, cur)
+			}
+		}
+	}
+	res = Prune(res)
 	return
+}
+
+func Prune(data []interface{}) []interface{} {
+	for i := len(data) - 1; i > 0; i-- {
+		if data[i] == nil {
+			data = data[:len(data)-1]
+		} else {
+			return data
+		}
+	}
+	return data
 }

@@ -155,5 +155,7 @@ func TestGo(t *testing.T) {
 }
 
 func Test(t *testing.T) {
-	ArrayToTree()
+	root := ArrayToTree()
+	arr := TreeToArray(root)
+	fmt.Println(arr)
 }
