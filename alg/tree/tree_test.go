@@ -153,3 +153,7 @@ func TestGo(t *testing.T) {
 	root := BuildTreeToValidate()
 	fmt.Println(checker(root))
 }
+
+func Test(t *testing.T) {
+	ArrayToTree()
+}

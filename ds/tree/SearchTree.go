@@ -370,3 +370,18 @@ func Run(bst BiSearchTree) {
 	bst.InOrderTravel()
 	fmt.Printf("\n")
 }
+
+func TreeToArray(root *TreeNode) (res []int) {
+
+	return
+}
+
+func create(nums []int) {
+
+}
+
+func ArrayToTree() (root *TreeNode) {
+	test := []interface{}{5, 1, 4, nil, nil, 3, 6}
+	fmt.Println(test)
+	return
+}
