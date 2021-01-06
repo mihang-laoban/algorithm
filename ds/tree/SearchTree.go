@@ -409,11 +409,7 @@ func TreeToArray(root *TreeNode) (res []interface{}) {
 			queue = append(queue, cur.Right)
 		} else {
 			// 如果*struct值为nil，则直接返回nil，如果直接返回，返回的是带有struct类型的nil值
-			if cur == nil {
-				res = append(res, nil)
-			} else {
-				res = append(res, cur)
-			}
+			res = append(res, nil)
 		}
 	}
 	res = Prune(res)
