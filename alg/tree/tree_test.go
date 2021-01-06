@@ -195,8 +195,12 @@ func TestTreeAndArray(t *testing.T) {
 func TestValidateBinaryTree(t *testing.T) {
 	nums := []interface{}{5, 1, 4, nil, nil, 3, 6}
 	root := ArrayToTree(nums)
-	res := helper(root, math.MinInt64, math.MaxInt64)
-	fmt.Println(res)
+	fmt.Println(isValidBST(root))
+	fmt.Println(isValidBSTInOrder(root))
+}
+
+func isValidBST(root *TreeNode) bool {
+	return helper(root, math.MinInt64, math.MaxInt64)
 }
 
 func helper(root *TreeNode, lower, upper int) bool {
@@ -209,7 +213,7 @@ func helper(root *TreeNode, lower, upper int) bool {
 	return helper(root.Left, lower, root.Val) && helper(root.Right, root.Val, upper)
 }
 
-func isValidBST(root *TreeNode) bool {
+func isValidBSTInOrder(root *TreeNode) bool {
 	stack := []*TreeNode{}
 	inorder := math.MinInt64
 	for len(stack) > 0 || root != nil {
