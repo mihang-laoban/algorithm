@@ -1,21 +1,20 @@
 package backtrace
 
 func Subset(nums []int) interface{} {
-	res := [][]int{}
-	stack := []int{}
+	trace, res := []int{}, [][]int{}
 
-	var back func([]int, int, []int)
-	back = func(nums []int, start int, stack []int) {
-		tmp := make([]int, len(stack))
-		copy(tmp, stack)
+	var get func([]int, int, []int)
+	get = func(nums []int, start int, trace []int) {
+		tmp := make([]int, len(trace))
+		copy(tmp, trace)
 		res = append(res, tmp)
 		for i := start; i < len(nums); i++ {
-			stack = append(stack, nums[i])
-			back(nums, i+1, stack)
-			stack = stack[:len(stack)-1]
+			trace = append(trace, nums[i])
+			get(nums, i+1, trace)
+			trace = trace[:len(trace)-1]
 		}
 	}
 
-	back(nums, 0, stack)
+	get(nums, 0, trace)
 	return res
 }
