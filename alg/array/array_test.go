@@ -372,6 +372,5 @@ func quickMulNew(x float64, N int) float64 {
 }
 
 func Test(t *testing.T) {
-	fmt.Println(3 / 2)
 
 }
