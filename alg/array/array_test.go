@@ -103,6 +103,11 @@ func twoSum(nums []int, target int) (res []int) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 func TestMoveZero(t *testing.T) {
 	fmt.Println(MoveZeroes([]int{1, 0, 0, 3, 12}))
+	fmt.Println(move0([]int{1, 0, 0, 3, 12}))
+}
+
+func move0(nums []int) []int {
+	return nums
 }
 
 /*给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
@@ -325,50 +330,8 @@ func MaxSlidingWindow(nums []int, k int) []int {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestPow(t *testing.T) {
-	fmt.Println(myPow(2.00, 10))
-	fmt.Println(myPowNew(2.00, 10))
-}
-
-func myPow(x float64, n int) float64 {
-	if n < 0 {
-		return 1.0 / quickMul(x, -n)
-	}
-	return quickMul(x, n)
-}
-
-func quickMul(x float64, i int) float64 {
-	if i == 0 {
-		return 1
-	}
-	y := quickMul(x, i/2)
-	if i%2 == 0 {
-		return y * y
-	}
-	return y * y * x
-}
-
-func myPowNew(x float64, n int) float64 {
-	if n >= 0 {
-		return quickMulNew(x, n)
-	}
-	return 1.0 / quickMulNew(x, -n)
-}
-
-func quickMulNew(x float64, N int) float64 {
-	ans := 1.0
-	// 贡献的初始值为 x
-	// 在对 N 进行二进制拆分的同时计算答案
-	for N > 0 {
-		if N%2 == 1 {
-			// 如果 N 二进制表示的最低位为 1，那么需要计入贡献
-			ans *= x
-		}
-		// 将贡献不断地平方
-		x *= x
-		// 舍弃 N 二进制表示的最低位，这样我们每次只要判断最低位即可
-		N /= 2
-	}
-	return ans
+	fmt.Println(MyPow(2.00, 10))
+	fmt.Println(MyPowNew(2.00, 10))
 }
 
 func Test(t *testing.T) {
