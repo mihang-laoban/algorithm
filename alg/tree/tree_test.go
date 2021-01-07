@@ -162,9 +162,8 @@ func balance(node *TreeNode) int {
 	if node == nil {
 		return 0
 	}
-	left := balance(node.Left)
-	right := balance(node.Right)
-	if left == -1 || right == -1 || Abs(left-right) > 1 {
+	left, right := balance(node.Left), balance(node.Right)
+	if left == -1 || right == 1 || Abs(left-right) > 1 {
 		return -1
 	}
 	return Max(left, right) + 1
