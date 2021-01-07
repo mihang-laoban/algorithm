@@ -380,7 +380,7 @@ func ArrayToTree(nums []interface{}) *TreeNode {
 	var build func(*TreeNode, int)
 	build = func(node *TreeNode, cur int) {
 		left, right := cur*2+1, cur*2+2
-		if left > size {
+		if left >= size {
 			return
 		}
 		if nums[left] != nil {
