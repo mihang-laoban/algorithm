@@ -255,24 +255,16 @@ func InOrderLoop(root *TreeNode) []int {
 
 func PostOrderLoop(root *TreeNode) (res []int) {
 	stack := []*TreeNode{}
-	var prev *TreeNode
-	for root != nil || len(stack) > 0 {
-
-		for root != nil {
-			stack = append(stack, root)
-			root = root.Left
-		}
-
-		root = stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-
-		if root.Right == nil || root.Right == prev {
-			res = append(res, root.Val)
-			prev = root
-			root = nil
-		} else {
-			stack = append(stack, root)
+	for len(stack) != 0 || root != nil {
+		if root != nil {
+			res = append([]int{root.Val}, res...)
+			if root.Left != nil {
+				stack = append(stack, root.Left)
+			}
 			root = root.Right
+		} else {
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
 		}
 	}
 	return

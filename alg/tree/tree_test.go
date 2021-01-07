@@ -37,7 +37,7 @@ func MyInOrder(root *TreeNode) (res []int)   { return }
 func MyPostOrder(root *TreeNode) (res []int) { return }
 
 func AllOrderTraverse() {
-	for _, v := range []int{PRE, IN, POST} {
+	for _, v := range []int{ /*PRE, IN,*/ POST} {
 		traverse(v)
 	}
 }
@@ -170,9 +170,9 @@ func balance(node *TreeNode) int {
 }
 
 func TestGo(t *testing.T) {
-	//AllOrderTraverse()
-	root := BuildTreeToValidate()
-	fmt.Println(checker(root))
+	AllOrderTraverse()
+	//root := BuildTreeToValidate()
+	//fmt.Println(checker(root))
 }
 
 func TestTreeAndArray(t *testing.T) {
