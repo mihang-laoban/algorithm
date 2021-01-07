@@ -218,17 +218,17 @@ func Ordering(root *TreeNode, functions []func(*TreeNode) []int) {
 func PreOrderLoop(root *TreeNode) (res []int) {
 	stack := []*TreeNode{}
 	for root != nil || len(stack) > 0 {
-		for root != nil {
+		if root != nil {
 			// 添加根节点到结果集
 			res = append(res, root.Val)
-			// 根节点入栈，直到最左边的叶子节点
-			stack = append(stack, root)
+			if root.Right != nil {
+				stack = append(stack, root.Right)
+			}
 			root = root.Left
+		} else {
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
 		}
-		// 切换到最后一个节点的右子节点
-		root = stack[len(stack)-1].Right
-		// 弹出栈中最后一个元素
-		stack = stack[:len(stack)-1]
 	}
 	return
 }
@@ -238,17 +238,18 @@ func InOrderLoop(root *TreeNode) []int {
 	// 如果根节点不为空，并且栈中有元素
 	for root != nil || len(stack) > 0 {
 		// 遍历到最左边的叶子节点，并一直添加左子节点到栈中
-		for root != nil {
+		if root != nil {
 			stack = append(stack, root)
 			root = root.Left
+		} else {
+			// 弹出栈中最后一个元素，等价于root = stack.pop（）
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			// 将最后一个元素添加到结果集
+			res = append(res, root.Val)
+			// 切换到右子树
+			root = root.Right
 		}
-		// 弹出栈中最后一个元素，等价于root = stack.pop（）
-		root = stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		// 将最后一个元素添加到结果集
-		res = append(res, root.Val)
-		// 切换到右子树
-		root = root.Right
 	}
 	return res
 }
