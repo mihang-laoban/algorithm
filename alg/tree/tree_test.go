@@ -215,7 +215,7 @@ func helper(root *TreeNode, lower, upper int) bool {
 
 func isValidBSTInOrder(root *TreeNode) bool {
 	stack := []*TreeNode{}
-	inorder := math.MinInt64
+	inOrder := math.MinInt64
 	for len(stack) > 0 || root != nil {
 		for root != nil {
 			stack = append(stack, root)
@@ -223,10 +223,10 @@ func isValidBSTInOrder(root *TreeNode) bool {
 		}
 		root = stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
-		if root.Val <= inorder {
+		if root.Val <= inOrder {
 			return false
 		}
-		inorder = root.Val
+		inOrder = root.Val
 		root = root.Right
 	}
 	return true
