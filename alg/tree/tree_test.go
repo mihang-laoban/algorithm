@@ -73,7 +73,7 @@ func SerAndDes() {
    / \
   3   6
 输出: false
-解释: 输入为: [5,1,4,null,null,3,6]。
+解释: 输入为: [5,1,4,nil,nil,3,6]。
      根节点的值为 5 ，但是其右子节点值为 4 。
 
 来源：力扣（LeetCode）
@@ -118,7 +118,7 @@ func checker(root *TreeNode) bool {
 /*输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
 
 示例 1:
-给定二叉树 [3,9,20,null,null,15,7]
+给定二叉树 [3,9,20,nil,nil,15,7]
 
   3
  / \
@@ -129,7 +129,7 @@ func checker(root *TreeNode) bool {
 
 示例 2:
 
-给定二叉树 [1,2,2,3,3,null,null,4,4]
+给定二叉树 [1,2,2,3,3,nil,nil,4,4]
 
       1
      / \
@@ -139,13 +139,35 @@ func checker(root *TreeNode) bool {
  / \
 4   4
 
+	  1
+	 / \
+	2   2
+   /     \
+  3       3
+ /
+4
+[1,2,2,3,nil,nil,3,4,nil,nil,4]
+
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/ping-heng-er-cha-shu-lcof
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
 func TestIsBalancedBottom(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 2, 3, nil, nil, 3, 4, nil, nil, 4})
+	fmt.Println(balance(root) >= 0)
+}
 
+func balance(node *TreeNode) int {
+	if node == nil {
+		return 0
+	}
+	left := balance(node.Left)
+	right := balance(node.Right)
+	if left == -1 || right == -1 || Abs(left-right) > 1 {
+		return -1
+	}
+	return Max(left, right) + 1
 }
 
 func TestGo(t *testing.T) {
@@ -185,7 +207,7 @@ func TestTreeAndArray(t *testing.T) {
      / \
     3   6
 输出: false
-解释: 输入为: [5,1,4,null,null,3,6]。
+解释: 输入为: [5,1,4,nil,nil,3,6]。
      根节点的值为 5 ，但是其右子节点值为 4 。
 
 来源：力扣（LeetCode）

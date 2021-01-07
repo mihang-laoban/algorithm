@@ -71,8 +71,7 @@ func HeightBottom(root *TreeNode) int {
 	if root == nil {
 		return 0
 	}
-	left := HeightBottom(root.Left)
-	right := HeightBottom(root.Right)
+	left, right := HeightBottom(root.Left), HeightBottom(root.Right)
 	if left == -1 || right == -1 || Abs(left-right) > 1 {
 		return -1
 	}
