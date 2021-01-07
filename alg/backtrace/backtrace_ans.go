@@ -18,3 +18,6 @@ func Subset(nums []int) interface{} {
 	get(nums, 0, trace)
 	return res
 }
+
+//https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/
+https://leetcode-cn.com/problems/n-queens/
