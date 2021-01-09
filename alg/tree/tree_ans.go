@@ -323,3 +323,28 @@ func GetRootForSerialize() *TreeNode {
 	root.Right.Right = &TreeNode{Val: 5}
 	return root
 }
+
+func BFSArray(root *TreeNode) (res [][]int) {
+	if root == nil {
+		return res
+	}
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		// tmp记录当前层的值，size记录当前层的大小
+		tmp, size := []int{}, len(queue)
+		for i := 0; i < size; i++ {
+			// 取出第一个
+			cur := queue[0]
+			queue = queue[1:]
+			tmp = append(tmp, cur.Val)
+			if cur.Left != nil {
+				queue = append(queue, cur.Left)
+			}
+			if cur.Right != nil {
+				queue = append(queue, cur.Right)
+			}
+		}
+		res = append(res, tmp)
+	}
+	return
+}

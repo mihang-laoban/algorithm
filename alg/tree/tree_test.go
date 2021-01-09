@@ -268,48 +268,47 @@ func Test(t *testing.T) {
 	fmt.Println(Pre(root))
 	//12356
 	fmt.Println(In(root))
+	fmt.Println(InOrderLoop(root))
 	//13265
 	fmt.Println(Post(root))
 	fmt.Println(BFS(root))
 }
 
 func Pre(root *TreeNode) (res []int) {
-	stack := []*TreeNode{}
-	for len(stack) > 0 || root != nil {
-		if root != nil {
-			for root != nil {
-				res = append(res, root.Val)
-				stack = append(stack, root.Right)
-				root = root.Left
-			}
-
-		} else {
-
-		}
-	}
 	return
 }
 
 func In(root *TreeNode) (res []int) {
-	stack := []*TreeNode{}
-	if len(stack) > 0 || root != nil {
-		if root != nil {
-
-		} else {
-
-		}
-	}
 	return
 }
 
 func Post(root *TreeNode) (res []int) {
-	queue := []*TreeNode{}
-	if len(queue) > 0 || root != nil {
-		if root != nil {
-
-		} else {
-
-		}
-	}
 	return
+}
+
+/*给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
+
+示例：
+二叉树：[3,9,20,nil,nil,15,7],
+
+  3
+ / \
+9  20
+  /  \
+15    7
+返回其层序遍历结果：
+
+[
+[3],
+[9,20],
+[15,7]
+]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/binary-tree-level-order-traversal
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestBFS(t *testing.T) {
+	root := ArrayToTree([]interface{}{3, 9, 20, nil, nil, 15, 7})
+	fmt.Println(BFSArray(root))
 }
