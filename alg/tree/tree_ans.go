@@ -215,27 +215,11 @@ func Ordering(root *TreeNode, functions []func(*TreeNode) []int) {
 	}
 }
 
-func PostOrderLoop(root *TreeNode) (res []int) {
-	stack := []*TreeNode{}
-	for len(stack) != 0 || root != nil {
-		if root != nil {
-			// 新元素添加到队列头，根节点位于队尾
-			res = append([]int{root.Val}, res...)
-			if root.Left != nil {
-				stack = append(stack, root.Left)
-			}
-			root = root.Right
-		} else {
-			root = stack[len(stack)-1]
-			stack = stack[:len(stack)-1]
-		}
-	}
-	return
-}
-
+// 根左右
 func PreOrderLoop(root *TreeNode) (res []int) {
 	stack := []*TreeNode{}
 	for root != nil || len(stack) > 0 {
+		// 走到最左子节点，递推时记录结果，右子树入栈
 		if root != nil {
 			// 添加根节点到结果集
 			res = append(res, root.Val)
@@ -244,6 +228,7 @@ func PreOrderLoop(root *TreeNode) (res []int) {
 			}
 			root = root.Left
 		} else {
+			// 回归
 			root = stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
 		}
@@ -251,16 +236,17 @@ func PreOrderLoop(root *TreeNode) (res []int) {
 	return
 }
 
+// 左根右
 func InOrderLoop(root *TreeNode) []int {
 	res, stack := []int{}, []*TreeNode{}
 	// 如果根节点不为空，并且栈中有元素
 	for root != nil || len(stack) > 0 {
-		// 遍历到最左边的叶子节点，并一直添加左子节点到栈中
+		// 递推，左子树入栈
 		if root != nil {
 			stack = append(stack, root)
 			root = root.Left
 		} else {
-			// 弹出栈中最后一个元素，等价于root = stack.pop（）
+			// 回归时，先记录左子树，后记录根
 			root = stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
 			// 将最后一个元素添加到结果集
@@ -270,6 +256,47 @@ func InOrderLoop(root *TreeNode) []int {
 		}
 	}
 	return res
+}
+
+// 左右根
+func PostOrderLoop(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
+	for len(stack) != 0 || root != nil {
+		if root != nil {
+			// 新元素添加到队列头，根节点位于队尾
+			res = append([]int{root.Val}, res...)
+			if root.Left != nil {
+				stack = append(stack, root.Left)
+			}
+			root = root.Right // 根节点靠哪个孩子近就往哪边移动
+		} else {
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+		}
+	}
+	return
+}
+
+func BFS(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
+	for root != nil || len(stack) > 0 {
+		if root != nil {
+			res = append(res, root.Val)
+			if root.Left != nil {
+				stack = append(stack, root.Left)
+			}
+			if root.Right != nil {
+				stack = append(stack, root.Right)
+			}
+			if len(stack) == 0 {
+				root = nil
+				return
+			}
+			root = stack[0]
+			stack = stack[1:]
+		}
+	}
+	return
 }
 
 func GetRootForTraverse() (roots []*TreeNode) {

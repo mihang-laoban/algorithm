@@ -253,34 +253,63 @@ func isValidBSTInOrder(root *TreeNode) bool {
 	return true
 }
 
-//https://leetcode-cn.com/problems/number-of-islands/solution/number-of-islands-shen-du-you-xian-bian-li-dfs-or-/
+/*
+    5
+   / \
+  2   6
+ / \
+1   3
 
+*/
+//https://leetcode-cn.com/problems/number-of-islands/solution/number-of-islands-shen-du-you-xian-bian-li-dfs-or-/
 func Test(t *testing.T) {
-	root1 := InitTree([]int{5, 2, 6, 1, 3})
-	root2 := ArrayToTree([]interface{}{})
-	fmt.Println(PostOrderLoop(root1.GetRoot()))
-	fmt.Println(PostOrderLoop(root2))
-	fmt.Println(BFS(root2))
+	root := InitTree([]int{5, 2, 6, 1, 3}).GetRoot()
+	//52136
+	fmt.Println(Pre(root))
+	//12356
+	fmt.Println(In(root))
+	//13265
+	fmt.Println(Post(root))
+	fmt.Println(BFS(root))
 }
 
-func BFS(root *TreeNode) interface{} {
-	res, stack := []int{}, []*TreeNode{}
-	for root != nil || len(stack) > 0 {
+func Pre(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
+	for len(stack) > 0 || root != nil {
 		if root != nil {
-			res = append(res, root.Val)
-			if root.Left != nil {
-				stack = append(stack, root.Left)
-			}
-			if root.Right != nil {
+			for root != nil {
+				res = append(res, root.Val)
 				stack = append(stack, root.Right)
+				root = root.Left
 			}
-			if len(stack) == 0 {
-				root = nil
-				return res
-			}
-			root = stack[0]
-			stack = stack[1:]
+
+		} else {
+
 		}
 	}
-	return res
+	return
+}
+
+func In(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
+	if len(stack) > 0 || root != nil {
+		if root != nil {
+
+		} else {
+
+		}
+	}
+	return
+}
+
+func Post(root *TreeNode) (res []int) {
+	queue := []*TreeNode{}
+	if len(queue) > 0 || root != nil {
+		if root != nil {
+
+		} else {
+
+		}
+	}
+	return
 }
