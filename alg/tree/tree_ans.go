@@ -215,6 +215,23 @@ func Ordering(root *TreeNode, functions []func(*TreeNode) []int) {
 	}
 }
 
+func PostOrderLoop(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
+	for len(stack) != 0 || root != nil {
+		if root != nil {
+			res = append([]int{root.Val}, res...)
+			if root.Left != nil {
+				stack = append(stack, root.Left)
+			}
+			root = root.Right
+		} else {
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+		}
+	}
+	return
+}
+
 func PreOrderLoop(root *TreeNode) (res []int) {
 	stack := []*TreeNode{}
 	for root != nil || len(stack) > 0 {
@@ -252,23 +269,6 @@ func InOrderLoop(root *TreeNode) []int {
 		}
 	}
 	return res
-}
-
-func PostOrderLoop(root *TreeNode) (res []int) {
-	stack := []*TreeNode{}
-	for len(stack) != 0 || root != nil {
-		if root != nil {
-			res = append([]int{root.Val}, res...)
-			if root.Left != nil {
-				stack = append(stack, root.Left)
-			}
-			root = root.Right
-		} else {
-			root = stack[len(stack)-1]
-			stack = stack[:len(stack)-1]
-		}
-	}
-	return
 }
 
 func GetRootForTraverse() (roots []*TreeNode) {
