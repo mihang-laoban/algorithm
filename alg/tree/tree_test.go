@@ -254,3 +254,33 @@ func isValidBSTInOrder(root *TreeNode) bool {
 }
 
 //https://leetcode-cn.com/problems/number-of-islands/solution/number-of-islands-shen-du-you-xian-bian-li-dfs-or-/
+
+func Test(t *testing.T) {
+	root1 := InitTree([]int{5, 2, 6, 1, 3})
+	root2 := ArrayToTree([]interface{}{})
+	fmt.Println(PostOrderLoop(root1.GetRoot()))
+	fmt.Println(PostOrderLoop(root2))
+	fmt.Println(BFS(root2))
+}
+
+func BFS(root *TreeNode) interface{} {
+	res, stack := []int{}, []*TreeNode{}
+	for root != nil || len(stack) > 0 {
+		if root != nil {
+			res = append(res, root.Val)
+			if root.Left != nil {
+				stack = append(stack, root.Left)
+			}
+			if root.Right != nil {
+				stack = append(stack, root.Right)
+			}
+			if len(stack) == 0 {
+				root = nil
+				return res
+			}
+			root = stack[0]
+			stack = stack[1:]
+		}
+	}
+	return res
+}

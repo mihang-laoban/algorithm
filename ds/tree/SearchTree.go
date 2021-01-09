@@ -330,10 +330,11 @@ func (bst *BiSearchTree) Clear() {
 		  6    18
 		 / \   / \
 		3   7 17  20
-	   / \   \
-	  2   4   13
-			  / \
+	   / \   \		\
+	  2   4   13	 1
+              / \
 			 9   14
+[]int{15, 6, 18, 3, 7, 17, 20, 2, 4, 13, 9, 14, 1}
 */
 
 func InitTree(arr []int) (bst BiSearchTree) {
@@ -372,10 +373,11 @@ func Run(bst BiSearchTree) {
 }
 
 func ArrayToTree(nums []interface{}) *TreeNode {
-	size, root := len(nums), &TreeNode{Val: nums[0].(int)}
+	size := len(nums)
 	if size == 0 {
 		return nil
 	}
+	root := &TreeNode{Val: nums[0].(int)}
 
 	var build func(*TreeNode, int)
 	build = func(node *TreeNode, cur int) {
