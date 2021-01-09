@@ -237,8 +237,8 @@ func PreOrderLoop(root *TreeNode) (res []int) {
 }
 
 // 左根右
-func InOrderLoop(root *TreeNode) []int {
-	res, stack := []int{}, []*TreeNode{}
+func InOrderLoop(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
 	// 如果根节点不为空，并且栈中有元素
 	for root != nil || len(stack) > 0 {
 		// 递推，左子树入栈
@@ -255,7 +255,7 @@ func InOrderLoop(root *TreeNode) []int {
 			root = root.Right
 		}
 	}
-	return res
+	return
 }
 
 // 左右根
