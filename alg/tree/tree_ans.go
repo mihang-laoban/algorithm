@@ -219,7 +219,7 @@ func PostOrderLoop(root *TreeNode) (res []int) {
 	stack := []*TreeNode{}
 	for len(stack) != 0 || root != nil {
 		if root != nil {
-			// 新元素添加到队列头
+			// 新元素添加到队列头，根节点位于队尾
 			res = append([]int{root.Val}, res...)
 			if root.Left != nil {
 				stack = append(stack, root.Left)
