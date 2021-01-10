@@ -268,21 +268,68 @@ func Test(t *testing.T) {
 	fmt.Println(Pre(root))
 	//12356
 	fmt.Println(In(root))
-	fmt.Println(InOrderLoop(root))
+	//fmt.Println(InOrderLoop(root))
 	//13265
 	fmt.Println(Post(root))
-	fmt.Println(BFS(root))
+	//fmt.Println(BFS(root))
 }
 
 func Pre(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
+	for root != nil || len(stack) > 0 {
+		if root != nil {
+			res = append(res, root.Val)
+			if root.Right != nil {
+				stack = append(stack, root.Right)
+			}
+			root = root.Left
+		} else {
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+		}
+	}
+
 	return
 }
 
 func In(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
+	for root != nil || len(stack) > 0 {
+		if root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		} else {
+			cur := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			res = append(res, cur.Val)
+			root = cur.Right
+		}
+	}
 	return
 }
 
+/*
+    5
+   / \
+  2   6
+ / \
+1   3
+
+*/
 func Post(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
+	for root != nil || len(stack) > 0 {
+		if root != nil {
+			res = append([]int{root.Val}, res...)
+			if root.Left != nil {
+				stack = append(stack, root.Left)
+			}
+			root = root.Right
+		} else {
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+		}
+	}
 	return
 }
 
