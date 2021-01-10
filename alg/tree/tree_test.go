@@ -310,5 +310,41 @@ func Post(root *TreeNode) (res []int) {
 
 func TestBFS(t *testing.T) {
 	root := ArrayToTree([]interface{}{3, 9, 20, nil, nil, 15, 7})
-	fmt.Println(BFSArray(root))
+	fmt.Println(BFS2(root))
+}
+
+func BFSArr(root *TreeNode) (res [][]int) {
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		tmp, size := []int{}, len(queue)
+		for i := 0; i < size; i++ {
+			cur := queue[0]
+			queue = queue[1:]
+			tmp = append(tmp, cur.Val)
+			if cur.Left != nil {
+				queue = append(queue, cur.Left)
+			}
+			if cur.Right != nil {
+				queue = append(queue, cur.Right)
+			}
+		}
+		res = append(res, tmp)
+	}
+	return
+}
+
+func BFS2(root *TreeNode) (res []int) {
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		res = append(res, cur.Val)
+		if cur.Left != nil {
+			queue = append(queue, cur.Left)
+		}
+		if cur.Right != nil {
+			queue = append(queue, cur.Right)
+		}
+	}
+	return
 }

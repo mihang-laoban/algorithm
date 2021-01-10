@@ -278,22 +278,16 @@ func PostOrderLoop(root *TreeNode) (res []int) {
 }
 
 func BFS(root *TreeNode) (res []int) {
-	stack := []*TreeNode{}
-	for root != nil || len(stack) > 0 {
-		if root != nil {
-			res = append(res, root.Val)
-			if root.Left != nil {
-				stack = append(stack, root.Left)
-			}
-			if root.Right != nil {
-				stack = append(stack, root.Right)
-			}
-			if len(stack) == 0 {
-				root = nil
-				return
-			}
-			root = stack[0]
-			stack = stack[1:]
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		res = append(res, cur.Val)
+		if cur.Left != nil {
+			queue = append(queue, cur.Left)
+		}
+		if cur.Right != nil {
+			queue = append(queue, cur.Right)
 		}
 	}
 	return
