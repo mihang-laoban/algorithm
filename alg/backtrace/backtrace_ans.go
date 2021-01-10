@@ -60,10 +60,9 @@ func PhoneNum(str string) interface{} {
 }
 
 //https://leetcode-cn.com/problems/n-queens/
-var solutions [][]string
 
 func SolveNQueens(queueNum int) [][]string {
-	solutions = [][]string{}
+	solutions := [][]string{}
 	queens := make([]int, queueNum)
 	// 初始化皇后位置
 	for i := 0; i < queueNum; i++ {
