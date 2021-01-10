@@ -78,29 +78,30 @@ func SolveNQueens(queueNum int) [][]string {
 			return
 		}
 		for i := 0; i < queueNum; i++ {
-			// 如果当前行不可用，尝试下一个位置
+			// 如果当前列已被占用，则继续
 			if columns[i] {
 				continue
 			}
-			left := row - i
-			if main[left] {
+			// 如果
+			mainIndex := row - i
+			if main[mainIndex] {
 				continue
 			}
-			right := row + i
-			if sub[right] {
+			subIndex := row + i
+			if sub[subIndex] {
 				continue
 			}
 
 			// 如果可用，标记占用，继续看下一行
 			queens[row] = i
-			columns[i], main[left], sub[right] = true, true, true
+			columns[i], main[mainIndex], sub[subIndex] = true, true, true
 			backtrack(queueNum, row+1)
 
 			// 恢复状态
 			queens[row] = -1
 			delete(columns, i)
-			delete(main, left)
-			delete(sub, right)
+			delete(main, mainIndex)
+			delete(sub, subIndex)
 		}
 	}
 
@@ -120,3 +121,50 @@ func generateBoard(queens []int, n int) []string {
 	}
 	return board
 }
+
+/*
+
+var solutions [][]string
+func SolveNQueens(n int) [][]string {
+	solutions = [][]string{}
+	queens := make([]int, n)
+	for i := 0; i < n; i++ {
+		queens[i] = -1
+	}
+	columns := map[int]bool{}
+	diagonals1, diagonals2 := map[int]bool{}, map[int]bool{}
+	backtrack(queens, n, 0, columns, diagonals1, diagonals2)
+	return solutions
+}
+
+func backtrack(queens []int, n, row int, columns, diagonals1, diagonals2 map[int]bool) {
+	if row == n {
+		board := generateBoard(queens, n)
+		solutions = append(solutions, board)
+		return
+	}
+	for i := 0; i < n; i++ {
+		if columns[i] {
+			continue
+		}
+		diagonal1 := row - i
+		if diagonals1[diagonal1] {
+			continue
+		}
+		diagonal2 := row + i
+		if diagonals2[diagonal2] {
+			continue
+		}
+
+		queens[row] = i
+		columns[i] = true
+		diagonals1[diagonal1], diagonals2[diagonal2] = true, true
+		backtrack(queens, n, row+1, columns, diagonals1, diagonals2)
+
+		queens[row] = -1
+		delete(columns, i)
+		delete(diagonals1, diagonal1)
+		delete(diagonals2, diagonal2)
+	}
+}
+*/
