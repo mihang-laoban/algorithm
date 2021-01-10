@@ -331,7 +331,12 @@ func MaxSlidingWindow(nums []int, k int) []int {
 
 func TestPow(t *testing.T) {
 	fmt.Println(MyPow(2.00, 10))
+	fmt.Println(MyPow1(2.00, 10))
 	fmt.Println(MyPowNew(2.00, 10))
+}
+
+func MyPow1(f float64, i int) interface{} {
+	return nil
 }
 
 func Test(t *testing.T) {
