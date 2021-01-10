@@ -342,3 +342,35 @@ func BFSArray(root *TreeNode) (res [][]int) {
 	}
 	return
 }
+
+func IslandBFS(grid [][]string) int {
+	count := 0
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j++ {
+			// 遇到第一片陆地，则查看周边是否也是陆地
+			if grid[i][j] == "1" {
+				bfs(grid, i, j)
+				count++
+			}
+		}
+	}
+	return count
+}
+
+func bfs(grid [][]string, i int, j int) {
+	queue := [][]int{[]int{i, j}}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		i, j := cur[0], cur[1]
+		// 如果不超出边界，并且也是陆地，则沉掉当前陆地
+		if 0 <= i && i < len(grid) && 0 <= j && j < len(grid[0]) && grid[i][j] == "1" {
+			grid[i][j] = "0"
+			// 继续检查周边是否也是陆地
+			queue = append(queue, []int{i + 1, j})
+			queue = append(queue, []int{i - 1, j})
+			queue = append(queue, []int{i, j + 1})
+			queue = append(queue, []int{i, j - 1})
+		}
+	}
+}
