@@ -78,22 +78,24 @@ func SolveNQueens(queueNum int) [][]string {
 			return
 		}
 		for i := 0; i < queueNum; i++ {
-			// 如果当前列已被占用，则继续
+			// 如果当前列已被占用，则看下一个位置
 			if columns[i] {
 				continue
 			}
-			// 如果
+			// 如果主对角线被占用，则看下一个位置
 			mainIndex := row - i
 			if main[mainIndex] {
 				continue
 			}
+			// 如果副对角线被占用，则看下一个位置
 			subIndex := row + i
 			if sub[subIndex] {
 				continue
 			}
 
-			// 如果可用，标记占用，继续看下一行
+			// 记录当前皇后的行下表
 			queens[row] = i
+			// 当前位置皇后不存在冲突，占用当前位置，继续看下一行
 			columns[i], main[mainIndex], sub[subIndex] = true, true, true
 			backtrack(queueNum, row+1)
 
