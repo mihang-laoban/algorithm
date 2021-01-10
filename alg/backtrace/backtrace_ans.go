@@ -125,7 +125,6 @@ func generateBoard(queens []int, n int) []string {
 }
 
 /*
-
 var solutions [][]string
 func SolveNQueens(n int) [][]string {
 	solutions = [][]string{}

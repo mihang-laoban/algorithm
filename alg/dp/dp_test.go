@@ -312,16 +312,16 @@ func dpGenerateParenthesis(n int) []string {
 func generateParenthesis(n int) (res []string) {
 	var GenBrackets func(int, int, int, string)
 
-	GenBrackets = func(left int, right int, n int, s string) {
-		if left == n && right == n {
+	GenBrackets = func(left int, right int, pairNum int, s string) {
+		if left == pairNum && right == pairNum {
 			res = append(res, s)
 			return
 		}
-		if left < n {
-			GenBrackets(left+1, right, n, s+"(")
+		if left < pairNum {
+			GenBrackets(left+1, right, pairNum, s+"(")
 		}
 		if right < left {
-			GenBrackets(left, right+1, n, s+")")
+			GenBrackets(left, right+1, pairNum, s+")")
 		}
 	}
 	GenBrackets(0, 0, n, "")
