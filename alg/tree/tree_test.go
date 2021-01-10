@@ -445,3 +445,8 @@ func IslandBfs(grid [][]string) int {
 	count := 0
 	return count
 }
+
+//https://leetcode-cn.com/problems/assign-cookies/
+//https://leetcode-cn.com/problems/sqrtx/
+//https://leetcode-cn.com/problems/valid-perfect-square/
+//https://leetcode-cn.com/problems/search-rotate-array-lcci/
