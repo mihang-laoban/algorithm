@@ -70,14 +70,15 @@ func SolveNQueens(queueNum int) [][]string {
 	}
 	columns, main, sub := map[int]bool{}, map[int]bool{}, map[int]bool{}
 
-	var backtrack func([]int, int, int)
-	backtrack = func(queens []int, queueNum, row int) {
+	var backtrack func(int, int)
+	backtrack = func(queueNum, row int) {
 		if row == queueNum {
 			board := generateBoard(queens, queueNum)
 			solutions = append(solutions, board)
 			return
 		}
 		for i := 0; i < queueNum; i++ {
+			// 如果当前行不可用，尝试下一个位置
 			if columns[i] {
 				continue
 			}
@@ -89,9 +90,13 @@ func SolveNQueens(queueNum int) [][]string {
 			if sub[right] {
 				continue
 			}
+
+			// 如果可用，标记占用，继续看下一行
 			queens[row] = i
 			columns[i], main[left], sub[right] = true, true, true
-			backtrack(queens, queueNum, row+1)
+			backtrack(queueNum, row+1)
+
+			// 恢复状态
 			queens[row] = -1
 			delete(columns, i)
 			delete(main, left)
@@ -99,7 +104,7 @@ func SolveNQueens(queueNum int) [][]string {
 		}
 	}
 
-	backtrack(queens, queueNum, 0)
+	backtrack(queueNum, 0)
 	return solutions
 }
 
