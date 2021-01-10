@@ -60,3 +60,59 @@ func PhoneNum(str string) interface{} {
 }
 
 //https://leetcode-cn.com/problems/n-queens/
+var solutions [][]string
+
+func SolveNQueens(queueNum int) [][]string {
+	solutions = [][]string{}
+	queens := make([]int, queueNum)
+	// 初始化皇后位置
+	for i := 0; i < queueNum; i++ {
+		queens[i] = -1
+	}
+	columns, main, sub := map[int]bool{}, map[int]bool{}, map[int]bool{}
+
+	var backtrack func([]int, int, int)
+	backtrack = func(queens []int, queueNum, row int) {
+		if row == queueNum {
+			board := generateBoard(queens, queueNum)
+			solutions = append(solutions, board)
+			return
+		}
+		for i := 0; i < queueNum; i++ {
+			if columns[i] {
+				continue
+			}
+			left := row - i
+			if main[left] {
+				continue
+			}
+			right := row + i
+			if sub[right] {
+				continue
+			}
+			queens[row] = i
+			columns[i], main[left], sub[right] = true, true, true
+			backtrack(queens, queueNum, row+1)
+			queens[row] = -1
+			delete(columns, i)
+			delete(main, left)
+			delete(sub, right)
+		}
+	}
+
+	backtrack(queens, queueNum, 0)
+	return solutions
+}
+
+func generateBoard(queens []int, n int) []string {
+	board := []string{}
+	for i := 0; i < n; i++ {
+		row := make([]byte, n)
+		for j := 0; j < n; j++ {
+			row[j] = '.'
+		}
+		row[queens[i]] = 'Q'
+		board = append(board, string(row))
+	}
+	return board
+}
