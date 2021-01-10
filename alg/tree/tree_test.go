@@ -395,3 +395,76 @@ func BFS2(root *TreeNode) (res []int) {
 	}
 	return
 }
+
+/*
+给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+
+岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+
+此外，你可以假设该网格的四条边均被水包围。
+
+
+
+示例 1：
+
+输入：grid = [
+["1","1","1","1","0"],
+["1","1","0","1","0"],
+["1","1","0","0","0"],
+["0","0","0","0","0"]
+]
+输出：1
+
+示例 2：
+
+输入：grid = [
+["1","1","0","0","0"],
+["1","1","0","0","0"],
+["0","0","1","0","0"],
+["0","0","0","1","1"]
+]
+输出：3
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/number-of-islands
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestIslandNum(t *testing.T) {
+	grid := [][]string{
+		[]string{"1", "1", "0", "0", "0"},
+		[]string{"1", "1", "0", "0", "0"},
+		[]string{"0", "0", "1", "0", "0"},
+		[]string{"0", "0", "0", "1", "1"},
+	}
+
+	fmt.Println(IslandBFS(grid))
+}
+
+func IslandBFS(grid [][]string) int {
+	count := 0
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j++ {
+			if grid[i][j] == "1" {
+				bfs(grid, i, j)
+				count++
+			}
+		}
+	}
+	return count
+}
+
+func bfs(grid [][]string, i int, j int) {
+	queue := [][]int{[]int{i, j}}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		i, j := cur[0], cur[1]
+		if 0 <= i && i < len(grid) && 0 <= j && j < len(grid[0]) && grid[i][j] == "1" {
+			grid[i][j] = "0"
+			queue = append(queue, []int{i + 1, j})
+			queue = append(queue, []int{i - 1, j})
+			queue = append(queue, []int{i, j + 1})
+			queue = append(queue, []int{i, j - 1})
+		}
+	}
+}
