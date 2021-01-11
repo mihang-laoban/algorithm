@@ -177,3 +177,62 @@ func MySqrt(x int) int {
 	}
 	return ans
 }
+
+func BinarySearch(target int, nums []int) interface{} {
+	size := len(nums)
+	if size == 0 {
+		return 0
+	}
+	if size == 1 {
+		if nums[0] == target {
+			return 0
+		}
+		return -1
+	}
+	l, r := 0, size-1
+	for l <= r {
+		mid := (l + r) / 2
+		if nums[mid] == target {
+			return mid
+		} else if nums[mid] > target {
+			r = mid - 1
+		} else {
+			l = mid + 1
+		}
+	}
+	return -1
+}
+
+func SearchRotatedArray(target int, nums []int) int {
+	n := len(nums)
+	if n == 0 {
+		return -1
+	}
+	if n == 1 {
+		if nums[0] == target {
+			return 0
+		}
+		return -1
+	}
+	l, r := 0, n-1
+	for l <= r {
+		mid := (l + r) / 2
+		if nums[mid] == target {
+			return mid
+		}
+		if nums[0] <= nums[mid] {
+			if nums[0] <= target && target < nums[mid] {
+				r = mid - 1
+			} else {
+				l = mid + 1
+			}
+		} else {
+			if target <= nums[n-1] && nums[mid] < target {
+				l = mid + 1
+			} else {
+				r = mid - 1
+			}
+		}
+	}
+	return -1
+}
