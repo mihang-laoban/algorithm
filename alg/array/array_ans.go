@@ -165,7 +165,7 @@ func MySqrt(x int) int {
 	// 如果左边大于右边
 	for l <= r {
 		// 查找中位数
-		mid := l + (r-l)/2
+		mid := (r + l) / 2
 		// 如果中位数的平方小于目标，则更新结果，然后向上查找
 		if mid*mid > x {
 			r = mid - 1
@@ -207,7 +207,7 @@ func SearchRotatedArray(target int, nums []int) int {
 	size := len(nums)
 	low, high := 0, size-1
 	for low <= high {
-		mid := low + (high-low)/2
+		mid := (high + low) / 2
 		if nums[mid] == target {
 			return mid
 		}
