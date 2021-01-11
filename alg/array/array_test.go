@@ -396,4 +396,9 @@ func TestBinarySearch(t *testing.T) {
 func TestSearchRotatedArray(t *testing.T) {
 	target, nums := 1, []int{4, 5, 6, 7, 0, 1, 2}
 	fmt.Println(SearchRotatedArray(target, nums))
+	fmt.Println(SearchRotatedArray2(target, nums))
+}
+
+func SearchRotatedArray2(target int, nums []int) interface{} {
+	return nil
 }
