@@ -400,5 +400,5 @@ func TestSearchRotatedArray(t *testing.T) {
 }
 
 func SearchRotatedArray2(target int, nums []int) interface{} {
-	return nil
+	return -1
 }
