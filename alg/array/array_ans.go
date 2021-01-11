@@ -157,3 +157,23 @@ func quickMulNew(x float64, N int) float64 {
 	}
 	return ans
 }
+
+func MySqrt(x int) int {
+	// 记录左右边界
+	l, r := 0, x
+	ans := -1
+	// 如果左边大于右边
+	for l <= r {
+		// 查找中位数
+		mid := l + (r-l)/2
+		// 如果中位数的平方小于目标，则更新结果，然后向上查找
+		if mid*mid > x {
+			r = mid - 1
+		} else {
+			// 如果中位数的平方大于目标，向下查找
+			ans = mid
+			l = mid + 1
+		}
+	}
+	return ans
+}
