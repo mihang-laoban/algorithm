@@ -204,8 +204,7 @@ func BinarySearch(target int, nums []int) interface{} {
 }
 
 func SearchRotatedArray(target int, nums []int) int {
-	size := len(nums)
-	low, high := 0, size-1
+	low, high := 0, len(nums)-1
 	for low <= high {
 		mid := (high + low) / 2
 		if nums[mid] == target {
