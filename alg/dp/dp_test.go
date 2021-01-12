@@ -327,3 +327,5 @@ func generateParenthesis(n int) (res []string) {
 	GenBrackets(0, 0, n, "")
 	return
 }
+
+//https://leetcode-cn.com/problems/unique-paths/

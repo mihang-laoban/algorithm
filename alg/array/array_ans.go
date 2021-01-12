@@ -165,7 +165,7 @@ func MySqrt(x int) int {
 	// 如果左边大于右边
 	for l <= r {
 		// 查找中位数
-		mid := l + (r-l)/2
+		mid := (r + l) / 2
 		// 如果中位数的平方小于目标，则更新结果，然后向上查找
 		if mid*mid > x {
 			r = mid - 1
@@ -176,4 +176,53 @@ func MySqrt(x int) int {
 		}
 	}
 	return ans
+}
+
+func BinarySearch(target int, nums []int) interface{} {
+	size := len(nums)
+	if size == 0 {
+		return 0
+	}
+	if size == 1 {
+		if nums[0] == target {
+			return 0
+		}
+		return -1
+	}
+	l, r := 0, size-1
+	for l <= r {
+		mid := (l + r) / 2
+		if nums[mid] == target {
+			return mid
+		} else if nums[mid] > target {
+			r = mid - 1
+		} else {
+			l = mid + 1
+		}
+	}
+	return -1
+}
+
+func SearchRotatedArray(target int, nums []int) int {
+	low, high := 0, len(nums)-1
+	for low <= high {
+		mid := (high + low) / 2
+		if nums[mid] == target {
+			return mid
+		}
+		if nums[low] <= nums[mid] {
+			if nums[low] <= target && target < nums[mid] {
+				high = mid - 1
+			} else {
+				low = mid + 1
+			}
+		} else {
+			if nums[mid] < target && target <= nums[high] {
+				low = mid + 1
+			} else {
+				high = mid - 1
+			}
+		}
+	}
+	return -1
 }
