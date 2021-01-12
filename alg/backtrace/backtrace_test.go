@@ -1,9 +1,15 @@
 package backtrace
 
 import (
+	"dp/alg/dp"
+	. "dp/tools"
 	"fmt"
 	"testing"
 )
+
+func init() {
+	Max(1, 2)
+}
 
 /*给你一个整数数组 nums ，返回该数组所有可能的子集（幂集）。解集不能包含重复的子集。
 
@@ -123,4 +129,40 @@ func TestNQueue(t *testing.T) {
 func SolveNQueen(queenNum int) [][]string {
 	res := [][]string{}
 	return res
+}
+
+/*给定一个非负整数数组，你最初位于数组的第一个位置。
+数组中的每个元素代表你在该位置可以跳跃的最大长度。
+判断你是否能够到达最后一个位置。
+
+示例 1:
+输入: [2,3,1,1,4]
+输出: true
+解释: 我们可以先跳 1 步，从位置 0 到达 位置 1, 然后再从位置 1 跳 3 步到达最后一个位置。
+
+示例 2:
+输入: [3,2,1,0,4]
+输出: false
+解释: 无论怎样，你总会到达索引为 3 的位置。但该位置的最大跳跃长度是 0 ， 所以你永远不可能到达最后一个位置。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/jump-game
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestJumpGame(t *testing.T) {
+	//nums := []int{2, 3, 1, 1, 4}
+	nums := []int{3, 2, 1, 0, 4}
+	fmt.Println(JumpG(nums))
+	fmt.Println(dp.JumpGame(nums))
+}
+
+func JumpG(nums []int) bool {
+	pos := 0
+	for i := 0; i < len(nums); i++ {
+		if i > pos {
+			return false
+		}
+		pos = Max(pos, i+nums[i])
+	}
+	return true
 }
