@@ -5,25 +5,24 @@ import (
 	"fmt"
 )
 
-func Exchange(values []int, total int) {
+func Exchange(values []int, total int) int {
 	dp := make([]int, total+1)
-	for i := 1; i < total+1; i++ {
+	for i := 0; i < total+1; i++ {
 		dp[i] = total + 1
 	}
-	dp[0] = 0
 
+	dp[0] = 0
 	for i := 1; i < total+1; i++ {
 		for _, value := range values {
-			if i-value < 0 {
-				continue
+			if i-value >= 0 {
+				dp[i] = Min(dp[i-value]+1, dp[i])
 			}
-			dp[i] = Min(dp[i-value]+1, dp[i])
 		}
 	}
 	if dp[total] == total+1 {
-		fmt.Println(-1)
+		return -1
 	}
-	fmt.Println(dp[total])
+	return dp[total]
 }
 
 func Pack(weights []int, values []int, totalWeight int, totalCount int) {
@@ -491,6 +490,23 @@ func Rob(nums []int) int {
 	return second
 }
 
+func Rob2(nums []int) interface{} {
+	size := len(nums)
+	if size == 0 {
+		return 0
+	}
+	if size == 1 {
+		return nums[0]
+	}
+	dp := make([]int, size)
+	dp[0] = nums[0]
+	dp[1] = Max(nums[0], nums[1])
+	for i := 2; i < size; i++ {
+		dp[i] = Max(dp[i-2]+nums[i], dp[i-1])
+	}
+	return dp[size-1]
+}
+
 func MinCostClimbingStairs(cost []int) int {
 	n := len(cost)
 	pre, cur := 0, 0
@@ -498,4 +514,52 @@ func MinCostClimbingStairs(cost []int) int {
 		pre, cur = cur, Min(cur+cost[i-1], pre+cost[i-2])
 	}
 	return cur
+}
+
+/*
+动态规划：
+dp[i]表示i组括号的所有有效组合
+dp[i] = "(dp[p]的所有有效组合)+【dp[q]的组合】"，其中 1 + p + q = i , p从0遍历到i-1, q则相应从i-1到0
+*/
+func DpGenerateParenthesis(n int) []string {
+	if n == 0 {
+		return []string{}
+	}
+	if n == 1 {
+		return []string{"()"}
+	}
+	dp := make([][]string, n+1)
+	dp[0], dp[1] = []string{""}, []string{"()"}
+	for i := 2; i < n+1; i++ {
+		for j := 0; j < i; j++ {
+			// 正向遍历dp备忘录
+			for _, p := range dp[j] {
+				// 反向遍历dp备忘录
+				for _, q := range dp[i-j-1] {
+					dp[i] = append(dp[i], "("+p+")"+q)
+				}
+			}
+		}
+	}
+	return dp[n]
+}
+
+// https://leetcode-cn.com/problems/generate-parentheses/solution/zui-jian-dan-yi-dong-de-dong-tai-gui-hua-bu-lun-da/
+func GenerateParenthesis(n int) (res []string) {
+	var GenBrackets func(int, int, int, string)
+
+	GenBrackets = func(left int, right int, pairNum int, s string) {
+		if left == pairNum && right == pairNum {
+			res = append(res, s)
+			return
+		}
+		if left < pairNum {
+			GenBrackets(left+1, right, pairNum, s+"(")
+		}
+		if right < left {
+			GenBrackets(left, right+1, pairNum, s+")")
+		}
+	}
+	GenBrackets(0, 0, n, "")
+	return
 }

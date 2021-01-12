@@ -12,11 +12,7 @@ func init() {
 
 // Q1
 func TestExchangeMinCount(t *testing.T) {
-	Exchange([]int{3, 5}, 11)
-}
-
-func ex(values []int, total int) {
-
+	fmt.Println(Exchange([]int{3, 5}, 11))
 }
 
 /*示例：
@@ -194,23 +190,6 @@ func TestRob(t *testing.T) {
 	fmt.Println(Rob2([]int{1, 2, 3, 1}))
 }
 
-func Rob2(nums []int) interface{} {
-	size := len(nums)
-	if size == 0 {
-		return 0
-	}
-	if size == 1 {
-		return nums[0]
-	}
-	dp := make([]int, size)
-	dp[0] = nums[0]
-	dp[1] = Max(nums[0], nums[1])
-	for i := 2; i < size; i++ {
-		dp[i] = Max(dp[i-2]+nums[i], dp[i-1])
-	}
-	return dp[size-1]
-}
-
 /*数组的每个下标作为一个阶梯，第 i 个阶梯对应着一个非负数的体力花费值 cost[i]（下标从 0 开始）。
 每当你爬上一个阶梯你都要花费对应的体力值，一旦支付了相应的体力值，你就可以选择向上爬一个阶梯或者爬两个阶梯。
 请你找出达到楼层顶部的最低花费。在开始时，你可以选择从下标为 0 或 1 的元素作为初始阶梯。
@@ -276,56 +255,8 @@ func TestClimb(t *testing.T) {
 
 func TestGenBrackets(t *testing.T) {
 	n := 3
-	fmt.Println(generateParenthesis(n))
-	fmt.Println(dpGenerateParenthesis(n))
-}
-
-/*
-动态规划：
-dp[i]表示i组括号的所有有效组合
-dp[i] = "(dp[p]的所有有效组合)+【dp[q]的组合】"，其中 1 + p + q = i , p从0遍历到i-1, q则相应从i-1到0
-*/
-func dpGenerateParenthesis(n int) []string {
-	if n == 0 {
-		return []string{}
-	}
-	if n == 1 {
-		return []string{"()"}
-	}
-	dp := make([][]string, n+1)
-	dp[0], dp[1] = []string{""}, []string{"()"}
-	for i := 2; i < n+1; i++ {
-		for j := 0; j < i; j++ {
-			// 正向遍历dp备忘录
-			for _, p := range dp[j] {
-				// 反向遍历dp备忘录
-				for _, q := range dp[i-j-1] {
-					dp[i] = append(dp[i], "("+p+")"+q)
-				}
-			}
-		}
-	}
-	return dp[n]
-}
-
-// https://leetcode-cn.com/problems/generate-parentheses/solution/zui-jian-dan-yi-dong-de-dong-tai-gui-hua-bu-lun-da/
-func generateParenthesis(n int) (res []string) {
-	var GenBrackets func(int, int, int, string)
-
-	GenBrackets = func(left int, right int, pairNum int, s string) {
-		if left == pairNum && right == pairNum {
-			res = append(res, s)
-			return
-		}
-		if left < pairNum {
-			GenBrackets(left+1, right, pairNum, s+"(")
-		}
-		if right < left {
-			GenBrackets(left, right+1, pairNum, s+")")
-		}
-	}
-	GenBrackets(0, 0, n, "")
-	return
+	fmt.Println(GenerateParenthesis(n))
+	fmt.Println(DpGenerateParenthesis(n))
 }
 
 //https://leetcode-cn.com/problems/unique-paths/

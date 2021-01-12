@@ -32,12 +32,18 @@ func traverse(order int) {
 	}
 }
 
-func MyPreOrder(root *TreeNode) (res []int)  { return }
-func MyInOrder(root *TreeNode) (res []int)   { return }
-func MyPostOrder(root *TreeNode) (res []int) { return }
+func MyPreOrder(root *TreeNode) (res []int) {
+	return
+}
+func MyInOrder(root *TreeNode) (res []int) {
+	return
+}
+func MyPostOrder(root *TreeNode) (res []int) {
+	return
+}
 
 func AllOrderTraverse() {
-	for _, v := range []int{ /*PRE, IN,*/ POST} {
+	for _, v := range []int{PRE, IN, POST} {
 		traverse(v)
 	}
 }

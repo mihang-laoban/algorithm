@@ -261,7 +261,7 @@ func InOrderLoop(root *TreeNode) (res []int) {
 // 左右根
 func PostOrderLoop(root *TreeNode) (res []int) {
 	deque := []*TreeNode{}
-	for len(deque) != 0 || root != nil {
+	for len(deque) > 0 || root != nil {
 		if root != nil {
 			// 新元素添加到队列头，根节点位于队尾
 			res = append([]int{root.Val}, res...)
