@@ -530,6 +530,7 @@ func search(target int, nums []int) int {
 	if n == 0 {
 		return -1
 	}
+	// 如果只有一个数字
 	if n == 1 {
 		if nums[0] == target {
 			return 0
@@ -542,14 +543,16 @@ func search(target int, nums []int) int {
 		if nums[mid] == target {
 			return mid
 		}
-		if nums[0] <= nums[mid] {
+		if nums[0] <= nums[mid] { // 当右半边递增
+			//如果目标值在右半边
 			if nums[0] <= target && target < nums[mid] {
 				r = mid - 1
 			} else {
 				l = mid + 1
 			}
-		} else {
-			if target <= nums[n-1] && nums[mid] < target {
+		} else { // 当左半边递增
+			//如果目标值在右半边
+			if nums[mid] < target && target <= nums[n-1] {
 				l = mid + 1
 			} else {
 				r = mid - 1
