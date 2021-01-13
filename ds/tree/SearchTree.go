@@ -389,6 +389,9 @@ func ArrayToTree(nums []interface{}) *TreeNode {
 			node.Left = &TreeNode{Val: nums[left].(int)}
 			build(node.Left, left)
 		}
+		if right >= size {
+			return
+		}
 		if nums[right] != nil {
 			node.Right = &TreeNode{Val: nums[right].(int)}
 			build(node.Right, right)

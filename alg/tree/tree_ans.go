@@ -258,6 +258,70 @@ func InOrderLoop(root *TreeNode) (res []int) {
 	return
 }
 
+func RecoverTree(root *TreeNode) {
+	stack := []*TreeNode{}
+	var x, y, pred *TreeNode
+	for len(stack) > 0 || root != nil {
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if pred != nil && root.Val < pred.Val {
+			y = root
+			if x == nil {
+				x = pred
+			} else {
+				break
+			}
+		}
+		pred = root
+		root = root.Right
+	}
+	x.Val, y.Val = y.Val, x.Val
+}
+
+func RecoverTreeMorris(root *TreeNode) {
+	var x, y, pred, predecessor *TreeNode
+
+	for root != nil {
+		if root.Left != nil {
+			// predecessor 节点就是当前 root 节点向左走一步，然后一直向右走至无法走为止
+			predecessor = root.Left
+			for predecessor.Right != nil && predecessor.Right != root {
+				predecessor = predecessor.Right
+			}
+
+			// 让 predecessor 的右指针指向 root，继续遍历左子树
+			if predecessor.Right == nil {
+				predecessor.Right = root
+				root = root.Left
+			} else { // 说明左子树已经访问完了，我们需要断开链接
+				if pred != nil && root.Val < pred.Val {
+					y = root
+					if x == nil {
+						x = pred
+					}
+				}
+				pred = root
+				predecessor.Right = nil
+				root = root.Right
+			}
+		} else { // 如果没有左孩子，则直接访问右孩子
+			if pred != nil && root.Val < pred.Val {
+				y = root
+				if x == nil {
+					x = pred
+				}
+			}
+			pred = root
+			root = root.Right
+		}
+	}
+	x.Val, y.Val = y.Val, x.Val
+}
+
 // 左右根
 func PostOrderLoop(root *TreeNode) (res []int) {
 	deque := []*TreeNode{}
@@ -290,6 +354,34 @@ func BFS(root *TreeNode) (res []int) {
 			queue = append(queue, cur.Right)
 		}
 	}
+	return
+}
+
+func BFStoArray(root *TreeNode) (res []interface{}) {
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		if cur == nil {
+			res = append(res, nil)
+		} else {
+			res = append(res, cur.Val)
+		}
+		if cur == nil {
+			continue
+		}
+		if cur.Left != nil {
+			queue = append(queue, cur.Left)
+		} else {
+			queue = append(queue, nil)
+		}
+		if cur.Right != nil {
+			queue = append(queue, cur.Right)
+		} else {
+			queue = append(queue, nil)
+		}
+	}
+	res = Prune(res)
 	return
 }
 
