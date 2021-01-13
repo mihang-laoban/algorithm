@@ -243,9 +243,8 @@ func TestRob(t *testing.T) {
 
 func TestClimbMinCost(t *testing.T) {
 	cost := []int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1}
-	size := len(cost)
 	pre, cur := 0, 0
-	for i := 2; i < size+1; i++ {
+	for i := 2; i < len(cost)+1; i++ {
 		tmp := Min(cur+cost[i-1], pre+cost[i-2])
 		pre = cur
 		cur = tmp
