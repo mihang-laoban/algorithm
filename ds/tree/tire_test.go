@@ -66,9 +66,9 @@ func (this *Trie) StartsWith(prefix string) bool {
 func TestTire(t *testing.T) {
 	tire := Constructor()
 	tire.Insert("apple")
-	fmt.Println(tire.Search("apple"))
-	fmt.Println(tire.Search("app"))
-	fmt.Println(tire.StartsWith("app"))
+	fmt.Println(tire.Search("apple"))   // true
+	fmt.Println(tire.Search("app"))     // false
+	fmt.Println(tire.StartsWith("app")) // true
 	tire.Insert("app")
-	fmt.Println(tire.Search("app"))
+	fmt.Println(tire.Search("app")) // true
 }
