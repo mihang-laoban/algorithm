@@ -23,7 +23,7 @@ func Subset(nums []int) interface{} {
 
 //https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/
 
-func PhoneNum(str string) interface{} {
+func honeNum(str string) interface{} {
 	// 创建数字键盘映射表
 	phoneMap := map[string]string{
 		"2": "abc",
