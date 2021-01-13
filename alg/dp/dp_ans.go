@@ -171,7 +171,7 @@ func LongestCommon(text1 string, text2 string) {
 	fmt.Println(dp[m][n%2])
 }
 
-func RobotPathSum(m int, n int) {
+func RobotPathSum(m int, n int) int {
 	dp := make([][]int, m)
 	for i := 0; i < m; i++ {
 		dp[i] = make([]int, n)
@@ -189,7 +189,36 @@ func RobotPathSum(m int, n int) {
 			dp[i][j] = dp[i-1][j] + dp[i][j-1]
 		}
 	}
-	fmt.Println(dp[m-1][n-1])
+	return dp[m-1][n-1]
+}
+
+func RobotPathSum2(m int, n int) int {
+	pre, cur := make([]int, n), make([]int, n)
+	for i := 0; i < n; i++ {
+		pre[i] = 1
+		cur[i] = 1
+	}
+
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			cur[j] = pre[j] + cur[j-1]
+		}
+		copy(pre, cur)
+	}
+	return pre[n-1]
+}
+
+func RobotPathSum3(m int, n int) int {
+	cur := make([]int, n)
+	for i := 0; i < n; i++ {
+		cur[i] = 1
+	}
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			cur[j] += cur[j-1]
+		}
+	}
+	return cur[n-1]
 }
 
 func InitPath() (arr [][]int) {
