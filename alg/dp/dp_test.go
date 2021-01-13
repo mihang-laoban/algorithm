@@ -209,7 +209,15 @@ func TestRob(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestClimbMinCost(t *testing.T) {
-
+	cost := []int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1}
+	size := len(cost)
+	pre, cur := 0, 0
+	for i := 2; i <= size; i++ {
+		pre, cur = cur, Min(cur+cost[i-1], pre+cost[i-2])
+		//cur = Min(cur+cost[i-1], pre+cost[i-2])
+		//pre = cur
+	}
+	fmt.Println(cur)
 }
 
 /*假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
