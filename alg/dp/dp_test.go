@@ -246,11 +246,13 @@ func TestClimbMinCost(t *testing.T) {
 	size := len(cost)
 	pre, cur := 0, 0
 	for i := 2; i <= size; i++ {
-		pre, cur = cur, Min(cur+cost[i-1], pre+cost[i-2])
-		//cur = Min(cur+cost[i-1], pre+cost[i-2])
-		//pre = cur
+		tmp := Min(cur+cost[i-1], pre+cost[i-2])
+		pre = cur
+		cur = tmp
 	}
 	fmt.Println(cur)
+
+	fmt.Println(MinCostClimbingStairs(cost))
 }
 
 /*假设你正在爬楼梯。需要 n 阶你才能到达楼顶。

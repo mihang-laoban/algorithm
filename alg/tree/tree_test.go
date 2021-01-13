@@ -580,12 +580,40 @@ func search(target int, nums []int) int {
 示例 2：
 输入：root = [3,1,4,nil,nil,2]
 输出：[2,1,4,nil,nil,3]
-解释：2 不能在 3 的右子树中，因为 2 < 3 。交换 2 和 3 使二叉搜索树有效。*/
+解释：2 不能在 3 的右子树中，因为 2 < 3 。交换 2 和 3 使二叉搜索树有效。
+https://leetcode-cn.com/problems/recover-binary-search-tree/solution/hui-fu-er-cha-sou-suo-shu-by-leetcode-solution/
+*/
 func TestRecoverTree(t *testing.T) {
 	tree1 := ArrayToTree([]interface{}{1, 3, nil, nil, 2})
-	tree2 := ArrayToTree([]interface{}{3, 1, 4, nil, nil, 2})
+	//tree2 := ArrayToTree([]interface{}{3, 1, 4, nil, nil, 2})
+	recoverT(tree1)
 	RecoverTree(tree1)
-	RecoverTreeMorris(tree2)
+	//RecoverTreeMorris(tree2)
 	fmt.Println(BFStoArray(tree1))
-	fmt.Println(BFStoArray(tree2))
+	//fmt.Println(BFStoArray(tree2))
+}
+
+func recoverT(root *TreeNode) {
+	stack := []*TreeNode{}
+	var x, y, pre *TreeNode
+	for root != nil || len(stack) > 0 {
+		if root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		} else {
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			if pre != nil && root.Val < pre.Val {
+				y = root
+				if x == nil {
+					x = pre
+				} else {
+					break
+				}
+			}
+			pre = root
+			root = root.Right
+		}
+	}
+	x.Val, y.Val = y.Val, x.Val
 }
