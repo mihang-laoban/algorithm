@@ -238,18 +238,18 @@ func WithObstacle(arr [][]int) {
 	fmt.Println(dp[m-1][n-1])
 }
 
-func JumpGame(arr []int) {
-	index := len(arr) - 1
+func JumpGame(nums []int) bool {
+	index := len(nums) - 1
 	for i := index - 1; i >= 0; i-- {
-		if i+arr[i] >= index {
+		// 前一个位置可以抵达当前位置，则当前位置更新为前一个位置
+		if index <= i+nums[i] {
 			index = i
 		}
 	}
 	if index == 0 {
-		fmt.Println(true)
-		return
+		return true
 	}
-	fmt.Println(false)
+	return false
 }
 
 func FindContinuous(arr []int) {
