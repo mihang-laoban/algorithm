@@ -244,3 +244,93 @@ func numIslands(grid [][]byte) int {
 
 	return unionFind.Count - spaces
 }
+
+/*给定一个二维网格和一个单词，找出该单词是否存在于网格中。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+
+
+示例:
+
+board =
+[
+['A','B','C','E'],
+['S','F','C','S'],
+['A','D','E','E']
+]
+
+给定 word = "ABCCED", 返回 true
+给定 word = "SEE", 返回 true
+给定 word = "ABCB", 返回 false
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/word-search
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestWordSearch(t *testing.T) {
+	board := [][]byte{
+		[]byte{'A', 'B', 'C', 'E'},
+		[]byte{'S', 'F', 'C', 'S'},
+		[]byte{'A', 'D', 'E', 'E'},
+	}
+	word1 := "ABCCED"
+	word2 := "SEE"
+	word3 := "ABCB"
+	fmt.Println(exist(board, word1))
+	fmt.Println(exist(board, word2))
+	fmt.Println(exist(board, word3))
+}
+
+func exist(board [][]byte, word string) bool {
+
+	//        (x-1,y)
+	//(x,y-1) (x,y) (x,y+1)
+	//        (x+1,y)
+	directions := [][]int{
+		[]int{0, -1},
+		[]int{-1, 0},
+		[]int{0, 1},
+		[]int{1, 0},
+	}
+	m, n := len(board), len(board[0])
+	marked := make([][]bool, m)
+	for i := 0; i < m; i++ {
+		marked[i] = make([]bool, n)
+	}
+	var dfs func(int, int, int) bool
+	var inArea func(int, int) bool
+	inArea = func(x int, y int) bool {
+		return x >= 0 && x < m && y >= 0 && y < n
+	}
+
+	dfs = func(i, j, start int) bool {
+		if start == len(word)-1 {
+			return board[i][j] == word[start]
+		}
+		if board[i][j] == word[start] {
+			marked[i][j] = true
+			for k := 0; k < 4; k++ {
+				newX := i + directions[k][0]
+				newY := j + directions[k][1]
+				if inArea(newX, newY) && !marked[newX][newY] {
+					if dfs(newX, newY, start+1) {
+						return true
+					}
+				}
+			}
+			marked[i][j] = false
+		}
+		return false
+	}
+
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if dfs(i, j, 0) {
+				return true
+			}
+		}
+	}
+
+	return false
+}
