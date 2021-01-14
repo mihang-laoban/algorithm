@@ -302,7 +302,7 @@ func exist(board [][]byte, word string) bool {
 	}
 
 	dfs = func(i, j, start int) bool {
-		// 如果单词查完，检验
+		// 如果单词查完，校验最后一个字母是否匹配
 		if start == len(word)-1 {
 			return board[i][j] == word[start]
 		}
