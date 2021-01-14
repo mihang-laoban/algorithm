@@ -210,22 +210,22 @@ func TestIsland(t *testing.T) {
 }
 
 func numIslands(grid [][]byte) int {
-	rows := len(grid)
-	if rows == 0 {
+	x := len(grid)
+	if x == 0 {
 		return 0
 	}
-	cols := len(grid[0])
+	y := len(grid[0])
 
 	// 空地的数量
 	spaces := 0
 	unionFind := UnionFind{}
-	unionFind.UnionFind(rows * cols)
+	unionFind.UnionFind(x * y)
 	directions := [][]int{
 		[]int{1, 0},
 		[]int{0, 1},
 	}
-	for i := 0; i < rows; i++ {
-		for j := 0; j < cols; j++ {
+	for i := 0; i < x; i++ {
+		for j := 0; j < y; j++ {
 			if grid[i][j] == '0' {
 				spaces++
 			} else {
@@ -234,8 +234,8 @@ func numIslands(grid [][]byte) int {
 					newX := i + direction[0]
 					newY := j + direction[1]
 					// 先判断坐标合法，再检查右边一格和下边一格是否是陆地
-					if newX < rows && newY < cols && grid[newX][newY] == '1' {
-						unionFind.Union(i*cols+j, newX*cols+newY)
+					if newX < x && newY < y && grid[newX][newY] == '1' {
+						unionFind.Union(i*y+j, newX*y+newY)
 					}
 				}
 			}
