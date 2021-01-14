@@ -274,68 +274,7 @@ func TestWordSearch(t *testing.T) {
 	word1 := "ABCCED"
 	word2 := "SEE"
 	word3 := "ABCB"
-	fmt.Println(exist(board, word1))
-	fmt.Println(exist(board, word2))
-	fmt.Println(exist(board, word3))
-}
-
-func exist(board [][]byte, word string) bool {
-	// 节点待检查的四个方向
-	directions := [][]int{
-		[]int{0, -1},
-		[]int{-1, 0},
-		[]int{0, 1},
-		[]int{1, 0},
-	}
-	m, n := len(board), len(board[0])
-	// 标记走过的格子
-	marked := make([][]bool, m)
-	for i := 0; i < m; i++ {
-		marked[i] = make([]bool, n)
-	}
-	var dfs func(int, int, int) bool
-	var inArea func(int, int) bool
-
-	// 确保数组不越界
-	inArea = func(x int, y int) bool {
-		return x >= 0 && x < m && y >= 0 && y < n
-	}
-
-	dfs = func(i, j, start int) bool {
-		// 如果单词查完，校验最后一个字母是否匹配
-		if start == len(word)-1 {
-			return board[i][j] == word[start]
-		}
-
-		if board[i][j] == word[start] {
-			// 当前字母匹配，则标记为已访问
-			marked[i][j] = true
-			// 查看当前字母四个方向是否可以继续移动
-			for k := 0; k < 4; k++ {
-				newX := i + directions[k][0]
-				newY := j + directions[k][1]
-				// 如果没越界，没有走过，则继续看下一个字母
-				if inArea(newX, newY) && !marked[newX][newY] {
-					if dfs(newX, newY, start+1) {
-						return true
-					}
-				}
-			}
-			// 回溯时还原已访问的位置
-			marked[i][j] = false
-		}
-		// 如果当前字母不匹配，则直接看矩阵里面下一元素
-		return false
-	}
-
-	// 遍历矩阵
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if dfs(i, j, 0) {
-				return true
-			}
-		}
-	}
-
-	return false
+	fmt.Println(WordSearch(board, word1))
+	fmt.Println(WordSearch(board, word2))
+	fmt.Println(WordSearch(board, word3))
 }
