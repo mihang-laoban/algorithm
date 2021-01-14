@@ -261,7 +261,7 @@ func InOrderLoop(root *TreeNode) (res []int) {
 func RecoverTree(root *TreeNode) {
 	stack := []*TreeNode{}
 	var x, y, pre *TreeNode
-	for len(stack) > 0 || root != nil {
+	for root != nil || len(stack) > 0 {
 		if root != nil {
 			stack = append(stack, root)
 			root = root.Left

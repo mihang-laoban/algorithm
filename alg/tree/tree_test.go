@@ -586,7 +586,7 @@ https://leetcode-cn.com/problems/recover-binary-search-tree/solution/hui-fu-er-c
 func TestRecoverTree(t *testing.T) {
 	tree1 := ArrayToTree([]interface{}{1, 3, nil, nil, 2})
 	//tree2 := ArrayToTree([]interface{}{3, 1, 4, nil, nil, 2})
-	recoverT(tree1)
+	//recoverT(tree1)
 	RecoverTree(tree1)
 	//RecoverTreeMorris(tree2)
 	fmt.Println(BFStoArray(tree1))
