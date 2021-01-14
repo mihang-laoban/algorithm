@@ -300,6 +300,7 @@ func exist(board [][]byte, word string) bool {
 	}
 	var dfs func(int, int, int) bool
 	var inArea func(int, int) bool
+
 	inArea = func(x int, y int) bool {
 		return x >= 0 && x < m && y >= 0 && y < n
 	}
