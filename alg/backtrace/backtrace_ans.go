@@ -136,15 +136,15 @@ func WordSearch(board [][]byte, word string) bool {
 	}
 	m, n := len(board), len(board[0])
 	// 标记走过的格子
-	marked := make([][]bool, m)
+	visited := make([][]bool, m)
 	for i := 0; i < m; i++ {
-		marked[i] = make([]bool, n)
+		visited[i] = make([]bool, n)
 	}
 	var dfs func(int, int, int) bool
-	var inArea func(int, int) bool
+	var isValid func(int, int) bool
 
 	// 确保数组不越界
-	inArea = func(x int, y int) bool {
+	isValid = func(x int, y int) bool {
 		return x >= 0 && x < m && y >= 0 && y < n
 	}
 
@@ -156,20 +156,18 @@ func WordSearch(board [][]byte, word string) bool {
 
 		if board[i][j] == word[start] {
 			// 当前字母匹配，则标记为已访问
-			marked[i][j] = true
+			visited[i][j] = true
 			// 查看当前字母四个方向是否可以继续移动
-			for k := 0; k < 4; k++ {
-				newX := i + directions[k][0]
-				newY := j + directions[k][1]
-				// 如果没越界，没有走过，则继续看下一个字母
-				if inArea(newX, newY) && !marked[newX][newY] {
-					if dfs(newX, newY, start+1) {
-						return true
-					}
+			for _, direction := range directions {
+				newX := i + direction[0]
+				newY := j + direction[1]
+				// 如果没越界，没有访问过，则继续看下一个字母
+				if isValid(newX, newY) && !visited[newX][newY] && dfs(newX, newY, start+1) {
+					return true
 				}
 			}
-			// 回溯时还原已访问的位置
-			marked[i][j] = false
+			// 如果没有完全匹配，则回溯时还原已访问的位置
+			visited[i][j] = false
 		}
 		// 如果当前字母不匹配，则直接看矩阵里面下一元素
 		return false

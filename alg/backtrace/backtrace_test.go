@@ -278,3 +278,7 @@ func TestWordSearch(t *testing.T) {
 	fmt.Println(WordSearch(board, word2))
 	fmt.Println(WordSearch(board, word3))
 }
+
+func WordSearch2(board [][]byte, word string) bool {
+	return false
+}
