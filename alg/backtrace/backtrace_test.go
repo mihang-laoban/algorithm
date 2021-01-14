@@ -275,10 +275,43 @@ func TestWordSearch(t *testing.T) {
 	word2 := "SEE"
 	word3 := "ABCB"
 	fmt.Println(WordSearch(board, word1))
-	fmt.Println(WordSearch(board, word2))
-	fmt.Println(WordSearch(board, word3))
+	fmt.Println(WordSearch2(board, word2))
+	fmt.Println(WordSearch2(board, word3))
 }
 
 func WordSearch2(board [][]byte, word string) bool {
+	var exist func(int, int, int) bool
+	exist = func(x, y, index int) bool {
+		// 单词查完，找到
+		if index == len(word) {
+			return true
+		}
+		// 棋盘越界，当前字母没找到
+		if x < 0 || y < 0 || x == len(board) || y == len(board[x]) {
+			return false
+		}
+		// 字母不匹配，当前字母没找到（被标记过的肯定不匹配）
+		if board[x][y] != word[index] {
+			return false
+		}
+		// 标记当前节点
+		board[x][y] ^= '|'
+		// 向四个方向延展，最终结果为四哥方向聚合的结果
+		res := exist(x, y+1, index+1) || exist(x, y-1, index+1) || exist(x+1, y, index+1) || exist(x-1, y, index+1)
+		// 恢复标记
+		board[x][y] ^= '|'
+		return res
+	}
+
+	// 遍历字母表
+	for i := 0; i < len(board); i++ {
+		for j := 0; j < len(board[i]); j++ {
+			// 如果所有都存在才会存在
+			if exist(i, j, 0) {
+				return true
+			}
+		}
+	}
+
 	return false
 }
