@@ -280,10 +280,7 @@ func TestWordSearch(t *testing.T) {
 }
 
 func exist(board [][]byte, word string) bool {
-
-	//        (x-1,y)
-	//(x,y-1) (x,y) (x,y+1)
-	//        (x+1,y)
+	// 节点待检查的四个方向
 	directions := [][]int{
 		[]int{0, -1},
 		[]int{-1, 0},
