@@ -246,18 +246,15 @@ func numIslands(grid [][]byte) int {
 }
 
 /*给定一个二维网格和一个单词，找出该单词是否存在于网格中。
-
 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
-
-
 
 示例:
 
 board =
 [
-['A','B','C','E'],
-['S','F','C','S'],
-['A','D','E','E']
+	['A','B','C','E'],
+	['S','F','C','S'],
+	['A','D','E','E']
 ]
 
 给定 word = "ABCCED", 返回 true
@@ -294,6 +291,7 @@ func exist(board [][]byte, word string) bool {
 		[]int{1, 0},
 	}
 	m, n := len(board), len(board[0])
+	// 标记走过的格子
 	marked := make([][]bool, m)
 	for i := 0; i < m; i++ {
 		marked[i] = make([]bool, n)
@@ -301,30 +299,39 @@ func exist(board [][]byte, word string) bool {
 	var dfs func(int, int, int) bool
 	var inArea func(int, int) bool
 
+	// 确保数组不越界
 	inArea = func(x int, y int) bool {
 		return x >= 0 && x < m && y >= 0 && y < n
 	}
 
 	dfs = func(i, j, start int) bool {
+		// 如果单词查完，检验
 		if start == len(word)-1 {
 			return board[i][j] == word[start]
 		}
+
 		if board[i][j] == word[start] {
+			// 当前字母匹配，则标记为已访问
 			marked[i][j] = true
+			// 查看当前字母四个方向是否可以继续移动
 			for k := 0; k < 4; k++ {
 				newX := i + directions[k][0]
 				newY := j + directions[k][1]
+				// 如果没越界，没有走过，则继续看下一个字母
 				if inArea(newX, newY) && !marked[newX][newY] {
 					if dfs(newX, newY, start+1) {
 						return true
 					}
 				}
 			}
+			// 回溯时还原已访问的位置
 			marked[i][j] = false
 		}
+		// 如果当前字母不匹配，则直接看矩阵里面下一元素
 		return false
 	}
 
+	// 遍历矩阵
 	for i := 0; i < m; i++ {
 		for j := 0; j < n; j++ {
 			if dfs(i, j, 0) {
