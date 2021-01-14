@@ -538,7 +538,7 @@ func Rob2(nums []int) interface{} {
 
 func MinCostClimbingStairs(cost []int) int {
 	pre, cur := 0, 0
-	for i := 2; i <= len(cost)+1; i++ {
+	for i := 2; i < len(cost)+1; i++ {
 		pre, cur = cur, Min(cur+cost[i-1], pre+cost[i-2])
 	}
 	return cur
