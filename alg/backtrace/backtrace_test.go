@@ -351,34 +351,42 @@ type TrieNode struct {
 func build(words []string) *TrieNode {
 	root := &TrieNode{}
 	for _, word := range words {
-		p := root
+		// 每次从字典树初始位置开始遍历
+		cur := root
 		for _, w := range word {
-			if p.next[w-'a'] == nil {
-				p.next[w-'a'] = &TrieNode{}
+			// 如果下一个字母不存在，则创建并移动到下一个节点
+			if cur.next[w-'a'] == nil {
+				cur.next[w-'a'] = &TrieNode{}
 			}
-			p = p.next[w-'a']
+			cur = cur.next[w-'a']
 		}
-		p.word = word
+		cur.word = word
 	}
 	return root
 }
 
 func findWords(board [][]byte, words []string) []string {
 	res := []string{}
+	// 创建字典树
 	root := build(words)
 	var dfs func(int, int, *TrieNode)
 
 	dfs = func(i, j int, root *TrieNode) {
 		c := board[i][j]
+		// 如果访问过或者当前位置没有字母退出
 		if c == '#' || root.next[c-'a'] == nil {
 			return
 		}
+		// 如果有字母或者未访问，则看下一个字母
 		root = root.next[c-'a']
+		// 如果当前位置存有单词，则记录结果
 		if root.word != "" {
 			res = append(res, root.word)
 			root.word = ""
 		}
+		// 标记访问
 		board[i][j] = '#'
+		// 检查数组是否越界
 		if i > 0 {
 			dfs(i-1, j, root)
 		}
@@ -391,6 +399,7 @@ func findWords(board [][]byte, words []string) []string {
 		if j < len(board[0])-1 {
 			dfs(i, j+1, root)
 		}
+		// 恢复未访问状态
 		board[i][j] = c
 	}
 
