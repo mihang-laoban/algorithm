@@ -396,7 +396,7 @@ func findWords(board [][]byte, words []string) []string {
 		if i < len(board)-1 {
 			dfs(i+1, j, root)
 		}
-		if j < len(board[0])-1 {
+		if j < len(board[i])-1 {
 			dfs(i, j+1, root)
 		}
 		// 恢复未访问状态
@@ -404,7 +404,7 @@ func findWords(board [][]byte, words []string) []string {
 	}
 
 	for i := 0; i < len(board); i++ {
-		for j := 0; j < len(board[0]); j++ {
+		for j := 0; j < len(board[i]); j++ {
 			dfs(i, j, root)
 		}
 	}
