@@ -192,6 +192,7 @@ func FindWords(board [][]byte, words []string) []string {
 	}
 	var build func([]string) *TrieNode
 
+	// 创建字典树
 	build = func(words []string) *TrieNode {
 		root := &TrieNode{}
 		for _, word := range words {
