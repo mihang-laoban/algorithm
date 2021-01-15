@@ -213,8 +213,8 @@ func FindWords(board [][]byte, words []string) []string {
 
 	// 创建字典树
 	root := build(words)
-	var dfs func(int, int, *TrieNode)
 
+	var dfs func(int, int, *TrieNode)
 	dfs = func(i, j int, root *TrieNode) {
 		c := board[i][j]
 		// 如果访问过或者当前位置没有字母退出
