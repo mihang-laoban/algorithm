@@ -191,6 +191,7 @@ func FindWords(board [][]byte, words []string) []string {
 		word string
 	}
 	var build func([]string) *TrieNode
+	var res []string
 
 	// 创建字典树
 	build = func(words []string) *TrieNode {
@@ -210,7 +211,6 @@ func FindWords(board [][]byte, words []string) []string {
 		return root
 	}
 
-	res := []string{}
 	// 创建字典树
 	root := build(words)
 	var dfs func(int, int, *TrieNode)
