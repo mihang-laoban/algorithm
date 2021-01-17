@@ -279,6 +279,7 @@ func SingleNumber2(nums []int) []int {
 	for _, num := range nums {
 		bitmask ^= num
 	}
+	// 确定第一个差异位
 	diff := bitmask & (-bitmask)
 
 	x := 0
