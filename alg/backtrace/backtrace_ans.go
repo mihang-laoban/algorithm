@@ -1,5 +1,7 @@
 package backtrace
 
+import "math/bits"
+
 func Subset(nums []int) interface{} {
 	trace, res := []int{}, [][]int{}
 
@@ -125,6 +127,51 @@ func generateBoard(queens []int, n int) []string {
 	}
 	return board
 }
+
+// =====================================================================================================
+var solutions [][]string
+
+func SolveNQueens2(n int) [][]string {
+	solutions = [][]string{}
+	queens := make([]int, n)
+	for i := 0; i < n; i++ {
+		queens[i] = -1
+	}
+	solve2(queens, n, 0, 0, 0, 0)
+	return solutions
+}
+
+func solve2(queens []int, n, row, columns, diagonals1, diagonals2 int) {
+	if row == n {
+		board := generateBoard2(queens, n)
+		solutions = append(solutions, board)
+		return
+	}
+	availablePositions := ((1 << n) - 1) & (^(columns | diagonals1 | diagonals2))
+	for availablePositions != 0 {
+		position := availablePositions & (-availablePositions)
+		availablePositions = availablePositions & (availablePositions - 1)
+		column := bits.OnesCount(uint(position - 1))
+		queens[row] = column
+		solve2(queens, n, row+1, columns|position, (diagonals1|position)>>1, (diagonals2|position)<<1)
+		queens[row] = -1
+	}
+}
+
+func generateBoard2(queens []int, n int) []string {
+	board := []string{}
+	for i := 0; i < n; i++ {
+		row := make([]byte, n)
+		for j := 0; j < n; j++ {
+			row[j] = '.'
+		}
+		row[queens[i]] = 'Q'
+		board = append(board, string(row))
+	}
+	return board
+}
+
+// =====================================================================================================
 
 func WordSearch(board [][]byte, word string) bool {
 	// 节点待检查的四个方向
