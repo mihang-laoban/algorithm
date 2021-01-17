@@ -2,6 +2,7 @@ package bit
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"testing"
 )
@@ -550,4 +551,76 @@ func makeTime(num int) (time string) {
 		time = strconv.Itoa(num)
 	}
 	return
+}
+
+/*给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
+你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+
+示例 1：
+输入：[3,2,3]
+输出：3
+
+示例 2：
+输入：[2,2,1,1,1,2,2]
+输出：2
+*/
+
+func TestMajorityElement(t *testing.T) {
+	fmt.Println(MajorityElement1([]int{2, 2, 1, 1, 1, 2, 2}))
+	fmt.Println(MajorityElement2([]int{1, 1, 1, 2, 2, 2, 2}))
+	fmt.Println(MajorityElement3([]int{1, 1, 1, 2, 2, 2, 2}))
+}
+
+func MajorityElement3(nums []int) interface{} {
+	return _majority(nums, 0, len(nums)-1)
+}
+
+func _majority(nums []int, low, high int) int {
+	if low == high {
+		return nums[low]
+	}
+	mid := (high-low)>>1 + low
+	left := _majority(nums, low, mid)
+	right := _majority(nums, mid+1, high)
+
+	if left == right {
+		return left
+	}
+	leftCount := countInRange(nums, left, low, high)
+	rightCount := countInRange(nums, right, low, high)
+	if leftCount > rightCount {
+		return left
+	}
+	return right
+}
+
+func countInRange(nums []int, num, low, high int) int {
+	count := 0
+	for i := low; i <= high; i++ {
+		if nums[i] == num {
+			count++
+		}
+	}
+	return count
+}
+
+func MajorityElement2(nums []int) interface{} {
+	count := 0
+	candidate := 0
+	for _, num := range nums {
+		if count == 0 {
+			candidate = num
+		}
+		if candidate == num {
+			count++
+		} else {
+			count--
+		}
+	}
+	return candidate
+}
+
+func MajorityElement1(nums []int) interface{} {
+	sort.Ints(nums)
+	return nums[len(nums)>>1]
 }
