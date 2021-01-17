@@ -2,6 +2,7 @@ package bit
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 )
 
@@ -322,4 +323,231 @@ func SingleNumber3(nums []int) interface{} {
 		two = two ^ n & ^one
 	}
 	return one
+}
+
+/*给定一个整数，写一个函数来判断它是否是 4 的幂次方。如果是，返回 true ；否则，返回 false 。
+整数 n 是 4 的幂次方需满足：存在整数 x 使得 n == 4x
+
+示例 1：
+输入：n = 16
+输出：true
+
+示例 2：
+输入：n = 5
+输出：false
+
+示例 3：
+输入：n = 1
+输出：true
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/power-of-four
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func Test4Mi(t *testing.T) {
+	fmt.Println(mi4(16))
+}
+
+func mi4(num int) bool {
+	//return num > 0 && num&(num-1) == 0 && num%3 == 1
+	return num > 0 && num&(num-1) == 0 && 0xaaaaaaaa&num == 0
+}
+
+/*给定一个正整数 n ，你可以做如下操作：
+
+如果 n 是偶数，则用 n / 2替换 n 。
+如果 n 是奇数，则可以用 n + 1或n - 1替换 n 。
+n 变为 1 所需的最小替换次数是多少？
+
+示例 1：
+输入：n = 8
+输出：3
+解释：8 -> 4 -> 2 -> 1
+
+示例 2：
+输入：n = 7
+输出：4
+解释：7 -> 8 -> 4 -> 2 -> 1
+或 7 -> 6 -> 3 -> 2 -> 1
+
+示例 3：
+输入：n = 4
+输出：2
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/integer-replacement
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestIntegerReplacement(t *testing.T) {
+	fmt.Println(IntegerReplacement(7))
+}
+
+func IntegerReplacement(n int) int {
+	count := 0
+	for n != 1 {
+		if n&1 == 0 {
+			n >>= 1
+		} else {
+			if (n+1)&3 == 0 && n != 3 {
+				n = n>>1 + 1
+				count++
+			} else {
+				n--
+			}
+		}
+		count++
+	}
+	return count
+}
+
+/*不使用运算符 + 和 - , 计算两整数a,b之和。
+
+示例 1:
+输入: a = 1, b = 2
+输出: 3
+
+示例 2:
+输入: a = -2, b = 3
+输出: 1
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/sum-of-two-integers
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestSum(t *testing.T) {
+	fmt.Println(Sum(5, 7))
+}
+
+//a + b 的问题拆分为 (a 和 b 的无进位结果) + (a 和 b 的进位结果)
+//无进位加法使用异或运算计算得出
+//进位结果使用与运算和移位运算计算得出
+//循环此过程，直到进位为 0
+func Sum(a int, b int) int {
+	// b 进位
+	for b != 0 {
+		// 算出个位，无进位加法结果
+		tmp := a ^ b
+		// 算出进位
+		sum := a & b
+		// 进位
+		b = sum << 1
+		a = tmp
+	}
+	return a
+}
+
+/*给定一个正整数，检查它的二进制表示是否总是 0、1 交替出现：换句话说，就是二进制表示中相邻两位的数字永不相同。
+
+示例 1：
+输入：n = 5
+输出：true
+解释：5 的二进制表示是：101
+
+示例 2：
+输入：n = 7
+输出：false
+解释：7 的二进制表示是：111.
+
+示例 3：
+输入：n = 11
+输出：false
+解释：11 的二进制表示是：1011.
+
+示例 4：
+输入：n = 10
+输出：true
+解释：10 的二进制表示是：1010.
+
+示例 5：
+输入：n = 3
+输出：false
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/binary-number-with-alternating-bits
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestAlternateBits(t *testing.T) {
+	fmt.Println(AlternateBits(10))
+}
+
+func AlternateBits(n int) bool {
+	n = n ^ (n >> 1)
+	return n&(n+1) == 0
+}
+
+/*两个整数之间的汉明距离指的是这两个数字对应二进制位不同的位置的数目。
+给出两个整数 x 和 y，计算它们之间的汉明距离。
+
+注意：
+0 ≤ x, y < 231.
+
+示例:
+输入: x = 1, y = 4
+输出: 2
+
+解释:
+1   (0 0 0 1)
+4   (0 1 0 0)
+↑   ↑
+上面的箭头指出了对应二进制位不同的位置。*/
+
+func TestHanMingDistance(t *testing.T) {
+	fmt.Println(HanMingDistance(1, 4))
+}
+
+func HanMingDistance(a int, b int) int {
+	xor := a ^ b
+	distance := 0
+	for xor > 0 {
+		distance++
+		xor = xor & (xor - 1)
+	}
+	return distance
+}
+
+/*二进制手表顶部有 4 个 LED 代表 小时（0-11），底部的 6 个 LED 代表 分钟（0-59）。
+每个 LED 代表一个 0 或 1，最低位在右侧。
+
+例如，上面的二进制手表读取 “3:25”。
+给定一个非负整数 n 代表当前 LED 亮着的数量，返回所有可能的时间。
+
+示例：
+输入: n = 1
+返回: ["1:00", "2:00", "4:00", "8:00", "0:01", "0:02", "0:04", "0:08", "0:16", "0:32"]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/binary-watch
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestBinaryWatch(t *testing.T) {
+	fmt.Println(BinaryWatch(1))
+}
+
+func BinaryWatch(n int) []string {
+	res := []string{}
+	for i := 0; i < 12; i++ {
+		for j := 0; j < 60; j++ {
+			if CountOne(i)+CountOne(j) == n {
+				hour, minus := strconv.Itoa(i), makeTime(j)
+				res = append(res, hour+":"+minus)
+			}
+		}
+	}
+	return res
+}
+
+func CountOne(num int) (count int) {
+	for num != 0 {
+		num = num & (num - 1)
+		count++
+	}
+	return
+}
+
+func makeTime(num int) (time string) {
+	if num < 10 {
+		time = "0" + strconv.Itoa(num)
+	} else {
+		time = strconv.Itoa(num)
+	}
+	return
 }
