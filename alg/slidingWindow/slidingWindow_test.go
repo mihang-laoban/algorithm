@@ -81,9 +81,10 @@ func Test(t *testing.T) {
 }
 
 func MinWindow(s string, t string) string {
-	ori, cnt := map[byte]int{}, map[byte]int{}
+	tRecord, sRecord := map[byte]int{}, map[byte]int{}
+	// 记录目标字符串
 	for i := 0; i < len(t); i++ {
-		ori[t[i]]++
+		tRecord[t[i]]++
 	}
 
 	sLen := len(s)
@@ -91,8 +92,8 @@ func MinWindow(s string, t string) string {
 	ansL, ansR := -1, -1
 
 	check := func() bool {
-		for k, v := range ori {
-			if cnt[k] < v {
+		for k, v := range tRecord {
+			if sRecord[k] < v {
 				return false
 			}
 		}
@@ -100,17 +101,21 @@ func MinWindow(s string, t string) string {
 	}
 
 	for l, r := 0, 0; r < sLen; r++ {
-		if r < sLen && ori[s[r]] > 0 {
-			cnt[s[r]]++
+		// 如果当前涵盖了目标字符串中的字母并且，右边界还未到头
+		if r < sLen && tRecord[s[r]] > 0 {
+			sRecord[s[r]]++
 		}
 		for check() && l <= r {
+			// 找到最短的字符串，并记录左右下标
 			if r-l+1 < size {
 				size = r - l + 1
 				ansL, ansR = l, l+size
 			}
-			if _, ok := ori[s[l]]; ok {
-				cnt[s[l]] -= 1
+			// 如果最左边记录存在则缩小窗口
+			if _, ok := tRecord[s[l]]; ok {
+				sRecord[s[l]]--
 			}
+			// 优化，缩短字符串
 			l++
 		}
 	}
