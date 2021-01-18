@@ -33,43 +33,16 @@ func traverse(order int) {
 }
 
 func MyPreOrder(root *TreeNode) (res []int) {
-	stack := []*TreeNode{}
-	for root != nil || len(stack) > 0 {
-		if root != nil {
-			res = append(res, root.Val)
-			if root.Right != nil {
-				stack = append(stack, root.Right)
-			}
-			root = root.Left
-		} else {
-			root := stack[len(stack)-1]
-			stack = stack[:len(stack)-1]
-			res = append(res, root.Val)
-			root = root.Right
-		}
-	}
+
 	return
 }
+
 func MyInOrder(root *TreeNode) (res []int) {
-	stack := []*TreeNode{}
-	for root != nil || len(stack) > 0 {
-		if root != nil {
 
-		} else {
-
-		}
-	}
 	return
 }
 func MyPostOrder(root *TreeNode) (res []int) {
-	deque := []*TreeNode{}
-	for root != nil || len(deque) > 0 {
-		if root != nil {
 
-		} else {
-
-		}
-	}
 	return
 }
 
