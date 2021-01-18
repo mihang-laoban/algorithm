@@ -3,9 +3,35 @@ package dp
 import (
 	. "dp/tools"
 	"fmt"
+	"math"
+	"sort"
 )
 
-func Exchange(values []int, total int) int {
+func CoinChangeDFS(coins []int, amount int) int {
+	sort.Ints(coins)
+	res := math.MaxInt32
+	var dfs func(int, int, int)
+	dfs = func(amount, count, index int) {
+		if amount == 0 {
+			res = Min(count, res)
+			return
+		}
+		if index < 0 {
+			return
+		}
+		for k := amount / coins[index]; k >= 0 && k+count < res; k-- {
+			dfs(amount-k*coins[index], count+k, index-1)
+		}
+	}
+
+	dfs(amount, 0, len(coins)-1)
+	if res != math.MaxInt32 {
+		return res
+	}
+	return -1
+}
+
+func Exchange(coins []int, total int) int {
 	dp := make([]int, total+1)
 	for i := 0; i < total+1; i++ {
 		dp[i] = total + 1
@@ -13,9 +39,9 @@ func Exchange(values []int, total int) int {
 
 	dp[0] = 0
 	for i := 1; i < total+1; i++ {
-		for _, value := range values {
-			if i-value >= 0 {
-				dp[i] = Min(dp[i-value]+1, dp[i])
+		for _, c := range coins {
+			if i-c >= 0 {
+				dp[i] = Min(dp[i-c]+1, dp[i])
 			}
 		}
 	}
@@ -23,6 +49,24 @@ func Exchange(values []int, total int) int {
 		return -1
 	}
 	return dp[total]
+}
+
+func CoinChange(coins []int, amount int) int {
+	dp := make([]int, amount+1)
+	for i := 1; i < len(dp); i++ {
+		dp[i] = amount + 1
+	}
+	for _, coin := range coins {
+		for i := coin; i < amount+1; i++ {
+			if dp[i] > dp[i-coin]+1 {
+				dp[i] = dp[i-coin] + 1
+			}
+		}
+	}
+	if dp[amount] == amount+1 {
+		return -1
+	}
+	return dp[amount]
 }
 
 func Pack(weights []int, values []int, totalWeight int, totalCount int) {

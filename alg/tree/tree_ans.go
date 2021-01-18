@@ -258,6 +258,41 @@ func InOrderLoop(root *TreeNode) (res []int) {
 	return
 }
 
+// 左右根
+func PostOrderLoop(root *TreeNode) (queue []int) {
+	stack := []*TreeNode{}
+	for len(stack) > 0 || root != nil {
+		if root != nil {
+			// 新元素添加到队列头，根节点位于队尾
+			queue = append([]int{root.Val}, queue...)
+			if root.Left != nil {
+				stack = append(stack, root.Left)
+			}
+			root = root.Right // 根节点靠哪个孩子近就往哪边移动
+		} else {
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+		}
+	}
+	return
+}
+
+func BFS(root *TreeNode) (res []int) {
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		res = append(res, cur.Val)
+		if cur.Left != nil {
+			queue = append(queue, cur.Left)
+		}
+		if cur.Right != nil {
+			queue = append(queue, cur.Right)
+		}
+	}
+	return
+}
+
 func RecoverTree(root *TreeNode) {
 	stack := []*TreeNode{}
 	var x, y, pre *TreeNode
@@ -321,41 +356,6 @@ func RecoverTreeMorris(root *TreeNode) {
 		}
 	}
 	x.Val, y.Val = y.Val, x.Val
-}
-
-// 左右根
-func PostOrderLoop(root *TreeNode) (res []int) {
-	deque := []*TreeNode{}
-	for len(deque) > 0 || root != nil {
-		if root != nil {
-			// 新元素添加到队列头，根节点位于队尾
-			res = append([]int{root.Val}, res...)
-			if root.Left != nil {
-				deque = append(deque, root.Left)
-			}
-			root = root.Right // 根节点靠哪个孩子近就往哪边移动
-		} else {
-			root = deque[len(deque)-1]
-			deque = deque[:len(deque)-1]
-		}
-	}
-	return
-}
-
-func BFS(root *TreeNode) (res []int) {
-	queue := []*TreeNode{root}
-	for len(queue) > 0 {
-		cur := queue[0]
-		queue = queue[1:]
-		res = append(res, cur.Val)
-		if cur.Left != nil {
-			queue = append(queue, cur.Left)
-		}
-		if cur.Right != nil {
-			queue = append(queue, cur.Right)
-		}
-	}
-	return
 }
 
 func BFStoArray(root *TreeNode) (res []interface{}) {
