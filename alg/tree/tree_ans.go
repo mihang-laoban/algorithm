@@ -259,19 +259,19 @@ func InOrderLoop(root *TreeNode) (res []int) {
 }
 
 // 左右根
-func PostOrderLoop(root *TreeNode) (res []int) {
-	deque := []*TreeNode{}
-	for len(deque) > 0 || root != nil {
+func PostOrderLoop(root *TreeNode) (queue []int) {
+	stack := []*TreeNode{}
+	for len(stack) > 0 || root != nil {
 		if root != nil {
 			// 新元素添加到队列头，根节点位于队尾
-			res = append([]int{root.Val}, res...)
+			queue = append([]int{root.Val}, queue...)
 			if root.Left != nil {
-				deque = append(deque, root.Left)
+				stack = append(stack, root.Left)
 			}
 			root = root.Right // 根节点靠哪个孩子近就往哪边移动
 		} else {
-			root = deque[len(deque)-1]
-			deque = deque[:len(deque)-1]
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
 		}
 	}
 	return
