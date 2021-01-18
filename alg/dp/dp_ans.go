@@ -3,13 +3,12 @@ package dp
 import (
 	. "dp/tools"
 	"fmt"
-	"math"
 	"sort"
 )
 
 func CoinChangeDFS(coins []int, amount int) int {
 	sort.Ints(coins)
-	res := math.MaxInt32
+	res := amount + 1
 	var dfs func(int, int, int)
 	dfs = func(amount, count, index int) {
 		if amount == 0 {
@@ -25,7 +24,7 @@ func CoinChangeDFS(coins []int, amount int) int {
 	}
 
 	dfs(amount, 0, len(coins)-1)
-	if res != math.MaxInt32 {
+	if res != amount+1 {
 		return res
 	}
 	return -1
