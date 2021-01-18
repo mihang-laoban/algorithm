@@ -13,6 +13,7 @@ func init() {
 // Q1
 func TestExchangeMinCount(t *testing.T) {
 	fmt.Println(Exchange([]int{3, 5}, 11))
+	fmt.Println(CoinChange([]int{3, 5}, 11))
 }
 
 /*示例：
