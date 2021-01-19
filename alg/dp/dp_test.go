@@ -349,8 +349,7 @@ func TestRobTree(t *testing.T) {
 }
 
 func RobTree(root *TreeNode) interface{} {
-	y, n := _robTree(root)
-	return Max(y, n)
+	return Max(_robTree(root))
 }
 
 func _robTree(root *TreeNode) (n int, y int) {
