@@ -33,16 +33,13 @@ func traverse(order int) {
 }
 
 func MyPreOrder(root *TreeNode) (res []int) {
-
 	return
 }
 
 func MyInOrder(root *TreeNode) (res []int) {
-
 	return
 }
 func MyPostOrder(root *TreeNode) (res []int) {
-
 	return
 }
 
