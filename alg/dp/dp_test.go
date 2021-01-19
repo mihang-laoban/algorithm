@@ -251,16 +251,6 @@ func TestClimbMinCost(t *testing.T) {
 	fmt.Println(MinCostClimbing(cost))
 }
 
-func MinCostClimbing(cost []int) interface{} {
-	pre, cur := 0, 0
-	for i := 2; i < len(cost)+1; i++ {
-		tmp := Min(cur+cost[i-1], pre+cost[i-2])
-		pre = cur
-		cur = tmp
-	}
-	return cur
-}
-
 /*假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
 注意：给定 n 是一个正整数。
@@ -346,24 +336,6 @@ func TestRobTree(t *testing.T) {
 	root2 := ArrayToTree([]interface{}{3, 4, 5, 1, 3, nil, 1})
 	fmt.Println(RobTree(root1))
 	fmt.Println(RobTree(root2))
-}
-
-func RobTree(root *TreeNode) interface{} {
-	return Max(_robTree(root))
-}
-
-func _robTree(root *TreeNode) (y, n int) {
-	// 遍历到底，无节点可偷
-	if root == nil {
-		return 0, 0
-	}
-	leftY, leftN := _robTree(root.Left)
-	rightY, rightN := _robTree(root.Right)
-	//当前节点选择偷：当前节点能偷到的最大钱数 = 左孩子选择自己不偷时能得到的钱 + 右孩子选择不偷时能得到的钱 + 当前节点的钱数
-	y = leftN + rightN + root.Val
-	//当前节点选择不偷：当前节点能偷到的最大钱数 = 左孩子能偷到的钱 + 右孩子能偷到的钱
-	n = Max(leftY, leftN) + Max(rightY, rightN)
-	return y, n
 }
 
 // https://leetcode-cn.com/problems/unique-paths/
