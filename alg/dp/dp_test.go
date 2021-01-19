@@ -352,18 +352,18 @@ func RobTree(root *TreeNode) interface{} {
 	return Max(_robTree(root))
 }
 
-func _robTree(root *TreeNode) (n int, y int) {
+func _robTree(root *TreeNode) (y, n int) {
 	// 遍历到底，无节点可偷
 	if root == nil {
 		return 0, 0
 	}
-	leftN, leftY := _robTree(root.Left)
-	rightN, rightY := _robTree(root.Right)
-	//当前节点选择不偷：当前节点能偷到的最大钱数 = 左孩子能偷到的钱 + 右孩子能偷到的钱
-	n = Max(leftN, leftY) + Max(rightN, rightY)
+	leftY, leftN := _robTree(root.Left)
+	rightY, rightN := _robTree(root.Right)
 	//当前节点选择偷：当前节点能偷到的最大钱数 = 左孩子选择自己不偷时能得到的钱 + 右孩子选择不偷时能得到的钱 + 当前节点的钱数
 	y = leftN + rightN + root.Val
-	return n, y
+	//当前节点选择不偷：当前节点能偷到的最大钱数 = 左孩子能偷到的钱 + 右孩子能偷到的钱
+	n = Max(leftY, leftN) + Max(rightY, rightN)
+	return y, n
 }
 
 // https://leetcode-cn.com/problems/unique-paths/
