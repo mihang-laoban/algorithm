@@ -403,3 +403,20 @@ func TestSearchRotatedArray(t *testing.T) {
 func SearchRotatedArray2(target int, nums []int) interface{} {
 	return -1
 }
+
+func TestRemoveDuplicate(t *testing.T) {
+	fmt.Println(RemoveDuplicate([]int{0, 0, 1, 2, 2, 3, 3}))
+}
+
+func RemoveDuplicate(nums []int) interface{} {
+	sort.Ints(nums)
+	slow, fast := 0, 1
+	for fast < len(nums) {
+		if nums[slow] != nums[fast] {
+			slow++
+			nums[slow] = nums[fast]
+		}
+		fast++
+	}
+	return nums[:slow+1]
+}
