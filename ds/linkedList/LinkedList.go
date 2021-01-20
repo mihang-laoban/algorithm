@@ -88,13 +88,13 @@ func (LinkedList *LinkedList) _reverse(head *Node) *Node {
 }
 
 func (LinkedList *LinkedList) _reverseR(head *Node) *Node {
-	if head == nil || head.Next == nil {
+	if head.Next == nil {
 		return head
 	}
-	tmp := LinkedList._reverseR(head.Next)
+	last := LinkedList._reverseR(head.Next)
 	head.Next.Next = head
 	head.Next = nil
-	return tmp
+	return last
 }
 
 func (LinkedList *LinkedList) _prepend(x interface{}) *Node {
