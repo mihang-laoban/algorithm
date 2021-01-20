@@ -104,7 +104,7 @@ func (LinkedList *LinkedList) _prepend(x interface{}) *Node {
 	return tmp
 }
 
-func test() {
+func TestLinkedList() {
 	node := LinkedList{}
 	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	fmt.Println(node.IsEmpty())
@@ -113,7 +113,7 @@ func test() {
 	}
 	node.Prepend(0)
 	node.Display()
-	node.Reverse()
+	node.ReverseR()
 	node.DisplayR()
 	fmt.Println()
 	fmt.Println(node.IsEmpty())
