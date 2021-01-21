@@ -640,5 +640,8 @@ func recoverT(root *TreeNode) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestReverseTree(t *testing.T) {
-
+	root := ArrayToTree([]interface{}{4,2,7,1,3,6,9})
+	root = ReverseTreeR(root)
+	root = ReverseTreeL(root)
+	fmt.Println(BFS(root))
 }
