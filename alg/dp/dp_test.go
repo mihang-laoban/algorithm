@@ -313,19 +313,19 @@ func TestGenBrackets(t *testing.T) {
   3   1
 
 输出: 7
-解释: 小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
+解释:小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
 示例 2:
 
 输入: [3,4,5,1,3,null,1]
 
-     3
+     3
     / \
    4   5
   / \   \
  1   3   1
 
 输出: 9
-解释: 小偷一晚能够盗取的最高金额 = 4 + 5 = 9.
+解释:小偷一晚能够盗取的最高金额 = 4 + 5 = 9.
 
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/house-robber-iii
@@ -335,7 +335,22 @@ func TestRobTree(t *testing.T) {
 	root1 := ArrayToTree([]interface{}{3, 2, 3, nil, 3, nil, 1})
 	root2 := ArrayToTree([]interface{}{3, 4, 5, 1, 3, nil, 1})
 	fmt.Println(RobTree(root1))
-	fmt.Println(RobTree(root2))
+	fmt.Println(RobTree1(root2))
+}
+
+func RobTree1(root *TreeNode) interface{} {
+	return Max(_rob(root))
+}
+
+func _rob(root *TreeNode) ( y, n int) {
+	if root == nil {
+		return 0, 0
+	}
+	leftY, leftN := _rob(root.Left)
+	rightY, rightN := _rob(root.Right)
+	y = leftN + rightN + root.Val
+	n = Max(leftY, leftN) + Max(rightY, rightN)
+	return y, n
 }
 
 // https://leetcode-cn.com/problems/unique-paths/
