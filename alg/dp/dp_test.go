@@ -335,22 +335,7 @@ func TestRobTree(t *testing.T) {
 	root1 := ArrayToTree([]interface{}{3, 2, 3, nil, 3, nil, 1})
 	root2 := ArrayToTree([]interface{}{3, 4, 5, 1, 3, nil, 1})
 	fmt.Println(RobTree(root1))
-	fmt.Println(RobTree1(root2))
-}
-
-func RobTree1(root *TreeNode) interface{} {
-	return Max(_rob(root))
-}
-
-func _rob(root *TreeNode) ( y, n int) {
-	if root == nil {
-		return 0, 0
-	}
-	leftY, leftN := _rob(root.Left)
-	rightY, rightN := _rob(root.Right)
-	y = leftN + rightN + root.Val
-	n = Max(leftY, leftN) + Max(rightY, rightN)
-	return y, n
+	fmt.Println(RobTree(root2))
 }
 
 // https://leetcode-cn.com/problems/unique-paths/
