@@ -645,3 +645,7 @@ func TestReverseTree(t *testing.T) {
 	root = ReverseTreeL(root)
 	fmt.Println(BFS(root))
 }
+
+func TestTree(t *testing.T) {
+	
+}
