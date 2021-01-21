@@ -405,7 +405,7 @@ func SearchRotatedArray2(target int, nums []int) interface{} {
 }
 
 func TestRemoveDuplicate(t *testing.T) {
-	fmt.Println(RemoveDuplicate([]int{0, 0, 1, 2, 2, 3, 3}))
+	fmt.Println(RemoveDuplicate([]int{0, 0, 1, 2, 3, 3, 2}))
 }
 
 func RemoveDuplicate(nums []int) interface{} {
