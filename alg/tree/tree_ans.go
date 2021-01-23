@@ -467,3 +467,32 @@ func bfs(grid [][]string, i int, j int) {
 		}
 	}
 }
+
+func ReverseTreeL(root *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		cur.Right, cur.Left = cur.Left, cur.Right
+		if cur.Left != nil {
+			queue = append(queue, cur.Left)
+		}
+		if cur.Right != nil {
+			queue = append(queue, cur.Right)
+		}
+	}
+	return root
+}
+
+func ReverseTreeR(root *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	root.Left, root.Right = root.Right, root.Left
+	ReverseTreeR(root.Right)
+	ReverseTreeR(root.Left)
+	return root
+}

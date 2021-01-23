@@ -1,15 +1,15 @@
 package dp
 
 import (
+	. "dp/ds/tree"
 	. "dp/tools"
 	"fmt"
-	"math"
 	"sort"
 )
 
 func CoinChangeDFS(coins []int, amount int) int {
 	sort.Ints(coins)
-	res := math.MaxInt32
+	res := amount + 1
 	var dfs func(int, int, int)
 	dfs = func(amount, count, index int) {
 		if amount == 0 {
@@ -25,7 +25,7 @@ func CoinChangeDFS(coins []int, amount int) int {
 	}
 
 	dfs(amount, 0, len(coins)-1)
-	if res != math.MaxInt32 {
+	if res != amount+1 {
 		return res
 	}
 	return -1
@@ -580,10 +580,38 @@ func Rob2(nums []int) interface{} {
 	return dp[size-1]
 }
 
+func RobTree(root *TreeNode) interface{} {
+	return Max(_robTree(root))
+}
+
+func _robTree(root *TreeNode) (y, n int) {
+	// 遍历到底，无节点可偷
+	if root == nil {
+		return 0, 0
+	}
+	leftY, leftN := _robTree(root.Left)
+	rightY, rightN := _robTree(root.Right)
+	//当前节点选择偷：当前节点能偷到的最大钱数 = 左孩子选择自己不偷时能得到的钱 + 右孩子选择不偷时能得到的钱 + 当前节点的钱数
+	y = leftN + rightN + root.Val
+	//当前节点选择不偷：当前节点能偷到的最大钱数 = 左孩子能偷到的钱 + 右孩子能偷到的钱
+	n = Max(leftY, leftN) + Max(rightY, rightN)
+	return y, n
+}
+
 func MinCostClimbingStairs(cost []int) int {
 	pre, cur := 0, 0
 	for i := 2; i < len(cost)+1; i++ {
 		pre, cur = cur, Min(cur+cost[i-1], pre+cost[i-2])
+	}
+	return cur
+}
+
+func MinCostClimbing(cost []int) interface{} {
+	pre, cur := 0, 0
+	for i := 2; i < len(cost)+1; i++ {
+		tmp := Min(cur+cost[i-1], pre+cost[i-2])
+		pre = cur
+		cur = tmp
 	}
 	return cur
 }

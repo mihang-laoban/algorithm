@@ -88,13 +88,13 @@ func (LinkedList *LinkedList) _reverse(head *Node) *Node {
 }
 
 func (LinkedList *LinkedList) _reverseR(head *Node) *Node {
-	if head == nil || head.Next == nil {
+	if head.Next == nil {
 		return head
 	}
-	tmp := LinkedList._reverseR(head.Next)
+	last := LinkedList._reverseR(head.Next)
 	head.Next.Next = head
 	head.Next = nil
-	return tmp
+	return last
 }
 
 func (LinkedList *LinkedList) _prepend(x interface{}) *Node {
@@ -104,7 +104,7 @@ func (LinkedList *LinkedList) _prepend(x interface{}) *Node {
 	return tmp
 }
 
-func test() {
+func TestLinkedList() {
 	node := LinkedList{}
 	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	fmt.Println(node.IsEmpty())
@@ -113,7 +113,7 @@ func test() {
 	}
 	node.Prepend(0)
 	node.Display()
-	node.Reverse()
+	node.ReverseR()
 	node.DisplayR()
 	fmt.Println()
 	fmt.Println(node.IsEmpty())

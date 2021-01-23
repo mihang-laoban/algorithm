@@ -10,6 +10,7 @@ func TestIsCircle(t *testing.T) {
 	node := GetCircleLink()
 	fmt.Println(IsCircular(node))
 	fmt.Println(isCircular(node))
+	TestLinkedList()
 }
 
 func isCircular(node *Node) bool {
