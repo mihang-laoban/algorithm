@@ -9,8 +9,8 @@ type Node struct {
 	Val  interface{}
 }
 
-type NodeInt struct {
-	Next *NodeInt
+type ListNode struct {
+	Next *ListNode
 	Val  int
 }
 
@@ -36,7 +36,7 @@ func (LinkedList *LinkedList) Size() int             { return LinkedList.Length 
 func (LinkedList *LinkedList) InnerDisplay()         { _innerDisplay(LinkedList) }
 func (LinkedList *LinkedList) Display()              { LinkedList._display(LinkedList.Head) }
 func (LinkedList *LinkedList) DisplayR()             { LinkedList._displayR(LinkedList.Head) }
-func (LinkedList *LinkedList) Reverse()              { LinkedList.Head = LinkedList._reverse(LinkedList.Head) }
+func (LinkedList *LinkedList) Reverse()              { LinkedList.Head = LinkedList.ReverseL(LinkedList.Head) }
 func (LinkedList *LinkedList) ReverseR()             { LinkedList.Head = LinkedList._reverseR(LinkedList.Head) }
 func (LinkedList *LinkedList) Prepend(x interface{}) { LinkedList.Head = LinkedList._prepend(x) }
 func (LinkedList *LinkedList) IsEmpty() bool         { return LinkedList.Head == nil }
@@ -80,7 +80,7 @@ func (LinkedList *LinkedList) _displayR(node *Node) {
 	}
 }
 
-func (LinkedList *LinkedList) _reverse(head *Node) *Node {
+func (LinkedList *LinkedList) ReverseL(head *Node) *Node {
 	cur := head
 	var pre *Node
 	for cur != nil {
@@ -158,18 +158,18 @@ func GetCircleLink() *Node {
 	return node.Head
 }
 
-func ArrayToLinkedList(arr []int) *NodeInt {
-	head := &NodeInt{}
+func ArrayToLinkedList(arr []int) *ListNode {
+	head := &ListNode{}
 	tmp := head
 	for _, v := range arr {
-		cur := &NodeInt{Val: v}
+		cur := &ListNode{Val: v}
 		tmp.Next = cur
 		tmp = tmp.Next
 	}
 	return head.Next
 }
 
-func LinkedListToArray(head *NodeInt) (res []int) {
+func LinkedListToArray(head *ListNode) (res []int) {
 	tmp := head
 	for tmp != nil {
 		res = append(res, tmp.Val)

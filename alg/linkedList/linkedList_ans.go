@@ -2,15 +2,15 @@ package linkedList
 
 import . "dp/ds/linkedList"
 
-func MergeLinkedListL(l1, l2 *NodeInt) *NodeInt {
-	head := &NodeInt{Val: -1}
+func MergeLinkedListL(l1, l2 *ListNode) *ListNode {
+	head := &ListNode{Val: -1}
 	tmp := head
 	for l1 != nil && l2 != nil {
 		if l1.Val < l2.Val {
-			tmp.Next = &NodeInt{Val: l1.Val}
+			tmp.Next = &ListNode{Val: l1.Val}
 			l1 = l1.Next
 		} else {
-			tmp.Next = &NodeInt{Val: l2.Val}
+			tmp.Next = &ListNode{Val: l2.Val}
 			l2 = l2.Next
 		}
 		tmp = tmp.Next
@@ -23,7 +23,7 @@ func MergeLinkedListL(l1, l2 *NodeInt) *NodeInt {
 	return head.Next
 }
 
-func MergeLinkedListR(l1, l2 *NodeInt) *NodeInt {
+func MergeLinkedListR(l1, l2 *ListNode) *ListNode {
 	if l1 == nil {
 		return l2
 	}
@@ -39,7 +39,7 @@ func MergeLinkedListR(l1, l2 *NodeInt) *NodeInt {
 	}
 }
 
-func SwapPairsR(head *NodeInt) *NodeInt {
+func SwapPairsR(head *ListNode) *ListNode {
 	// 如果头节点或者下一个节点尾空，则无法交换
 	if head == nil || head.Next == nil {
 		return head
@@ -61,8 +61,8 @@ func SwapPairsR(head *NodeInt) *NodeInt {
 		second.Next = head
 		return second*/
 }
-func SwapPairsL(head *NodeInt) *NodeInt {
-	dummyHead := &NodeInt{head, 0}
+func SwapPairsL(head *ListNode) *ListNode {
+	dummyHead := &ListNode{head, -1}
 	cur := dummyHead
 	/*
 		c, 1, 2, 3, 4
