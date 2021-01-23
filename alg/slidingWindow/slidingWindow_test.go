@@ -64,14 +64,11 @@ func LengthOfLongestSubstring(s string) int {
 
 注意：如果 s 中存在这样的子串，我们保证它是唯一的答案。
 
-
-
 示例 1：
-
 输入：s = "ADOBECODEBANC", t = "ABC"
 输出："BANC"
-示例 2：
 
+示例 2：
 输入：s = "a", t = "a"
 输出："a"
 */
