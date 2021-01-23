@@ -9,6 +9,11 @@ type Node struct {
 	Val  interface{}
 }
 
+type NodeInt struct {
+	Next *NodeInt
+	Val  int
+}
+
 type LinkedList struct {
 	Head   *Node
 	Length int
@@ -151,4 +156,24 @@ func GetCircleLink() *Node {
 	}
 	circle(node.Head)
 	return node.Head
+}
+
+func ArrayToLinkedList(arr []int) *NodeInt {
+	head := &NodeInt{}
+	tmp := head
+	for _, v := range arr {
+		cur := &NodeInt{Val: v}
+		tmp.Next = cur
+		tmp = tmp.Next
+	}
+	return head.Next
+}
+
+func LinkedListToArray(head *NodeInt) (res []int) {
+	tmp := head
+	for tmp != nil {
+		res = append(res, tmp.Val)
+		tmp = tmp.Next
+	}
+	return
 }
