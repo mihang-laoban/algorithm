@@ -108,8 +108,8 @@ func TestReverseLinkedList(t *testing.T) {
 	//fmt.Println(LinkedListToArray(ReverseListR(head)))
 	//fmt.Println(LinkedListToArray(ReverseKListR(head, 3)))
 	//fmt.Println(LinkedListToArray(ReverseListBetweenR(head, 2, 4)))
-	//fmt.Println(LinkedListToArray(ReverseListBetweenL(head, 2, 4)))
-	fmt.Println(LinkedListToArray(ReverseListBetweenL2(head, 2, 4)))
+	fmt.Println(LinkedListToArray(ReverseListBetweenL(head, 2, 4)))
+	//fmt.Println(LinkedListToArray(ReverseListBetweenL2(head, 2, 4)))
 }
 
 func ReverseListBetweenL(head *ListNode, m, n int) *ListNode {
@@ -196,3 +196,31 @@ func ReverseKListR(head *ListNode, n int) *ListNode {
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/plus-one-linked-list
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestPlusOne(t *testing.T) {
+	head := ArrayToLinkedList([]int{9})
+	fmt.Println(LinkedListToArray(PlusOne(head)))
+}
+
+//func PlusOne(head *ListNode) *ListNode {
+//	fast, slow := head, &ListNode{Val: -1}
+//	slow.Next = head
+//	//2.遍历链表
+//	for fast != nil {
+//		if fast.Val != 9 {
+//			slow = fast
+//		}
+//		fast = fast.Next
+//	}
+//	//3.末位加1
+//	slow.Val++
+//	cur := slow.Next
+//	for cur != nil {
+//		cur.Val = 0
+//		cur = cur.Next
+//	}
+//	if slow.Next == head {
+//		return slow
+//	}
+//	return head
+//}

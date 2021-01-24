@@ -137,3 +137,28 @@ func ReverseListL(head *ListNode) *ListNode {
 	}
 	return pre
 }
+
+func PlusOne(head *ListNode) *ListNode {
+	fast, slow := head, &ListNode{Val: 0}
+	// 处理只有一个9的情况
+	slow.Next = head
+	//2.遍历链表
+	for fast != nil {
+		if fast.Val != 9 {
+			slow = fast
+		}
+		fast = fast.Next
+	}
+	//3.末位加1
+	slow.Val++
+	cur := slow.Next
+	for cur != nil {
+		cur.Val = 0
+		cur = cur.Next
+	}
+	// 处理只有一个9的情况
+	if slow.Next == head {
+		return slow
+	}
+	return head
+}
