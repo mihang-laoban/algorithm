@@ -138,9 +138,10 @@ func ReverseListL(head *ListNode) *ListNode {
 	return pre
 }
 
+//"1299","1229","1922",普通情况，末尾元素+1，链表长度不变，返回头节点
+//“9”，“99”，“999”这种特殊情况，返回 哑节点，也就是没有移动一步的 slow 节点
 func PlusOne(head *ListNode) *ListNode {
 	fast, slow := head, &ListNode{Val: 0}
-	// 处理只有一个9的情况
 	slow.Next = head
 	//2.遍历链表
 	for fast != nil {
@@ -156,7 +157,6 @@ func PlusOne(head *ListNode) *ListNode {
 		cur.Val = 0
 		cur = cur.Next
 	}
-	// 处理只有一个9的情况
 	if slow.Next == head {
 		return slow
 	}
