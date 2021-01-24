@@ -233,20 +233,6 @@ func TestMergeKLists(t *testing.T) {
 	head1 := ArrayToLinkedList([]int{1, 4, 5})
 	head2 := ArrayToLinkedList([]int{1, 3, 4})
 	head3 := ArrayToLinkedList([]int{2, 6})
-	fmt.Println(LinkedListToArray(MergeKLists([]*ListNode{head1, head2, head3})))
-}
-
-func MergeKLists(lists []*ListNode) *ListNode {
-	var mergeKLists func(int, int) *ListNode
-	mergeKLists = func(low, hight int) *ListNode {
-		if low == hight {
-			return lists[low]
-		}
-		if low > hight {
-			return nil
-		}
-		mid := (low + hight) >> 1
-		return MergeLinkedListL(mergeKLists(low, mid), mergeKLists(mid+1, hight))
-	}
-	return mergeKLists(0, len(lists)-1)
+	//fmt.Println(LinkedListToArray(MergeKLists([]*ListNode{head1, head2, head3})))
+	fmt.Println(LinkedListToArray(MergeKListsPriorityQueue([]*ListNode{head1, head2, head3})))
 }

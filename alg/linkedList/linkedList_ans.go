@@ -1,12 +1,13 @@
 package linkedList
 
 import (
+	"container/heap"
 	. "dp/ds/linkedList"
 )
 
 func MergeLinkedListL(l1, l2 *ListNode) *ListNode {
-	head := &ListNode{Val: -1}
-	tmp := head
+	dummy := &ListNode{Val: -1}
+	tmp := dummy
 	for l1 != nil && l2 != nil {
 		if l1.Val < l2.Val {
 			tmp.Next = l1
@@ -22,7 +23,7 @@ func MergeLinkedListL(l1, l2 *ListNode) *ListNode {
 	} else {
 		tmp.Next = l1
 	}
-	return head.Next
+	return dummy.Next
 }
 
 func MergeLinkedListR(l1, l2 *ListNode) *ListNode {
@@ -161,4 +162,61 @@ func PlusOne(head *ListNode) *ListNode {
 		return slow
 	}
 	return head
+}
+
+func MergeKLists(lists []*ListNode) *ListNode {
+	var mergeKLists func(int, int) *ListNode
+	mergeKLists = func(low, hight int) *ListNode {
+		if low == hight {
+			return lists[low]
+		}
+		if low > hight {
+			return nil
+		}
+		mid := (low + hight) >> 1
+		return MergeLinkedListL(mergeKLists(low, mid), mergeKLists(mid+1, hight))
+	}
+	return mergeKLists(0, len(lists)-1)
+}
+
+/*本题考查最小堆的用法 最小堆里面的每个元素可以是一个结构体，只要正确实现了Less方法即可*/
+func MergeKListsPriorityQueue(lists []*ListNode) *ListNode {
+	pq := &minHeap{}
+	for i := 0; i < len(lists); i++ {
+		if lists[i] != nil {
+			heap.Push(pq, lists[i])
+		}
+	}
+	heap.Init(pq)
+	head := &ListNode{}
+	cur := head
+	for pq.Len() > 0 {
+		curNode := heap.Pop(pq).(*ListNode)
+		if curNode.Next != nil {
+			heap.Push(pq, curNode.Next)
+		}
+		cur.Next = curNode
+		cur = cur.Next
+	}
+	return head.Next
+}
+
+type minHeap []*ListNode //由链表组成的最小堆
+func (h *minHeap) Len() int {
+	return len(*h)
+}
+func (h *minHeap) Swap(i, j int) {
+	(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+}
+func (h *minHeap) Less(i, j int) bool {
+	return (*h)[i].Val < (*h)[j].Val
+}
+func (h *minHeap) Pop() interface{} {
+	headNode := (*h)[h.Len()-1]
+	*h = (*h)[:h.Len()-1]
+	return headNode
+}
+func (h *minHeap) Push(node interface{}) {
+	newNode := node.(*ListNode)
+	*h = append(*h, newNode)
 }
