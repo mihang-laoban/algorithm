@@ -91,44 +91,37 @@ func Test(t *testing.T) {
 	fmt.Println(LinkedListToArray(ReverseKGroup(head, 3)))
 }
 
-func ReverseKGroup(head *ListNode, k int) *ListNode {
-	// 链表头节点
-	dum := &ListNode{Val: -1}
-	// 表头指向入参头节点
-	dum.Next = head
-	// 初始化起点和终点
-	start, end := dum, dum
-	for end.Next != nil {
-		// 遍历到第K个元素
-		for i := 0; i < k && end != nil; i++ {
-			end = end.Next
-		}
-		// 如果到达最后一组没有遍历完则不反转
-		if end == nil {
-			break
-		}
-		// 记录起点和下一个起点
-		cur, next := start.Next, end.Next
-		// 断开链接，设置反转终点
-		end.Next = nil
-		// 起点指向反转以后的第一个节点
-		start.Next = ReverseListL(cur)
-		// 重新链接，此时的start已经上一组的终点
-		cur.Next = next
-		// 重新设置起点
-		start, end = cur, cur
-	}
-	return dum.Next
+func TestReverseLinkedList(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
+	//fmt.Println(LinkedListToArray(ReverseListR(head)))
+	fmt.Println(LinkedListToArray(ReverseKListR(head, 3)))
+	//fmt.Println(LinkedListToArray(ReverseListBetweenR(head, 2, 4)))
 }
 
-func ReverseListL(head *ListNode) *ListNode {
-	cur := head
-	var pre *ListNode
-	for cur != nil {
-		tmp := cur.Next
-		cur.Next = pre
-		pre = cur
-		cur = tmp
+func ReverseListBetweenR(head *ListNode, m, n int) *ListNode {
+	if m == 1 {
+		return ReverseKListR(head, n)
 	}
-	return pre
+	head.Next = ReverseListBetweenR(head.Next, m-1, n-1)
+	return head
+}
+
+func ReverseKListR(head *ListNode, n int) *ListNode {
+	var (
+		successor      *ListNode
+		_reverseFirstK func(*ListNode, int) *ListNode
+	)
+
+	_reverseFirstK = func(head *ListNode, n int) *ListNode {
+		if n == 1 {
+			successor = head.Next
+			return head
+		}
+		last := _reverseFirstK(head.Next, n-1)
+		head.Next.Next = head
+		head.Next = successor
+		return last
+	}
+
+	return _reverseFirstK(head, n)
 }
