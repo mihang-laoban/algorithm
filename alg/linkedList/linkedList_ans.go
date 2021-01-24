@@ -6,7 +6,7 @@ import (
 )
 
 func MergeLinkedListL(l1, l2 *ListNode) *ListNode {
-	dummy := &ListNode{Val: -1}
+	dummy := &ListNode{}
 	tmp := dummy
 	for l1 != nil && l2 != nil {
 		if l1.Val < l2.Val {
@@ -219,4 +219,47 @@ func (h *minHeap) Pop() interface{} {
 func (h *minHeap) Push(node interface{}) {
 	newNode := node.(*ListNode)
 	*h = append(*h, newNode)
+}
+
+func SortList(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+
+	length := 0
+	for node := head; node != nil; node = node.Next {
+		length++
+	}
+
+	dummyHead := &ListNode{Next: head}
+	for subLength := 1; subLength < length; subLength <<= 1 {
+		prev, cur := dummyHead, dummyHead.Next
+		for cur != nil {
+			l1 := cur
+			for i := 1; i < subLength && cur.Next != nil; i++ {
+				cur = cur.Next
+			}
+
+			l2 := cur.Next
+			cur.Next = nil
+			cur = l2
+			for i := 1; i < subLength && cur != nil && cur.Next != nil; i++ {
+				cur = cur.Next
+			}
+
+			var next *ListNode
+			if cur != nil {
+				next = cur.Next
+				cur.Next = nil
+			}
+			cur = next
+
+			prev.Next = MergeLinkedListL(l1, l2)
+
+			for prev.Next != nil {
+				prev = prev.Next
+			}
+		}
+	}
+	return dummyHead.Next
 }
