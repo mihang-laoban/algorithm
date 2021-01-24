@@ -9,10 +9,10 @@ func MergeLinkedListL(l1, l2 *ListNode) *ListNode {
 	tmp := head
 	for l1 != nil && l2 != nil {
 		if l1.Val < l2.Val {
-			tmp.Next = &ListNode{Val: l1.Val}
+			tmp.Next = l1
 			l1 = l1.Next
 		} else {
-			tmp.Next = &ListNode{Val: l2.Val}
+			tmp.Next = l2
 			l2 = l2.Next
 		}
 		tmp = tmp.Next
