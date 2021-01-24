@@ -108,26 +108,48 @@ func TestReverseLinkedList(t *testing.T) {
 	//fmt.Println(LinkedListToArray(ReverseListR(head)))
 	//fmt.Println(LinkedListToArray(ReverseKListR(head, 3)))
 	//fmt.Println(LinkedListToArray(ReverseListBetweenR(head, 2, 4)))
-	fmt.Println(LinkedListToArray(ReverseListBetweenL(head, 2, 4)))
+	//fmt.Println(LinkedListToArray(ReverseListBetweenL(head, 2, 4)))
+	fmt.Println(LinkedListToArray(ReverseListBetweenL2(head, 2, 4)))
 }
 
 func ReverseListBetweenL(head *ListNode, m, n int) *ListNode {
 	dummy := &ListNode{Val: -1}
 	dummy.Next = head
-	step, guard, cur := 0, dummy, dummy.Next
-	for step < m-1 {
-		guard, cur = guard.Next, cur.Next
-		step++
+	guard, point := dummy, dummy.Next
+	for i := 0; i < m-1; i++ {
+		guard, point = guard.Next, point.Next
 	}
-
 	for i := 0; i < n-m; i++ {
-		removed := cur.Next
-		cur.Next = cur.Next.Next
-
+		removed := point.Next
+		point.Next = point.Next.Next
 		removed.Next = guard.Next
 		guard.Next = removed
 	}
+	return dummy.Next
+}
 
+func ReverseListBetweenL2(head *ListNode, m, n int) *ListNode {
+	dummy := &ListNode{Val: -1}
+	dummy.Next = head
+	node := dummy
+	//找到需要反转的那一段的上一个节点。
+	for i := 1; i < m; i++ {
+		node = node.Next
+	}
+	//node.next就是需要反转的这段的起点。
+	cur := node.Next
+	var tmp, pre *ListNode
+	//反转m到n这一段
+	for i := m; i <= n; i++ {
+		tmp = cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = tmp
+	}
+	//将反转的起点的next指向next。
+	node.Next.Next = tmp
+	//需要反转的那一段的上一个节点的next节点指向反转后链表的头结点
+	node.Next = pre
 	return dummy.Next
 }
 
