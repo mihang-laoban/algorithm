@@ -264,3 +264,37 @@ func SortList(head *ListNode) *ListNode {
 	}
 	return dummy.Next
 }
+
+func MiddleNode(head *ListNode) *ListNode {
+	fast, slow := head, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	return slow
+}
+
+func ReorderList(head *ListNode) {
+	if head == nil {
+		return
+	}
+	mid := MiddleNode(head)
+	l1, l2 := head, mid.Next
+	mid.Next = nil // 断开链表1
+	l2 = ReverseListL(l2)
+	reorderList(l1, l2)
+}
+
+func reorderList(l1, l2 *ListNode) {
+	for l1 != nil && l2 != nil {
+		// 存出两个链表头节点的下一个节点
+		tmp1 := l1.Next
+		tmp2 := l2.Next
+
+		l1.Next = l2 // 交错
+		l1 = tmp1    // 向后移动一位
+
+		l2.Next = l1 // 交错
+		l2 = tmp2    // 向后移动一位
+	}
+}
