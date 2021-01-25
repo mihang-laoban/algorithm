@@ -258,6 +258,6 @@ func TestMergeKLists(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestSortList(t *testing.T) {
-	head := ArrayToLinkedList([]int{4, 2, 1, 3})
+	head := ArrayToLinkedList([]int{4, 2, 1, 3, 5})
 	fmt.Println(LinkedListToArray(SortList(head)))
 }

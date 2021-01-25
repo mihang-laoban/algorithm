@@ -227,13 +227,13 @@ func SortList(head *ListNode) *ListNode {
 	}
 
 	length := 0
-	for node := head; node != nil; node = node.Next {
+	for i := head; i != nil; i = i.Next {
 		length++
 	}
 
 	dummyHead := &ListNode{Next: head}
 	for subLength := 1; subLength < length; subLength <<= 1 {
-		prev, cur := dummyHead, dummyHead.Next
+		pre, cur := dummyHead, dummyHead.Next
 		for cur != nil {
 			l1 := cur
 			for i := 1; i < subLength && cur.Next != nil; i++ {
@@ -243,6 +243,7 @@ func SortList(head *ListNode) *ListNode {
 			l2 := cur.Next
 			cur.Next = nil
 			cur = l2
+			// -------------------------|处理奇数情况|-------------------------
 			for i := 1; i < subLength && cur != nil && cur.Next != nil; i++ {
 				cur = cur.Next
 			}
@@ -254,10 +255,10 @@ func SortList(head *ListNode) *ListNode {
 			}
 			cur = next
 
-			prev.Next = MergeLinkedListL(l1, l2)
+			pre.Next = MergeLinkedListL(l1, l2)
 
-			for prev.Next != nil {
-				prev = prev.Next
+			for pre.Next != nil {
+				pre = pre.Next
 			}
 		}
 	}
