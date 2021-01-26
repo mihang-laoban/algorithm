@@ -298,3 +298,38 @@ func reorderList(l1, l2 *ListNode) {
 		l2 = tmp2    // 向后移动一位
 	}
 }
+
+func Partition(head *ListNode, x int) *ListNode {
+	small, large := &ListNode{}, &ListNode{}
+	smallTmp, largeTmp := small, large
+	for head != nil {
+		if head.Val < x {
+			smallTmp.Next = head
+			smallTmp = smallTmp.Next
+		} else {
+			largeTmp.Next = head
+			largeTmp = largeTmp.Next
+		}
+		head = head.Next
+	}
+	largeTmp.Next, smallTmp.Next = nil, large.Next
+	return small.Next
+}
+
+func DeleteNode(node *ListNode) {
+	node.Val = node.Next.Val
+	node.Next = node.Next.Next
+}
+
+func RemoveNthFromEnd(head *ListNode, n int) *ListNode {
+	dummy := &ListNode{Next: head}
+	slow, fast := dummy, dummy.Next
+	for i := 0; i < n; i++ {
+		fast = fast.Next
+	}
+	for ; fast != nil; fast = fast.Next {
+		slow = slow.Next
+	}
+	slow.Next = slow.Next.Next
+	return dummy.Next
+}

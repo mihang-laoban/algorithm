@@ -321,19 +321,50 @@ func TestPartition(t *testing.T) {
 	fmt.Println(LinkedListToArray(Partition(head, 3)))
 }
 
-func Partition(head *ListNode, x int) *ListNode {
-	small, large := &ListNode{}, &ListNode{}
-	smallTmp, largeTmp := small, large
-	for head != nil {
-		if head.Val < x {
-			smallTmp.Next = head
-			smallTmp = smallTmp.Next
-		} else {
-			largeTmp.Next = head
-			largeTmp = largeTmp.Next
-		}
-		head = head.Next
-	}
-	largeTmp.Next, smallTmp.Next = nil, large.Next
-	return small.Next
+/*请编写一个函数，使其可以删除某个链表中给定的（非末尾）节点。传入函数的唯一参数为 要被删除的节点 。
+现有一个链表 -- head = [4,5,1,9]，它可以表示为:
+
+示例 1：
+输入：head = [4,5,1,9], node = 5
+输出：[4,1,9]
+解释：给定你链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -> 1 -> 9.
+
+示例 2：
+输入：head = [4,5,1,9], node = 1
+输出：[4,5,9]
+解释：给定你链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -> 5 -> 9.
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/delete-node-in-a-linked-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestDeleteNode(t *testing.T) {
+	head := ArrayToLinkedList([]int{4, 5, 1, 9})
+	target := SearchNode(head, 5)
+	DeleteNode(target)
+	fmt.Println(LinkedListToArray(head))
+}
+
+/*给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+进阶：你能尝试使用一趟扫描实现吗？
+
+示例 1：
+输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+
+示例 2：
+输入：head = [1], n = 1
+输出：[]
+
+示例 3：
+输入：head = [1,2], n = 1
+输出：[1]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestRemoveNthFromEnd(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
+	fmt.Println(LinkedListToArray(RemoveNthFromEnd(head, 2)))
 }

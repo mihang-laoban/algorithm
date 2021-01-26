@@ -177,3 +177,12 @@ func LinkedListToArray(head *ListNode) (res []int) {
 	}
 	return
 }
+
+func SearchNode(head *ListNode, val int) *ListNode {
+	for i := head; i != nil; i = i.Next {
+		if i.Val == val {
+			return i
+		}
+	}
+	return nil
+}
