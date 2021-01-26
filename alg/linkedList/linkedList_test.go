@@ -323,17 +323,17 @@ func TestPartition(t *testing.T) {
 
 func Partition(head *ListNode, x int) *ListNode {
 	small, large := &ListNode{}, &ListNode{}
-	smallHead, largeHead := small, large
+	smallTmp, largeTmp := small, large
 	for head != nil {
 		if head.Val < x {
-			small.Next = head
-			small = small.Next
+			smallTmp.Next = head
+			smallTmp = smallTmp.Next
 		} else {
-			large.Next = head
-			large = large.Next
+			largeTmp.Next = head
+			largeTmp = largeTmp.Next
 		}
 		head = head.Next
 	}
-	large.Next, small.Next = nil, largeHead.Next
-	return smallHead.Next
+	largeTmp.Next, smallTmp.Next = nil, large.Next
+	return small.Next
 }
