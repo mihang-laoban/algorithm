@@ -65,7 +65,7 @@ func SwapPairsR(head *ListNode) *ListNode {
 		return second*/
 }
 func SwapPairsL(head *ListNode) *ListNode {
-	dummyHead := &ListNode{head, -1}
+	dummyHead := &ListNode{Next: head, Val: -1}
 	cur := dummyHead
 	/*
 		c, 1, 2, 3, 4
@@ -332,4 +332,37 @@ func RemoveNthFromEnd(head *ListNode, n int) *ListNode {
 	}
 	slow.Next = slow.Next.Next
 	return dummy.Next
+}
+
+func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	s1, s2 := []int{}, []int{}
+	for l1 != nil {
+		s1 = append(s1, l1.Val)
+		l1 = l1.Next
+	}
+	for l2 != nil {
+		s2 = append(s2, l2.Val)
+		l2 = l2.Next
+	}
+	var ans *ListNode
+	var a, b, carry int
+	for len(s1) > 0 || len(s2) > 0 || carry != 0 {
+		if len(s1) == 0 {
+			a = 0
+		} else {
+			a = s1[len(s1)-1]
+			s1 = s1[:len(s1)-1]
+		}
+		if len(s2) == 0 {
+			b = 0
+		} else {
+			b = s2[len(s2)-1]
+			s2 = s2[:len(s2)-1]
+		}
+		cur := a + b + carry
+		carry = cur / 10
+		cur %= 10
+		ans = &ListNode{Next: ans, Val: cur}
+	}
+	return ans
 }

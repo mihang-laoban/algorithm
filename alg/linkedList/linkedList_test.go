@@ -368,3 +368,52 @@ func TestRemoveNthFromEnd(t *testing.T) {
 	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
 	fmt.Println(LinkedListToArray(RemoveNthFromEnd(head, 2)))
 }
+
+/*
+给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。
+你可以假设除了数字 0 之外，这两个数字都不会以零开头。
+
+进阶：
+如果输入链表不能修改该如何处理？换句话说，你不能对列表中的节点进行翻转。
+
+示例：
+输入：(7 -> 2 -> 4 -> 2) + (5 -> 6 -> 4)
+输出：7 -> 8 -> 0 -> 6
+*/
+func TestAddTwoNumbers(t *testing.T) {
+	head1 := ArrayToLinkedList([]int{7, 2, 4, 2})
+	head2 := ArrayToLinkedList([]int{5, 6, 4})
+	fmt.Println(LinkedListToArray(AddTwoNumbers(head1, head2)))
+}
+
+/*
+删除链表中等于给定值 val 的所有节点。
+
+示例:
+输入: 1->2->6->3->4->5->6, val = 6
+输出: 1->2->3->4->5
+
+1,1,1
+[]
+*/
+
+func TestRemoveElements(t *testing.T) {
+	//head := ArrayToLinkedList([]int{6, 1, 2, 6, 3, 4, 5, 6})
+	//head := ArrayToLinkedList([]int{1, 1, 1})
+	head := ArrayToLinkedList([]int{1})
+	fmt.Println(LinkedListToArray(RemoveElements(head, 1)))
+}
+
+func RemoveElements(head *ListNode, val int) *ListNode {
+	dummy := &ListNode{Next: head}
+	pre, cur := dummy, head
+	for cur != nil {
+		if cur.Val == val {
+			pre.Next = cur.Next
+		} else {
+			pre = cur
+		}
+		cur = cur.Next
+	}
+	return dummy.Next
+}

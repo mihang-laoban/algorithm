@@ -10,8 +10,8 @@ type Node struct {
 }
 
 type ListNode struct {
-	Next *ListNode
 	Val  int
+	Next *ListNode
 }
 
 type LinkedList struct {
