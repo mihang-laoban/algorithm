@@ -437,3 +437,87 @@ func TestDeleteDuplicates(t *testing.T) {
 	head := ArrayToLinkedList([]int{1, 1, 2, 3, 3})
 	fmt.Println(LinkedListToArray(DeleteDuplicates(head)))
 }
+
+/*
+请判断一个链表是否为回文链表。
+
+示例 1:
+
+输入: 1->2
+输出: false
+示例 2:
+
+输入: 1->2->2->1
+输出: true
+进阶：
+你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/palindrome-linked-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestIsPalindrome(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 2, 1})
+	fmt.Println(IsPalindrome1(head))
+	fmt.Println(IsPalindrome2(head))
+	fmt.Println(IsPalindrome3(head))
+}
+
+func IsPalindrome3(head *ListNode) bool {
+	if head == nil || head.Next == nil {
+		return true
+	}
+	var pre, tmp *ListNode
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		tmp = slow
+		slow = slow.Next
+		fast = fast.Next.Next
+		tmp.Next = pre
+		pre = tmp
+	}
+	if fast != nil {
+		slow = slow.Next
+	}
+	for tmp != nil && slow != nil {
+		if tmp.Val != slow.Val {
+			return false
+		}
+		tmp = tmp.Next
+		slow = slow.Next
+	}
+	return true
+}
+
+func IsPalindrome2(head *ListNode) interface{} {
+	tmp := head
+	var check func(*ListNode) bool
+	check = func(cur *ListNode) bool {
+		if cur != nil {
+			if !check(cur.Next) {
+				return false
+			}
+			if cur.Val != tmp.Val {
+				return false
+			}
+			tmp = tmp.Next
+		}
+		return true
+	}
+	return check(head)
+}
+
+func IsPalindrome1(head *ListNode) bool {
+	size, tmp, cur := 0, []int{}, head
+	for cur != nil {
+		tmp, cur = append(tmp, cur.Val), cur.Next
+		size++
+	}
+	for i := 0; i < size; i++ {
+		if tmp[i] != tmp[size-1-i] {
+			return false
+		}
+	}
+	return true
+}
