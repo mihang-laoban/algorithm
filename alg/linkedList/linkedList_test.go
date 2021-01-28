@@ -458,7 +458,8 @@ func TestDeleteDuplicates(t *testing.T) {
 */
 
 func TestIsPalindrome(t *testing.T) {
-	head := ArrayToLinkedList([]int{1, 2, 2, 1})
+	head := ArrayToLinkedList([]int{1, 2, 3, 8, 3, 2, 1})
+	//head := ArrayToLinkedList([]int{1, 0, 1})
 	fmt.Println(IsPalindrome1(head))
 	fmt.Println(IsPalindrome2(head))
 	fmt.Println(IsPalindrome3(head))
@@ -468,24 +469,21 @@ func IsPalindrome3(head *ListNode) bool {
 	if head == nil || head.Next == nil {
 		return true
 	}
-	var pre, tmp *ListNode
+	var pre, cur *ListNode
 	slow, fast := head, head
 	for fast != nil && fast.Next != nil {
-		tmp = slow
-		slow = slow.Next
-		fast = fast.Next.Next
-		tmp.Next = pre
-		pre = tmp
+		cur, slow, fast = slow, slow.Next, fast.Next.Next
+		cur.Next = pre
+		pre = cur
 	}
-	if fast != nil {
+	if fast != nil { // 处理奇数的情况
 		slow = slow.Next
 	}
-	for tmp != nil && slow != nil {
-		if tmp.Val != slow.Val {
+	for cur != nil && slow != nil {
+		if cur.Val != slow.Val {
 			return false
 		}
-		tmp = tmp.Next
-		slow = slow.Next
+		cur, slow = cur.Next, slow.Next
 	}
 	return true
 }
