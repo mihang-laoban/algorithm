@@ -461,7 +461,7 @@ func IsPalindrome1(head *ListNode) bool {
 	return true
 }
 
-func DeleteDuplicatesII(head *ListNode) *ListNode {
+func DeleteDuplicatesIIL(head *ListNode) *ListNode {
 	if head == nil {
 		return nil
 	}

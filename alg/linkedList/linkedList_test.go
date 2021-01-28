@@ -483,5 +483,21 @@ func TestIsPalindrome(t *testing.T) {
 
 func TestDeleteDuplicatesII(t *testing.T) {
 	head := ArrayToLinkedList([]int{1, 2, 3, 3, 4, 4, 5})
-	fmt.Println(LinkedListToArray(DeleteDuplicatesII(head)))
+	//fmt.Println(LinkedListToArray(DeleteDuplicatesIIL(head)))
+	fmt.Println(LinkedListToArray(DeleteDuplicatesIIR(head)))
+}
+
+func DeleteDuplicatesIIR(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	if head.Val == head.Next.Val {
+		for head != nil && head.Next != nil && head.Val == head.Next.Val {
+			head = head.Next
+		}
+		return DeleteDuplicatesIIR(head.Next)
+	} else {
+		head.Next = DeleteDuplicatesIIR(head.Next)
+		return head
+	}
 }
