@@ -465,57 +465,23 @@ func TestIsPalindrome(t *testing.T) {
 	fmt.Println(IsPalindrome3(head))
 }
 
-func IsPalindrome3(head *ListNode) bool {
-	if head == nil || head.Next == nil {
-		return true
-	}
-	var pre, cur *ListNode
-	slow, fast := head, head
-	for fast != nil && fast.Next != nil {
-		cur, slow, fast = slow, slow.Next, fast.Next.Next
-		cur.Next = pre
-		pre = cur
-	}
-	if fast != nil { // 处理奇数的情况
-		slow = slow.Next
-	}
-	for cur != nil && slow != nil {
-		if cur.Val != slow.Val {
-			return false
-		}
-		cur, slow = cur.Next, slow.Next
-	}
-	return true
-}
+/*
+给定一个排序链表，删除所有含有重复数字的节点，只保留原始链表中 没有重复出现 的数字。
 
-func IsPalindrome2(head *ListNode) interface{} {
-	tmp := head
-	var check func(*ListNode) bool
-	check = func(cur *ListNode) bool {
-		if cur != nil {
-			if !check(cur.Next) {
-				return false
-			}
-			if cur.Val != tmp.Val {
-				return false
-			}
-			tmp = tmp.Next
-		}
-		return true
-	}
-	return check(head)
-}
+示例 1:
+输入: 1->2->3->3->4->4->5
+输出: 1->2->5
 
-func IsPalindrome1(head *ListNode) bool {
-	size, tmp, cur := 0, []int{}, head
-	for cur != nil {
-		tmp, cur = append(tmp, cur.Val), cur.Next
-		size++
-	}
-	for i := 0; i < size; i++ {
-		if tmp[i] != tmp[size-1-i] {
-			return false
-		}
-	}
-	return true
+示例 2:
+输入: 1->1->1->2->3
+输出: 2->3
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestDeleteDuplicatesII(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 3, 4, 4, 5})
+	fmt.Println(LinkedListToArray(DeleteDuplicatesII(head)))
 }
