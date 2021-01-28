@@ -495,7 +495,11 @@ func DeleteDuplicatesIIR(head *ListNode) *ListNode {
 		for head != nil && head.Next != nil && head.Val == head.Next.Val {
 			head = head.Next
 		}
-		return DeleteDuplicatesIIR(head.Next)
+		if head != nil {
+			return DeleteDuplicatesIIR(head.Next)
+		} else {
+			return nil
+		}
 	} else {
 		head.Next = DeleteDuplicatesIIR(head.Next)
 		return head
