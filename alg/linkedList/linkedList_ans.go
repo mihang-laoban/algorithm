@@ -366,3 +366,29 @@ func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	return ans
 }
+
+func RemoveElements(head *ListNode, val int) *ListNode {
+	dummy := &ListNode{Next: head}
+	pre, cur := dummy, head
+	for cur != nil {
+		if cur.Val == val {
+			pre.Next = cur.Next
+		} else {
+			pre = cur
+		}
+		cur = cur.Next
+	}
+	return dummy.Next
+}
+
+func KthToLast(head *ListNode, k int) int {
+	slow, fast := head, head
+	for i := 0; i < k; i++ {
+		fast = fast.Next
+	}
+	for fast != nil {
+		fast = fast.Next
+		slow = slow.Next
+	}
+	return slow.Val
+}
