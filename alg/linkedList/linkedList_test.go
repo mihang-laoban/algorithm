@@ -2,7 +2,7 @@ package linkedList
 
 import (
 	. "dp/ds/linkedList"
-	"dp/ds/tree"
+	. "dp/ds/tree"
 	"fmt"
 	"testing"
 )
@@ -529,5 +529,5 @@ func DeleteDuplicatesIIR(head *ListNode) *ListNode {
 
 func TestTree(t *testing.T) {
 	head := ArrayToLinkedList([]int{-10, -3, 0, 5, 9})
-	fmt.Println(tree.TreeToArray(SortedListToBST(head)))
+	fmt.Println(TreeToArray(SortedListToBST(head)))
 }

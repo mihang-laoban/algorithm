@@ -490,7 +490,7 @@ func SortedListToBST(head *ListNode) *TreeNode {
 		return nil
 	}
 	slow, fast := head, head
-	var preSlow *ListNode = nil
+	var preSlow *ListNode
 	for fast != nil && fast.Next != nil {
 		preSlow = slow
 		slow = slow.Next
