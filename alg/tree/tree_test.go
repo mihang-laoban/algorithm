@@ -669,7 +669,7 @@ func TestReverseTree(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestVerifyPostOrder(t *testing.T) {
-	fmt.Println(VerifyPostOrder([]int{1, 6, 3, 2, 5}))
+	//fmt.Println(VerifyPostOrder([]int{1, 6, 3, 2, 5}))
 	fmt.Println(VerifyPostOrder([]int{1, 3, 2, 6, 5}))
 }
 
@@ -681,7 +681,7 @@ func VerifyPostOrder(postOrder []int) bool {
 		if postOrder[i] > root {
 			return false
 		}
-		// 如果栈不为空，且栈中最后一个元素大于当前元素，更新根节点
+		// 如果栈不为空，且栈中最后一个元素大于当前元素(它必然是当前元素最近的右子节点)，更新根节点为右子节点
 		for len(stack) > 0 && stack[len(stack)-1] > postOrder[i] {
 			root, stack = stack[len(stack)-1], stack[:len(stack)-1]
 		}
