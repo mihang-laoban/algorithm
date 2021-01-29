@@ -646,6 +646,47 @@ func TestReverseTree(t *testing.T) {
 	fmt.Println(BFS(root))
 }
 
-func TestTree(t *testing.T) {
+/*输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回 true，否则返回 false。假设输入的数组的任意两个数字都互不相同。
 
+参考以下这颗二叉搜索树：
+
+    5
+   / \
+  2   6
+ / \
+1   3
+示例 1：
+
+输入: [1,6,3,2,5]
+输出: false
+示例 2：
+
+输入: [1,3,2,6,5]
+输出: true
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestVerifyPostOrder(t *testing.T) {
+	fmt.Println(VerifyPostOrder([]int{1, 6, 3, 2, 5}))
+	fmt.Println(VerifyPostOrder([]int{1, 3, 2, 6, 5}))
+}
+
+func VerifyPostOrder(postOrder []int) bool {
+	stack, root := []int{}, math.MaxInt64
+	// 根 右 左
+	for i := len(postOrder) - 1; i >= 0; i-- {
+		// 如果当前后序节点大于根节点则不符合定义
+		if postOrder[i] > root {
+			return false
+		}
+		// 如果栈不为空，且栈中最后一个元素大于当前元素，更新根节点
+		for len(stack) > 0 && stack[len(stack)-1] > postOrder[i] {
+			root, stack = stack[len(stack)-1], stack[:len(stack)-1]
+		}
+		// 每次循环都会把当前元素入栈
+		stack = append(stack, postOrder[i])
+	}
+	return true
 }
