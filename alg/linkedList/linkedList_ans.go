@@ -366,3 +366,120 @@ func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	return ans
 }
+
+func RemoveElements(head *ListNode, val int) *ListNode {
+	dummy := &ListNode{Next: head}
+	pre, cur := dummy, head
+	for cur != nil {
+		if cur.Val == val {
+			pre.Next = cur.Next
+		} else {
+			pre = cur
+		}
+		cur = cur.Next
+	}
+	return dummy.Next
+}
+
+func KthToLast(head *ListNode, k int) int {
+	slow, fast := head, head
+	for i := 0; i < k; i++ {
+		fast = fast.Next
+	}
+	for fast != nil {
+		fast = fast.Next
+		slow = slow.Next
+	}
+	return slow.Val
+}
+
+func DeleteDuplicates(head *ListNode) *ListNode {
+	cur := head
+	// cur != nil 处理头节点为空的情况
+	for cur != nil && cur.Next != nil {
+		if cur.Val == cur.Next.Val {
+			cur.Next = cur.Next.Next
+		} else {
+			cur = cur.Next
+		}
+	}
+	return head
+}
+
+func IsPalindrome3(head *ListNode) bool {
+	if head == nil || head.Next == nil {
+		return true
+	}
+	var pre, cur *ListNode
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		cur, slow, fast = slow, slow.Next, fast.Next.Next
+		cur.Next = pre
+		pre = cur
+	}
+	if fast != nil { // 处理奇数的情况
+		slow = slow.Next
+	}
+	for cur != nil && slow != nil {
+		if cur.Val != slow.Val {
+			return false
+		}
+		cur, slow = cur.Next, slow.Next
+	}
+	return true
+}
+
+func IsPalindrome2(head *ListNode) interface{} {
+	tmp := head
+	var check func(*ListNode) bool
+	check = func(cur *ListNode) bool {
+		if cur != nil {
+			if !check(cur.Next) {
+				return false
+			}
+			if cur.Val != tmp.Val {
+				return false
+			}
+			tmp = tmp.Next
+		}
+		return true
+	}
+	return check(head)
+}
+
+func IsPalindrome1(head *ListNode) bool {
+	size, tmp, cur := 0, []int{}, head
+	for cur != nil {
+		tmp, cur = append(tmp, cur.Val), cur.Next
+		size++
+	}
+	for i := 0; i < size; i++ {
+		if tmp[i] != tmp[size-1-i] {
+			return false
+		}
+	}
+	return true
+}
+
+func DeleteDuplicatesIIL(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+	dummy := &ListNode{Next: head}
+	pre, cur := dummy, head
+	for cur != nil {
+		// 如果当前节点和下一个节点值相等则向后移动一位
+		for cur.Next != nil && cur.Val == cur.Next.Val {
+			cur = cur.Next
+		}
+		// 前置节点如果和当前节点是同一个节点则一起向后移动一位
+		if pre.Next == cur {
+			pre = pre.Next
+		} else {
+			// 否则指向已经下一位和当前位值不相等的位置
+			pre.Next = cur.Next
+		}
+		cur = cur.Next
+	}
+	return dummy.Next
+}

@@ -404,16 +404,104 @@ func TestRemoveElements(t *testing.T) {
 	fmt.Println(LinkedListToArray(RemoveElements(head, 1)))
 }
 
-func RemoveElements(head *ListNode, val int) *ListNode {
-	dummy := &ListNode{Next: head}
-	pre, cur := dummy, head
-	for cur != nil {
-		if cur.Val == val {
-			pre.Next = cur.Next
-		} else {
-			pre = cur
-		}
-		cur = cur.Next
+/*实现一种算法，找出单向链表中倒数第 k 个节点。返回该节点的值。
+
+注意：本题相对原题稍作改动
+示例：
+
+输入： 1->2->3->4->5 和 k = 2
+输出： 4
+说明：
+
+给定的 k 保证是有效的。
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/kth-node-from-end-of-list-lcci
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestKthToLast(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
+	fmt.Println(KthToLast(head, 2))
+}
+
+/*
+给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+示例 1:
+输入: 1->1->2
+输出: 1->2
+
+示例 2:
+输入: 1->1->2->3->3
+输出: 1->2->3
+*/
+func TestDeleteDuplicates(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 1, 2, 3, 3})
+	fmt.Println(LinkedListToArray(DeleteDuplicates(head)))
+}
+
+/*
+请判断一个链表是否为回文链表。
+
+示例 1:
+
+输入: 1->2
+输出: false
+示例 2:
+
+输入: 1->2->2->1
+输出: true
+进阶：
+你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/palindrome-linked-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestIsPalindrome(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 8, 3, 2, 1})
+	//head := ArrayToLinkedList([]int{1, 0, 1})
+	fmt.Println(IsPalindrome1(head))
+	fmt.Println(IsPalindrome2(head))
+	fmt.Println(IsPalindrome3(head))
+}
+
+/*
+给定一个排序链表，删除所有含有重复数字的节点，只保留原始链表中 没有重复出现 的数字。
+
+示例 1:
+输入: 1->2->3->3->4->4->5
+输出: 1->2->5
+
+示例 2:
+输入: 1->1->1->2->3
+输出: 2->3
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestDeleteDuplicatesII(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 3, 4, 4, 5})
+	//fmt.Println(LinkedListToArray(DeleteDuplicatesIIL(head)))
+	fmt.Println(LinkedListToArray(DeleteDuplicatesIIR(head)))
+}
+
+func DeleteDuplicatesIIR(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
 	}
-	return dummy.Next
+	if head.Val == head.Next.Val {
+		for head != nil && head.Next != nil && head.Val == head.Next.Val {
+			head = head.Next
+		}
+		if head != nil {
+			return DeleteDuplicatesIIR(head.Next)
+		} else {
+			return nil
+		}
+	} else {
+		head.Next = DeleteDuplicatesIIR(head.Next)
+		return head
+	}
 }
