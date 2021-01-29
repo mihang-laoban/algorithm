@@ -2,7 +2,6 @@ package linkedList
 
 import (
 	"fmt"
-	"testing"
 )
 
 // first in last out
@@ -13,19 +12,19 @@ type Stack struct {
 }
 
 type StackOperations interface {
-	push(interface{})
-	pop() interface{}
-	peek() interface{}
-	empty() bool
-	search(interface{}) int
+	Push(interface{})
+	Pop() interface{}
+	Peek() interface{}
+	Empty() bool
+	Search(interface{}) int
 }
 
-func (stack *Stack) push(val interface{}) {
+func (stack *Stack) Push(val interface{}) {
 	stack.data = append(stack.data, val)
 	stack.size++
 }
 
-func (stack *Stack) pop() (last interface{}) {
+func (stack *Stack) Pop() (last interface{}) {
 	if stack.size > 0 {
 		last = stack.data[stack.size-1]
 		stack.data = stack.data[:stack.size-1]
@@ -35,18 +34,18 @@ func (stack *Stack) pop() (last interface{}) {
 	return nil
 }
 
-func (stack *Stack) peek() interface{} {
+func (stack *Stack) Peek() interface{} {
 	return stack.data[stack.size-1]
 }
 
-func (stack *Stack) empty() bool {
+func (stack *Stack) Empty() bool {
 	if stack.size == 0 && len(stack.data) == 0 {
 		return true
 	}
 	return false
 }
 
-func (stack *Stack) search(val interface{}) int {
+func (stack *Stack) Search(val interface{}) int {
 	for k, v := range stack.data {
 		if v == val {
 			return k
@@ -55,9 +54,9 @@ func (stack *Stack) search(val interface{}) int {
 	return -1
 }
 
-func TestStack(t *testing.T) {
+func TestStack() {
 	stack := Stack{}
-	fmt.Println(stack.empty())
-	stack.push(1)
-	fmt.Println(stack.pop())
+	fmt.Println(stack.Empty())
+	stack.Push(1)
+	fmt.Println(stack.Pop())
 }

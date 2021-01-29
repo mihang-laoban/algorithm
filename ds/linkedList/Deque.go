@@ -93,7 +93,7 @@ func (deque *Deque) Pop() interface{} {
 		deque.size--
 		return res
 	}
-	return -1
+	return nil
 }
 
 func (deque *Deque) PeekFirst() interface{} {
