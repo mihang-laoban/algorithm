@@ -4,6 +4,7 @@ import (
 	. "dp/ds/tree"
 	. "dp/tools"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -495,4 +496,22 @@ func ReverseTreeR(root *TreeNode) *TreeNode {
 	ReverseTreeR(root.Right)
 	ReverseTreeR(root.Left)
 	return root
+}
+
+func VerifyPostOrder(postOrder []int) bool {
+	stack, root := []int{}, math.MaxInt64
+	// 根 右 左
+	for i := len(postOrder) - 1; i >= 0; i-- {
+		// 如果当前后序节点大于根节点则不符合定义
+		if postOrder[i] > root {
+			return false
+		}
+		// 如果栈不为空，且栈中最后一个元素大于当前元素(它必然是当前元素最近的右子节点)，更新根节点为右子节点
+		for len(stack) > 0 && stack[len(stack)-1] > postOrder[i] {
+			root, stack = stack[len(stack)-1], stack[:len(stack)-1]
+		}
+		// 每次循环都会把当前元素入栈
+		stack = append(stack, postOrder[i])
+	}
+	return true
 }

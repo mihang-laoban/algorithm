@@ -5,20 +5,26 @@ import (
 )
 
 type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+type TreeNodeM struct {
 	Val    int
-	Left   *TreeNode
-	Right  *TreeNode
-	Parent *TreeNode
+	Left   *TreeNodeM
+	Right  *TreeNodeM
+	Parent *TreeNodeM
 }
 
 type BiSearchTree struct {
-	root   *TreeNode
-	cur    *TreeNode
-	create *TreeNode
+	root   *TreeNodeM
+	cur    *TreeNodeM
+	create *TreeNodeM
 }
 
 func (bst *BiSearchTree) Add(data int) {
-	bst.create = new(TreeNode)
+	bst.create = new(TreeNodeM)
 	bst.create.Val = data
 
 	if !bst.IsEmpty() {
@@ -60,11 +66,11 @@ func (bst *BiSearchTree) Add(data int) {
 
 func (bst *BiSearchTree) Delete(data int) {
 	var (
-		deleteNode func(node *TreeNode)
+		deleteNode func(node *TreeNodeM)
 		node       = bst.Search(data)
 	)
 
-	deleteNode = func(node *TreeNode) {
+	deleteNode = func(node *TreeNodeM) {
 		if node == nil {
 			return
 		}
@@ -119,7 +125,7 @@ func (bst *BiSearchTree) Delete(data int) {
 	}
 	deleteNode(node)
 }
-func (bst BiSearchTree) GetRoot() *TreeNode {
+func (bst BiSearchTree) GetRoot() *TreeNodeM {
 	if bst.root != nil {
 		return bst.root
 	}
@@ -134,9 +140,9 @@ func (bst BiSearchTree) IsEmpty() bool {
 }
 
 func (bst BiSearchTree) InOrderTravel() {
-	var inOrderTravel func(node *TreeNode)
+	var inOrderTravel func(node *TreeNodeM)
 
-	inOrderTravel = func(node *TreeNode) {
+	inOrderTravel = func(node *TreeNodeM) {
 		if node != nil {
 			inOrderTravel(node.Left)
 			fmt.Printf("%d ", node.Val)
@@ -148,9 +154,9 @@ func (bst BiSearchTree) InOrderTravel() {
 }
 
 func (bst BiSearchTree) PreOrderTravel() {
-	var PreOrderTravel func(node *TreeNode)
+	var PreOrderTravel func(node *TreeNodeM)
 
-	PreOrderTravel = func(node *TreeNode) {
+	PreOrderTravel = func(node *TreeNodeM) {
 		if node != nil {
 			fmt.Printf("%d ", node.Val)
 			PreOrderTravel(node.Left)
@@ -162,9 +168,9 @@ func (bst BiSearchTree) PreOrderTravel() {
 }
 
 func (bst BiSearchTree) PostOrderTravel() {
-	var PostOrderTravel func(node *TreeNode)
+	var PostOrderTravel func(node *TreeNodeM)
 
-	PostOrderTravel = func(node *TreeNode) {
+	PostOrderTravel = func(node *TreeNodeM) {
 		if node != nil {
 			PostOrderTravel(node.Left)
 			PostOrderTravel(node.Right)
@@ -175,7 +181,7 @@ func (bst BiSearchTree) PostOrderTravel() {
 	PostOrderTravel(bst.root)
 }
 
-func (bst BiSearchTree) Search(data int) *TreeNode {
+func (bst BiSearchTree) Search(data int) *TreeNodeM {
 	//和Add操作类似，只要按照比当前节点小就往左孩子上拐，比当前节点大就往右孩子上拐的思路
 	//一路找下去，知道找到要查找的值返回即可
 	bst.cur = bst.root
@@ -195,9 +201,9 @@ func (bst BiSearchTree) Search(data int) *TreeNode {
 }
 
 func (bst BiSearchTree) GetDeepth() int {
-	var getDepth func(node *TreeNode) int
+	var getDepth func(node *TreeNodeM) int
 
-	getDepth = func(node *TreeNode) int {
+	getDepth = func(node *TreeNodeM) int {
 		if node == nil {
 			return 0
 		}
@@ -245,8 +251,8 @@ func (bst BiSearchTree) GetMax() int {
 	}
 }
 
-func (bst BiSearchTree) GetPredecessor(data int) *TreeNode {
-	getMax := func(node *TreeNode) *TreeNode {
+func (bst BiSearchTree) GetPredecessor(data int) *TreeNodeM {
+	getMax := func(node *TreeNodeM) *TreeNodeM {
 		if node == nil {
 			return nil
 		}
@@ -283,8 +289,8 @@ func (bst BiSearchTree) GetPredecessor(data int) *TreeNode {
 	return nil
 }
 
-func (bst BiSearchTree) GetSuccessor(data int) *TreeNode {
-	getMin := func(node *TreeNode) *TreeNode {
+func (bst BiSearchTree) GetSuccessor(data int) *TreeNodeM {
+	getMin := func(node *TreeNodeM) *TreeNodeM {
 		if node == nil {
 			return nil
 		}

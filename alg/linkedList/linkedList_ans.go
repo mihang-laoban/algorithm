@@ -3,6 +3,7 @@ package linkedList
 import (
 	"container/heap"
 	. "dp/ds/linkedList"
+	. "dp/ds/tree"
 )
 
 func MergeLinkedListL(l1, l2 *ListNode) *ListNode {
@@ -482,4 +483,24 @@ func DeleteDuplicatesIIL(head *ListNode) *ListNode {
 		cur = cur.Next
 	}
 	return dummy.Next
+}
+
+func SortedListToBST(head *ListNode) *TreeNode {
+	if head == nil {
+		return nil
+	}
+	slow, fast := head, head
+	var preSlow *ListNode = nil
+	for fast != nil && fast.Next != nil {
+		preSlow = slow
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	root := &TreeNode{Val: slow.Val}
+	if preSlow != nil {
+		preSlow.Next = nil
+		root.Left = SortedListToBST(head)
+	}
+	root.Right = SortedListToBST(slow.Next)
+	return root
 }
