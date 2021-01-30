@@ -128,14 +128,21 @@ func ReverseListR(head *ListNode) *ListNode {
 	return last
 }
 
+/*
+	关键步骤：
+	1.需要当前节点指向前面一个节点，由于要继续遍历，需要保存当前节点的后继节点，所以我们需要先记录 tmp := cur.Next
+	2.当前节点可以指向前驱节点了, cur.Next = pre
+	3.此时，前驱节点可以更新为当前节点了 pre = cur
+	4.继续看后面的元素，当前节点指向之前预存的后继节点cur = tmp
+*/
 func ReverseListL(head *ListNode) *ListNode {
 	cur := head
 	var pre *ListNode
 	for cur != nil {
-		tmp := cur.Next
-		cur.Next = pre
-		pre = cur
-		cur = tmp
+		tmp := cur.Next // 存出后续节点 tmp = 2 > 3 > 4
+		cur.Next = pre  // 头节点的后继节点指向前驱节点 cur(1) > pre(nil)
+		pre = cur       // 前驱节点替换为当前节点 pre = 1 > nil
+		cur = tmp       // 当前节点替换为存储的后续节点 cur = 2 > 3 > 4
 	}
 	return pre
 }

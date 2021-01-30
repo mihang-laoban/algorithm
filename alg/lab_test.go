@@ -1,14 +1,28 @@
 package alg
 
 import (
+	linkedList2 "dp/alg/linkedList"
+	. "dp/ds/linkedList"
 	"fmt"
 	"testing"
 )
 
-func Test算法组件拆解训练(t *testing.T) {
-	链表()
+func TestComponentLab(t *testing.T) {
+	linkedList()
 }
 
-func 链表() {
-	fmt.Println(123)
+func linkedList() {
+	head := ArrayToLinkedList([]int{1, 2, 3, 4})
+	linkedList2.ReverseListL()
+	//dummy := &ListNode{}
+	cur := head
+	var pre *ListNode
+	for cur != nil {
+		tmp := cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = tmp
+	}
+
+	fmt.Println(LinkedListToArray(cur))
 }
