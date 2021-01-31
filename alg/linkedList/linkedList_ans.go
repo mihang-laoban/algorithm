@@ -544,3 +544,119 @@ func SortedListToBST2(head *ListNode) *TreeNode {
 	}
 	return build(0, len(nums)-1)
 }
+
+// n - logn
+func SortedListToBST3(head *ListNode) *TreeNode {
+	if head == nil {
+		return nil
+	}
+	cur, length := head, 0
+	for head != nil {
+		length++
+		head = head.Next
+	}
+	var buildBST func(int, int) *TreeNode
+	buildBST = func(start, end int) *TreeNode {
+		if start > end {
+			return nil
+		}
+		mid := (start + end) >> 1
+		// 只看左半
+		left := buildBST(start, mid-1)
+		root := &TreeNode{Val: cur.Val}
+		cur = cur.Next
+		root.Left = left
+		// 只看右半
+		root.Right = buildBST(mid+1, end)
+		return root
+	}
+	return buildBST(0, length-1)
+}
+
+func GetRandomList(nums [][]interface{}) *RandomListNode {
+	dummy := &RandomListNode{}
+	pre := dummy
+	nodeMap := map[int]*RandomListNode{}
+	arr := []*RandomListNode{}
+	for i := 0; i < len(nums); i++ {
+		cur := &RandomListNode{
+			Val:    nums[i][0].(int),
+			Next:   nil,
+			Random: nil,
+		}
+		arr = append(arr, cur)
+		nodeMap[i] = cur
+		pre.Next = cur
+		pre = pre.Next
+	}
+	for i := 0; i < len(nums); i++ {
+		if nums[i][1] != nil {
+			arr[i].Random = nodeMap[nums[i][1].(int)]
+		}
+	}
+	return dummy.Next
+}
+
+func CopyRandomListNew(head *RandomListNode) *RandomListNode {
+	if head == nil {
+		return nil
+	}
+	// 复制链表
+	cur := head
+	for cur != nil {
+		tmp := &RandomListNode{Val: cur.Val}
+		tmp.Next = cur.Next
+		cur.Next = tmp
+		cur = tmp.Next
+	}
+	// 处理random
+	cur = head
+	for cur != nil {
+		if cur.Random != nil {
+			cur.Next.Random = cur.Random.Next
+		}
+		cur = cur.Next.Next
+	}
+	// 拆分链表
+	first, second, tmp := head, head.Next, head.Next
+	for first != nil {
+		first.Next = first.Next.Next
+		if second.Next != nil {
+			second.Next = second.Next.Next
+		}
+		first, second = first.Next, second.Next
+	}
+	return tmp
+}
+
+func CopyRandomList(head *RandomListNode) *RandomListNode {
+	visited := map[*RandomListNode]*RandomListNode{}
+	var copyNodesR func(*RandomListNode) *RandomListNode
+	copyNodesR = func(head *RandomListNode) *RandomListNode {
+		if head == nil {
+			return head
+		}
+		if v, ok := visited[head]; ok {
+			if ok {
+				return v
+			}
+		}
+		node := &RandomListNode{Val: head.Val}
+		visited[head] = node
+		node.Next = copyNodesR(head.Next)
+		node.Random = copyNodesR(head.Random)
+		return node
+	}
+	return copyNodesR(head)
+}
+
+func DuplicateLinkedList(head *ListNode) *ListNode {
+	cur := head
+	for cur != nil {
+		tmp := &ListNode{Val: cur.Val}
+		tmp.Next = cur.Next
+		cur.Next = tmp
+		cur = tmp.Next
+	}
+	return head
+}

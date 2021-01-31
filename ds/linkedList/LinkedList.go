@@ -19,6 +19,12 @@ type LinkedList struct {
 	Length int
 }
 
+type RandomListNode struct {
+	Val    int
+	Next   *RandomListNode
+	Random *RandomListNode
+}
+
 type Operation interface {
 	Add(x interface{})
 	Size() int
