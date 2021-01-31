@@ -13,16 +13,7 @@ func TestComponentLab(t *testing.T) {
 
 func linkedList() {
 	head := ArrayToLinkedList([]int{1, 2, 3, 4})
-	linkedList2.ReverseListL()
-	//dummy := &ListNode{}
-	cur := head
-	var pre *ListNode
-	for cur != nil {
-		tmp := cur.Next
-		cur.Next = pre
-		pre = cur
-		cur = tmp
-	}
+	cur := linkedList2.ReverseListR(head)
 
 	fmt.Println(LinkedListToArray(cur))
 }

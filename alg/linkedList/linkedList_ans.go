@@ -122,9 +122,9 @@ func ReverseListR(head *ListNode) *ListNode {
 	if head.Next == nil {
 		return head
 	}
-	last := ReverseListR(head.Next)
-	head.Next.Next = head
-	head.Next = nil
+	last := ReverseListR(head.Next) // 递推到最后把尾节点一直向上抛出，回归时的当前头节点就是上一个节点
+	head.Next.Next = head           // 头节点的下一个节点向前指向头节点形成循环链表(目标达成)
+	head.Next = nil                 // 头节点断开
 	return last
 }
 
@@ -492,22 +492,55 @@ func DeleteDuplicatesIIL(head *ListNode) *ListNode {
 	return dummy.Next
 }
 
-func SortedListToBST(head *ListNode) *TreeNode {
+// nlogn - logn
+func SortedListToBST1(head *ListNode) *TreeNode {
 	if head == nil {
 		return nil
 	}
 	slow, fast := head, head
 	var preSlow *ListNode
+	// 找到中间节点
 	for fast != nil && fast.Next != nil {
 		preSlow = slow
 		slow = slow.Next
 		fast = fast.Next.Next
 	}
+	// 根节点为中间值
 	root := &TreeNode{Val: slow.Val}
 	if preSlow != nil {
+		// 只传入前半段，即左子树
 		preSlow.Next = nil
-		root.Left = SortedListToBST(head)
+		root.Left = SortedListToBST1(head)
 	}
-	root.Right = SortedListToBST(slow.Next)
+	root.Right = SortedListToBST1(slow.Next)
 	return root
+}
+
+/*
+   0
+  / \
+-10  5
+   \  \
+    3  9
+*/
+
+// n - n
+func SortedListToBST2(head *ListNode) *TreeNode {
+	nums := []int{}
+	for head != nil {
+		nums = append(nums, head.Val)
+		head = head.Next
+	}
+	var build func(int, int) *TreeNode
+	build = func(start, end int) *TreeNode {
+		if start > end {
+			return nil
+		}
+		mid := (start + end) >> 1
+		root := &TreeNode{Val: nums[mid]}
+		root.Left = build(start, mid-1)
+		root.Right = build(mid+1, end)
+		return root
+	}
+	return build(0, len(nums)-1)
 }

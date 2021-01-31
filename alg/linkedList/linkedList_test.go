@@ -521,6 +521,12 @@ func DeleteDuplicatesIIR(head *ListNode) *ListNode {
   /   /
 -10  5
 
+   0
+  / \
+-10  5
+   \  \
+    3  9
+
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
@@ -529,5 +535,36 @@ func DeleteDuplicatesIIR(head *ListNode) *ListNode {
 
 func TestTree(t *testing.T) {
 	head := ArrayToLinkedList([]int{-10, -3, 0, 5, 9})
-	fmt.Println(TreeToArray(SortedListToBST(head)))
+	fmt.Println(TreeToArray(SortedListToBST1(head)))
+	head = ArrayToLinkedList([]int{-10, -3, 0, 5, 9})
+	fmt.Println(TreeToArray(SortedListToBST2(head)))
+	head = ArrayToLinkedList([]int{-10, -3, 0, 5, 9})
+	fmt.Println(TreeToArray(SortedListToBST3(head)))
+}
+
+func SortedListToBST3(head *ListNode) *TreeNode {
+	if head == nil {
+		return nil
+	}
+	cur, length := head, 0
+	for head != nil {
+		length++
+		head = head.Next
+	}
+	var buildBST func(int, int) *TreeNode
+	buildBST = func(start, end int) *TreeNode {
+		if start > end {
+			return nil
+		}
+		mid := (start + end) >> 1
+		// 只看左半
+		left := buildBST(start, mid-1)
+		root := &TreeNode{Val: cur.Val}
+		cur = cur.Next
+		root.Left = left
+		// 只看右半
+		root.Right = buildBST(mid+1, end)
+		return root
+	}
+	return buildBST(0, length-1)
 }
