@@ -700,3 +700,43 @@ func OddEvenList(head *ListNode) *ListNode {
 	odd.Next = evenHead
 	return head
 }
+
+func DetectCycle(head *ListNode) *ListNode {
+	slow, fast := head, head
+	for {
+		if fast == nil || fast.Next == nil {
+			return nil
+		}
+		slow = slow.Next
+		fast = fast.Next.Next
+		if fast == slow {
+			break
+		}
+	}
+	fast = head
+	for slow != fast {
+		fast = fast.Next
+		slow = slow.Next
+	}
+	return fast
+}
+
+func GetIntersectionNode(headA, headB *ListNode) *ListNode {
+	if headA == nil || headB == nil {
+		return nil
+	}
+	a, b := headA, headB
+	for a != b {
+		if a == nil {
+			a = headB
+		} else {
+			a = a.Next
+		}
+		if b == nil {
+			b = headA
+		} else {
+			b = b.Next
+		}
+	}
+	return a
+}

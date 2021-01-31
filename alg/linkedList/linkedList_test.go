@@ -660,22 +660,78 @@ func TestCir(t *testing.T) {
 	fmt.Println(DetectCycle(head))
 }
 
-func DetectCycle(head *ListNode) *ListNode {
-	slow, fast := head, head
-	for {
-		if fast == nil || fast.Next == nil {
-			return nil
-		}
-		slow = slow.Next
-		fast = fast.Next.Next
-		if fast == slow {
-			break
-		}
+/*编写一个程序，找到两个单链表相交的起始节点。
+
+示例 1：
+输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,0,1,8,4,5], skipA = 2, skipB = 3
+输出：Reference of the node with value = 8
+输入解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,0,1,8,4,5]。在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。
+
+示例 2：
+输入：intersectVal = 2, listA = [0,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1
+输出：Reference of the node with value = 2
+输入解释：相交节点的值为 2 （注意，如果两个链表相交则不能为 0）。从各自的表头开始算起，链表 A 为 [0,9,1,2,4]，链表 B 为 [3,2,4]。在 A 中，相交节点前有 3 个节点；在 B 中，相交节点前有 1 个节点。
+
+
+示例 3：
+输入：intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2
+输出：null
+输入解释：从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。由于这两个链表不相交，所以 intersectVal 必须为 0，而 skipA 和 skipB 可以是任意值。
+解释：这两个链表不相交，因此返回 null。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/intersection-of-two-linked-lists
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestGetIntersectionNode(t *testing.T) {
+	head := ArrayToLinkedList([]int{8, 4, 5})
+	a := ArrayToLinkedList([]int{4, 1})
+	b := ArrayToLinkedList([]int{5, 0, 1})
+	a.Next.Next = head
+	b.Next.Next.Next = head
+	fmt.Println(GetIntersectionNode(a, b).Val)
+}
+
+/*给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
+
+示例 1:
+输入: 1->2->3->4->5->NULL, k = 2
+输出: 4->5->1->2->3->NULL
+解释:
+向右旋转 1 步: 5->1->2->3->4->NULL
+向右旋转 2 步: 4->5->1->2->3->NULL
+
+示例 2:
+输入: 0->1->2->NULL, k = 4
+输出: 2->0->1->NULL
+解释:
+向右旋转 1 步: 2->0->1->NULL
+向右旋转 2 步: 1->2->0->NULL
+向右旋转 3 步: 0->1->2->NULL
+向右旋转 4 步: 2->0->1->NULL
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/rotate-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestRotateRight(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
+	fmt.Println(LinkedListToArray(RotateRight(head, 2)))
+}
+
+func RotateRight(head *ListNode, k int) *ListNode {
+	if head == nil {
+		return nil
 	}
-	fast = head
-	for slow != fast {
-		fast = fast.Next
-		slow = slow.Next
+	length, last := 1, head
+	for last.Next != nil {
+		length++
+		last = last.Next
 	}
-	return fast
+	last.Next = head
+	newHead := head
+	for i := 1; i < length-k%length; i++ {
+		newHead = newHead.Next
+	}
+	head, newHead.Next = newHead.Next, nil
+	return head
 }
