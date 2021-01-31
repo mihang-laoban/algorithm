@@ -661,7 +661,6 @@ func TestCir(t *testing.T) {
 }
 
 func DetectCycle(head *ListNode) *ListNode {
-	//slow, fast := head, head.Next
 	slow, fast := head, head
 	for {
 		if fast == nil || fast.Next == nil {
@@ -673,13 +672,6 @@ func DetectCycle(head *ListNode) *ListNode {
 			break
 		}
 	}
-	//for slow != fast {
-	//	if fast == nil || fast.Next == nil {
-	//		return nil
-	//	}
-	//	slow = slow.Next
-	//	fast = fast.Next.Next
-	//}
 	fast = head
 	for slow != fast {
 		fast = fast.Next
