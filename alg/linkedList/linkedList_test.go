@@ -10,12 +10,7 @@ import (
 func TestIsCircle(t *testing.T) {
 	node := GetCircleLink()
 	fmt.Println(IsCircular(node))
-	fmt.Println(isCircular(node))
 	TestLinkedList()
-}
-
-func isCircular(node *Node) bool {
-	return true
 }
 
 /*
@@ -580,4 +575,115 @@ func TestCopyRandomList(t *testing.T) {
 	newHead1 := CopyRandomList(head)
 	newHead2 := CopyRandomListNew(head)
 	fmt.Println(newHead1, newHead2)
+}
+
+/*对链表进行插入排序。
+
+插入排序的动画演示如上。从第一个元素开始，该链表可以被认为已经部分排序（用黑色表示）。
+每次迭代时，从输入数据中移除一个元素（用红色表示），并原地将其插入到已排好序的链表中。
+
+插入排序算法：
+插入排序是迭代的，每次只移动一个元素，直到所有元素可以形成一个有序的输出列表。
+每次迭代中，插入排序只从输入数据中移除一个待排序的元素，找到它在序列中适当的位置，并将其插入。
+重复直到所有输入数据插入完为止。
+
+示例 1：
+输入: 4->2->1->3
+输出: 1->2->3->4
+
+示例 2：
+输入: -1->5->3->4->0
+输出: -1->0->3->4->5
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/insertion-sort-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestInsertionSortList(t *testing.T) {
+	head := ArrayToLinkedList([]int{-1, 5, 3, 4, 0})
+	fmt.Println(LinkedListToArray(InsertionSortList(head)))
+}
+
+/*给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
+请尝试使用原地算法完成。你的算法的空间复杂度应为 O(1)，时间复杂度应为 O(nodes)，nodes 为节点总数。
+
+示例 1:
+输入: 1->2->3->4->5->NULL
+输出: 1->3->5->2->4->NULL
+
+示例 2:
+输入: 2->1->3->5->6->4->7->NULL
+输出: 2->3->6->7->1->5->4->NULL
+
+说明:
+应当保持奇数节点和偶数节点的相对顺序。
+链表的第一个节点视为奇数节点，第二个节点视为偶数节点，以此类推。*/
+
+func TestOddEvenList(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
+	fmt.Println(LinkedListToArray(OddEvenList(head)))
+}
+
+/*给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+说明：不允许修改给定的链表。
+
+进阶：
+你是否可以使用 O(1) 空间解决此题？
+
+示例 1：
+输入：head = [3,2,0,-4], pos = 1
+输出：返回索引为 1 的链表节点
+解释：链表中有一个环，其尾部连接到第二个节点。
+
+示例 2：
+输入：head = [1,2], pos = 0
+输出：返回索引为 0 的链表节点
+解释：链表中有一个环，其尾部连接到第一个节点。
+
+示例 3：
+输入：head = [1], pos = -1
+输出：返回 null
+解释：链表中没有环。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/linked-list-cycle-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestCir(t *testing.T) {
+	head := ArrayToLinkedList([]int{3, 2, 0, -1})
+	cur := head
+	for cur.Next != nil {
+		cur = cur.Next
+	}
+	cur.Next = head.Next
+	fmt.Println(DetectCycle(head))
+}
+
+func DetectCycle(head *ListNode) *ListNode {
+	//slow, fast := head, head.Next
+	slow, fast := head, head
+	for {
+		if fast == nil || fast.Next == nil {
+			return nil
+		}
+		slow = slow.Next
+		fast = fast.Next.Next
+		if fast == slow {
+			break
+		}
+	}
+	//for slow != fast {
+	//	if fast == nil || fast.Next == nil {
+	//		return nil
+	//	}
+	//	slow = slow.Next
+	//	fast = fast.Next.Next
+	//}
+	fast = head
+	for slow != fast {
+		fast = fast.Next
+		slow = slow.Next
+	}
+	return fast
 }

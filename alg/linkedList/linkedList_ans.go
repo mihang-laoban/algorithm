@@ -660,3 +660,43 @@ func DuplicateLinkedList(head *ListNode) *ListNode {
 	}
 	return head
 }
+
+func InsertionSortList(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+	dummy := &ListNode{Next: head}
+	lastSort, cur := head, head.Next
+	for cur != nil {
+		if lastSort.Val <= cur.Val {
+			lastSort = lastSort.Next
+		} else {
+			pre := dummy
+			// 从头找到第一个大于当前元素的元素
+			for pre.Next.Val <= cur.Val {
+				pre = pre.Next
+			}
+			lastSort.Next = cur.Next
+			cur.Next = pre.Next
+			pre.Next = cur
+		}
+		cur = lastSort.Next
+	}
+	return dummy.Next
+}
+
+func OddEvenList(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+	evenHead := head.Next
+	odd, even := head, head.Next
+	for even != nil && even.Next != nil {
+		odd.Next = even.Next
+		odd = odd.Next
+		even.Next = odd.Next
+		even = even.Next
+	}
+	odd.Next = evenHead
+	return head
+}
