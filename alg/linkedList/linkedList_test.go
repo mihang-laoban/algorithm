@@ -718,26 +718,8 @@ func TestRotateRight(t *testing.T) {
 	fmt.Println(LinkedListToArray(RotateRight(head, 2)))
 }
 
-func RotateRight(head *ListNode, k int) *ListNode {
-	if head == nil {
-		return nil
-	}
-	length, last := 1, head
-	for last.Next != nil {
-		length++
-		last = last.Next
-	}
-	last.Next = head
-	newHead := head
-	for i := 1; i < length-k%length; i++ {
-		newHead = newHead.Next
-	}
-	head, newHead.Next = newHead.Next, nil
-	return head
-}
-
-/*给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 index 个连续的部分。
-每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 nil。
+/*给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
+每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 null。
 这k个部分应该按照在链表中出现的顺序进行输出，并且排在前面的部分的长度应该大于或等于后面的长度。
 返回一个符合上述规则的链表的列表。
 
@@ -766,14 +748,15 @@ root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], index = 3
 
 func TestSplitListToParts(t *testing.T) {
 	head1 := ArrayToLinkedList([]int{1, 2, 3})
-	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	heads1 := SplitListToParts(head1, 5)
-	heads2 := SplitListToParts(head2, 3)
 	for i := 0; i < len(heads1); i++ {
-		fmt.Println(LinkedListToArray(heads1[i]))
+		fmt.Print(LinkedListToArray(heads1[i]), " ")
 	}
+	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7})
+	heads2 := SplitListToParts(head2, 3)
+	fmt.Println()
 	for i := 0; i < len(heads2); i++ {
-		fmt.Println(LinkedListToArray(heads2[i]))
+		fmt.Print(LinkedListToArray(heads2[i]), " ")
 	}
 }
 
@@ -831,4 +814,57 @@ func TestTreeToDoublyList(t *testing.T) {
 
 func TreeToDoublyList(root *TreeNode) *TreeNode {
 	return nil
+}
+
+/*编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+
+示例1:
+
+输入：[1, 2, 3, 3, 2, 1]
+输出：[1, 2, 3]
+示例2:
+
+输入：[1, 1, 1, 1, 2]
+输出：[1, 2]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/remove-duplicate-node-lcci
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestRemoveDuplicateNodes(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 3, 2, 1})
+	fmt.Println(LinkedListToArray(RemoveDuplicateNodes2(head)))
+}
+
+/*给你一个单链表的引用结点 head。链表中每个结点的值不是 0 就是 1。已知此链表是一个整数数字的二进制表示形式。
+请你返回该链表所表示数字的 十进制值 。
+
+示例 1：
+输入：head = [1,0,1]
+输出：5
+解释：二进制数 (101) 转化为十进制数 (5)
+
+示例 2：
+输入：head = [0]
+输出：0
+
+示例 3：
+输入：head = [1]
+输出：1
+
+示例 4：
+输入：head = [1,0,0,1,0,0,1,1,1,0,0,0,0,0,0]
+输出：18880
+
+示例 5：
+输入：head = [0,0]
+输出：0
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/convert-binary-number-in-a-linked-list-to-integer
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestGetDecimalValue(t *testing.T) {
+	//head := ArrayToLinkedList([]int{1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0})
+	head := ArrayToLinkedList([]int{1, 0, 1})
+	fmt.Println(GetDecimalValue(head))
 }

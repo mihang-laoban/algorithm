@@ -747,27 +747,80 @@ func SplitListToParts(root *ListNode, k int) []*ListNode {
 		cur = cur.Next
 		size++
 	}
-	width, rem, ans := size/k, size%k, make([]*ListNode, k)
+
+	width, rem, res := size/k, size%k, []*ListNode{}
 	cur = root
 	for i := 0; i < k; i++ {
-		head, good := cur, 0
+		head, seq := cur, 0
 		if i < rem {
-			good = 1
+			seq = 0
 		} else {
-			good = 0
+			seq = 1
 		}
-		for j := 0; j < width+good-1; j++ {
+		for j := 0; j < width-seq; j++ {
 			if cur != nil {
 				cur = cur.Next
 			}
 		}
 		if cur != nil {
-			prev := cur
-			cur, prev.Next = cur.Next, nil
+			pre := cur
+			cur = cur.Next
+			pre.Next = nil
 		}
-		ans[i] = head
+		res = append(res, head)
 	}
-	return ans
+	return res
+}
+
+func RotateRight(head *ListNode, k int) *ListNode {
+	if head == nil {
+		return nil
+	}
+	length, last := 1, head
+	for last.Next != nil {
+		length++
+		last = last.Next
+	}
+	last.Next = head
+	newHead := head
+	for i := 1; i < length-k%length; i++ {
+		newHead = newHead.Next
+	}
+	head, newHead.Next = newHead.Next, nil
+	return head
+}
+
+func RemoveDuplicateNodes1(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+	record := map[int]bool{}
+	record[head.Val] = true
+	cur := head
+	for cur.Next != nil {
+		// 如果存在，删除当前联表
+		if record[cur.Next.Val] {
+			cur.Next = cur.Next.Next
+		} else {
+			// 如果当前值不存在，记录
+			record[cur.Next.Val] = true
+			cur = cur.Next
+		}
+	}
+	return head
+}
+
+func RemoveDuplicateNodes2(head *ListNode) *ListNode {
+	a, pre := map[int]bool{}, head
+	for cur := head; cur != nil; cur = cur.Next {
+		if _, ok := a[cur.Val]; ok {
+			pre.Next = cur.Next
+		} else {
+			a[cur.Val] = true
+			pre = cur
+		}
+	}
+	return head
 }
 
 /*设计一个电话目录管理系统，让它支持以下功能：
@@ -848,4 +901,13 @@ func (this *PhoneDirectory) Release(number int) {
 		this.index--
 		this.nums[this.index] = number
 	}
+}
+
+func GetDecimalValue(head *ListNode) int {
+	res := 0
+	for head != nil {
+		res = res<<1 + head.Val
+		head = head.Next
+	}
+	return res
 }

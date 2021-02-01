@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-func TestComponentLab(t *testing.T) {
-	linkedList()
+func TestAlgorithmComponentsBreakLab(t *testing.T) {
+
 }
 
 func linkedList() {
