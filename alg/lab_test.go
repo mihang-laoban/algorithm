@@ -5,7 +5,11 @@ import (
 	"testing"
 )
 
-func Test算法组件拆解训练(t *testing.T) {
+var test132 struct {
+	as map[string]map[string]map[string]string
+}
+
+func TestAlgorithmComponentsBreakLab(t *testing.T) {
 	链表()
 }
 
