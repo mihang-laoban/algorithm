@@ -765,11 +765,11 @@ root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 3
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestSplitListToParts(t *testing.T) {
-	//head1 := ArrayToLinkedList([]int{1, 2, 3})
-	//heads1 := SplitListToParts(head1, 5)
-	//for i := 0; i < len(heads1); i++ {
-	//	fmt.Print(LinkedListToArray(heads1[i]), " ")
-	//}
+	head1 := ArrayToLinkedList([]int{1, 2, 3})
+	heads1 := SplitListToParts(head1, 5)
+	for i := 0; i < len(heads1); i++ {
+		fmt.Print(LinkedListToArray(heads1[i]), " ")
+	}
 	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7, 8})
 	heads2 := SplitListToParts(head2, 3)
 	fmt.Println()
@@ -789,13 +789,13 @@ func SplitListToParts(root *ListNode, k int) []*ListNode {
 	width, rem, ans := size/k, size%k, []*ListNode{}
 	cur = root
 	for i := 0; i < k; i++ {
-		head, sep := cur, 0
+		head, seq := cur, 0
 		if i < rem {
-			sep = 1
+			seq = 1
 		} else {
-			sep = 0
+			seq = 0
 		}
-		for j := 0; j < width+sep-1; j++ {
+		for j := 0; j < width+seq-1; j++ {
 			if cur != nil {
 				cur = cur.Next
 			}
