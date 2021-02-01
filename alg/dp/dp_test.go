@@ -20,7 +20,7 @@ func TestExchangeMinCount(t *testing.T) {
 
 /*示例：
 
-输入：W = 5, N = 3
+输入：W = 5, total = 3
 w = [3, 2, 1], v = [5, 2, 3]
 输出：15
 解释：当 i = 2 时，选取 5 次，总价值为 5 * 3 = 15。

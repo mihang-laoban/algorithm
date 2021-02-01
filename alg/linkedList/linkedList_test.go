@@ -65,14 +65,14 @@ func TestSwapPairs(t *testing.T) {
 	fmt.Println(LinkedListToArray(SwapPairsL(head)))
 }
 
-/*给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
-k 是一个正整数，它的值小于或等于链表的长度。
-如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+/*给你一个链表，每 index 个节点一组进行翻转，请你返回翻转后的链表。
+index 是一个正整数，它的值小于或等于链表的长度。
+如果节点总数不是 index 的整数倍，那么请将最后剩余的节点保持原有顺序。
 
 示例：
 给你这个链表：1->2->3->4->5
-当 k = 2 时，应当返回: 2->1->4->3->5
-当 k = 3 时，应当返回: 3->2->1->4->5
+当 index = 2 时，应当返回: 2->1->4->3->5
+当 index = 3 时，应当返回: 3->2->1->4->5
 
 说明：
 你的算法只能使用常数的额外空间。
@@ -400,16 +400,16 @@ func TestRemoveElements(t *testing.T) {
 	fmt.Println(LinkedListToArray(RemoveElements(head, 1)))
 }
 
-/*实现一种算法，找出单向链表中倒数第 k 个节点。返回该节点的值。
+/*实现一种算法，找出单向链表中倒数第 index 个节点。返回该节点的值。
 
 注意：本题相对原题稍作改动
 示例：
 
-输入： 1->2->3->4->5 和 k = 2
+输入： 1->2->3->4->5 和 index = 2
 输出： 4
 说明：
 
-给定的 k 保证是有效的。
+给定的 index 保证是有效的。
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/kth-node-from-end-of-list-lcci
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
@@ -508,7 +508,7 @@ func DeleteDuplicatesIIR(head *ListNode) *ListNode {
 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
 示例:
 给定的有序链表： [-10, -3, 0, 5, 9],
-一个可能的答案是：[0, -3, 9, -10, null, 5], 它可以表示下面这个高度平衡二叉搜索树：
+一个可能的答案是：[0, -3, 9, -10, nil, 5], 它可以表示下面这个高度平衡二叉搜索树：
 
      0
     / \
@@ -541,25 +541,25 @@ func TestTree(t *testing.T) {
 要求返回这个链表的 深拷贝。
 我们用一个由 n 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 [val, random_index] 表示：
 val：一个表示 RandomListNode.val 的整数。
-random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为  null 。
+random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为  nil 。
 
 示例 1：
 
-输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
-输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+输入：head = [[7,nil],[13,0],[11,4],[10,2],[1,0]]
+输出：[[7,nil],[13,0],[11,4],[10,2],[1,0]]
 
 示例 2：
 输入：head = [[1,1],[2,1]]
 输出：[[1,1],[2,1]]
 示例 3：
 
-输入：head = [[3,null],[3,0],[3,null]]
-输出：[[3,null],[3,0],[3,null]]
+输入：head = [[3,nil],[3,0],[3,nil]]
+输出：[[3,nil],[3,0],[3,nil]]
 示例 4：
 
 输入：head = []
 输出：[]
-解释：给定的链表为空（空指针），因此返回 null。
+解释：给定的链表为空（空指针），因此返回 nil。
 
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/copy-list-with-random-pointer
@@ -624,7 +624,7 @@ func TestOddEvenList(t *testing.T) {
 	fmt.Println(LinkedListToArray(OddEvenList(head)))
 }
 
-/*给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+/*给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 nil。
 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
 说明：不允许修改给定的链表。
 
@@ -643,7 +643,7 @@ func TestOddEvenList(t *testing.T) {
 
 示例 3：
 输入：head = [1], pos = -1
-输出：返回 null
+输出：返回 nil
 解释：链表中没有环。
 
 来源：力扣（LeetCode）
@@ -675,9 +675,9 @@ func TestCir(t *testing.T) {
 
 示例 3：
 输入：intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2
-输出：null
+输出：nil
 输入解释：从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。由于这两个链表不相交，所以 intersectVal 必须为 0，而 skipA 和 skipB 可以是任意值。
-解释：这两个链表不相交，因此返回 null。
+解释：这两个链表不相交，因此返回 nil。
 
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/intersection-of-two-linked-lists
@@ -692,17 +692,17 @@ func TestGetIntersectionNode(t *testing.T) {
 	fmt.Println(GetIntersectionNode(a, b).Val)
 }
 
-/*给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
+/*给定一个链表，旋转链表，将链表每个节点向右移动 index 个位置，其中 index 是非负数。
 
 示例 1:
-输入: 1->2->3->4->5->NULL, k = 2
+输入: 1->2->3->4->5->NULL, index = 2
 输出: 4->5->1->2->3->NULL
 解释:
 向右旋转 1 步: 5->1->2->3->4->NULL
 向右旋转 2 步: 4->5->1->2->3->NULL
 
 示例 2:
-输入: 0->1->2->NULL, k = 4
+输入: 0->1->2->NULL, index = 4
 输出: 2->0->1->NULL
 解释:
 向右旋转 1 步: 2->0->1->NULL
@@ -736,26 +736,26 @@ func RotateRight(head *ListNode, k int) *ListNode {
 	return head
 }
 
-/*给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
-每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 null。
+/*给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 index 个连续的部分。
+每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 nil。
 这k个部分应该按照在链表中出现的顺序进行输出，并且排在前面的部分的长度应该大于或等于后面的长度。
 返回一个符合上述规则的链表的列表。
 
-举例： 1->2->3->4, k = 5 // 5 结果 [ [1], [2], [3], [4], null ]
+举例： 1->2->3->4, index = 5 // 5 结果 [ [1], [2], [3], [4], nil ]
 
 示例 1：
 输入:
-root = [1, 2, 3], k = 5
+root = [1, 2, 3], index = 5
 输出: [[1],[2],[3],[],[]]
 解释:
 输入输出各部分都应该是链表，而不是数组。
-例如, 输入的结点 root 的 val= 1, root.next.val = 2, \root.next.next.val = 3, 且 root.next.next.next = null。
-第一个输出 output[0] 是 output[0].val = 1, output[0].next = null。
-最后一个元素 output[4] 为 null, 它代表了最后一个部分为空链表。
+例如, 输入的结点 root 的 val= 1, root.next.val = 2, \root.next.next.val = 3, 且 root.next.next.next = nil。
+第一个输出 output[0] 是 output[0].val = 1, output[0].next = nil。
+最后一个元素 output[4] 为 nil, 它代表了最后一个部分为空链表。
 
 示例 2：
 输入:
-root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 3
+root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], index = 3
 输出: [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]]
 解释:
 输入被分成了几个连续的部分，并且每部分的长度相差不超过1.前面部分的长度大于等于后面部分的长度。
@@ -777,31 +777,58 @@ func TestSplitListToParts(t *testing.T) {
 	}
 }
 
-func SplitListToParts(root *ListNode, k int) []*ListNode {
-	cur, size := root, 0
-	for cur != nil {
-		cur = cur.Next
-		size++
-	}
-	width, rem, ans := size/k, size%k, make([]*ListNode, k)
-	cur = root
-	for i := 0; i < k; i++ {
-		head, good := cur, 0
-		if i < rem {
-			good = 1
-		} else {
-			good = 0
-		}
-		for j := 0; j < width+good-1; j++ {
-			if cur != nil {
-				cur = cur.Next
-			}
-		}
-		if cur != nil {
-			prev := cur
-			cur, prev.Next = cur.Next, nil
-		}
-		ans[i] = head
-	}
-	return ans
+func TestPhoneDirectory(t *testing.T) {
+	// 初始化电话目录，包括 3 个电话号码：0，1 和 2。
+	directory := DirConstructor(3)
+	// 可以返回任意未分配的号码，这里我们假设它返回 0。
+	fmt.Print(directory.Get(), " ")
+	// 假设，函数返回 1。
+	fmt.Print(directory.Get(), " ")
+	// 号码 2 未分配，所以返回为 true。
+	fmt.Print(directory.Check(2), " ")
+	// 返回 2，分配后，只剩一个号码未被分配。
+	fmt.Print(directory.Get(), " ")
+	// 此时，号码 2 已经被分配，所以返回 false。
+	fmt.Print(directory.Check(2), " ")
+	// 释放号码 2，将该号码变回未分配状态。
+	directory.Release(2)
+	// 号码 2 现在是未分配状态，所以返回 true。
+	fmt.Print(directory.Check(2), " ")
+	fmt.Println()
+}
+
+/*将一个 二叉搜索树 就地转化为一个 已排序的双向循环链表 。
+对于双向循环列表，你可以将左右孩子指针作为双向循环链表的前驱和后继指针，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
+特别地，我们希望可以 就地 完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中最小元素的指针。
+
+示例 1：
+输入：root = [4,2,5,1,3]
+输出：[1,2,3,4,5]
+解释：下图显示了转化后的二叉搜索树，实线表示后继关系，虚线表示前驱关系。
+
+示例 2：
+输入：root = [2,1,3]
+输出：[1,2,3]
+
+示例 3：
+输入：root = []
+输出：[]
+解释：输入是空树，所以输出也是空链表。
+
+示例 4：
+输入：root = [1]
+输出：[1]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/convert-binary-search-tree-to-sorted-doubly-linked-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestTreeToDoublyList(t *testing.T) {
+	head := ArrayToTree([]interface{}{4, 2, 5, 1, 3})
+	new1 := TreeToDoublyList(head)
+	fmt.Println(TreeToArray(new1))
+}
+
+func TreeToDoublyList(root *TreeNode) *TreeNode {
+	return nil
 }

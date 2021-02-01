@@ -740,3 +740,112 @@ func GetIntersectionNode(headA, headB *ListNode) *ListNode {
 	}
 	return a
 }
+
+func SplitListToParts(root *ListNode, k int) []*ListNode {
+	cur, size := root, 0
+	for cur != nil {
+		cur = cur.Next
+		size++
+	}
+	width, rem, ans := size/k, size%k, make([]*ListNode, k)
+	cur = root
+	for i := 0; i < k; i++ {
+		head, good := cur, 0
+		if i < rem {
+			good = 1
+		} else {
+			good = 0
+		}
+		for j := 0; j < width+good-1; j++ {
+			if cur != nil {
+				cur = cur.Next
+			}
+		}
+		if cur != nil {
+			prev := cur
+			cur, prev.Next = cur.Next, nil
+		}
+		ans[i] = head
+	}
+	return ans
+}
+
+/*设计一个电话目录管理系统，让它支持以下功能：
+	get: 分配给用户一个未被使用的电话号码，获取失败请返回 -1
+	check: 检查指定的电话号码是否被使用
+	release: 释放掉一个电话号码，使其能够重新被分配
+
+示例：
+// 初始化电话目录，包括 3 个电话号码：0，1 和 2。
+PhoneDirectory2 directory = new PhoneDirectory2(3);
+
+// 可以返回任意未分配的号码，这里我们假设它返回 0。
+directory.get();
+
+// 假设，函数返回 1。
+directory.get();
+
+// 号码 2 未分配，所以返回为 true。
+directory.check(2);
+
+// 返回 2，分配后，只剩一个号码未被分配。
+directory.get();
+
+// 此时，号码 2 已经被分配，所以返回 false。
+directory.check(2);
+
+// 释放号码 2，将该号码变回未分配状态。
+directory.release(2);
+
+// 号码 2 现在是未分配状态，所以返回 true。
+directory.check(2);
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/design-phone-directory
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+type PhoneDirectory struct {
+	nums         []int
+	used         []bool
+	total, index int
+}
+
+/** Initialize your data structure here
+  @param maxNumbers - The maximum numbers that can be stored in the phone directory. */
+func DirConstructor(maxNumbers int) PhoneDirectory {
+	dir := PhoneDirectory{total: maxNumbers}
+	dir.used = make([]bool, maxNumbers)
+	for i := 0; i < maxNumbers; i++ {
+		dir.nums = append(dir.nums, i)
+	}
+	return dir
+}
+
+/** Provide a number which is not assigned to anyone.
+  @return - Return an available number. Return -1 if none is available. */
+func (this *PhoneDirectory) Get() int {
+	if this.index >= this.total {
+		return -1
+	}
+	val := this.nums[this.index]
+	this.index++
+	this.used[val] = true
+	return val
+}
+
+/** Check if a number is available or not. */
+func (this *PhoneDirectory) Check(number int) bool {
+	if number < this.total {
+		return !this.used[number]
+	}
+	return false
+}
+
+/** Recycle or release a number. */
+func (this *PhoneDirectory) Release(number int) {
+	if number < this.total && this.used[number] {
+		this.used[number] = false
+		this.index--
+		this.nums[this.index] = number
+	}
+}
