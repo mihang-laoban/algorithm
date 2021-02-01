@@ -765,43 +765,47 @@ root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 3
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestSplitListToParts(t *testing.T) {
-	head1 := ArrayToLinkedList([]int{1, 2, 3})
-	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-	heads1 := SplitListToParts(head1, 5)
+	//head1 := ArrayToLinkedList([]int{1, 2, 3})
+	//heads1 := SplitListToParts(head1, 5)
+	//for i := 0; i < len(heads1); i++ {
+	//	fmt.Print(LinkedListToArray(heads1[i]), " ")
+	//}
+	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7, 8})
 	heads2 := SplitListToParts(head2, 3)
-	for i := 0; i < len(heads1); i++ {
-		fmt.Println(LinkedListToArray(heads1[i]))
-	}
+	fmt.Println()
 	for i := 0; i < len(heads2); i++ {
-		fmt.Println(LinkedListToArray(heads2[i]))
+		fmt.Print(LinkedListToArray(heads2[i]), " ")
 	}
 }
 
 func SplitListToParts(root *ListNode, k int) []*ListNode {
+	// 统计链表长度
 	cur, size := root, 0
 	for cur != nil {
 		cur = cur.Next
 		size++
 	}
-	width, rem, ans := size/k, size%k, make([]*ListNode, k)
+	// 结果子数组数量，子数组中元素的数量
+	width, rem, ans := size/k, size%k, []*ListNode{}
 	cur = root
 	for i := 0; i < k; i++ {
-		head, good := cur, 0
+		head, sep := cur, 0
 		if i < rem {
-			good = 1
+			sep = 1
 		} else {
-			good = 0
+			sep = 0
 		}
-		for j := 0; j < width+good-1; j++ {
+		for j := 0; j < width+sep-1; j++ {
 			if cur != nil {
 				cur = cur.Next
 			}
 		}
 		if cur != nil {
-			prev := cur
-			cur, prev.Next = cur.Next, nil
+			pre := cur
+			cur = cur.Next
+			pre.Next = nil
 		}
-		ans[i] = head
+		ans = append(ans, head)
 	}
 	return ans
 }
