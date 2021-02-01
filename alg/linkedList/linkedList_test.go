@@ -770,7 +770,7 @@ func TestSplitListToParts(t *testing.T) {
 	for i := 0; i < len(heads1); i++ {
 		fmt.Print(LinkedListToArray(heads1[i]), " ")
 	}
-	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7})
 	heads2 := SplitListToParts(head2, 3)
 	fmt.Println()
 	for i := 0; i < len(heads2); i++ {
@@ -779,23 +779,21 @@ func TestSplitListToParts(t *testing.T) {
 }
 
 func SplitListToParts(root *ListNode, k int) []*ListNode {
-	// 统计链表长度
 	cur, size := root, 0
 	for cur != nil {
 		cur = cur.Next
 		size++
 	}
-	// 结果子数组数量，子数组中元素的数量
-	width, rem, ans := size/k, size%k, []*ListNode{}
+	width, rem, res := size/k, size%k, []*ListNode{}
 	cur = root
 	for i := 0; i < k; i++ {
 		head, seq := cur, 0
 		if i < rem {
-			seq = 1
-		} else {
 			seq = 0
+		} else {
+			seq = 1
 		}
-		for j := 0; j < width+seq-1; j++ {
+		for j := 0; j < width-seq; j++ {
 			if cur != nil {
 				cur = cur.Next
 			}
@@ -805,7 +803,7 @@ func SplitListToParts(root *ListNode, k int) []*ListNode {
 			cur = cur.Next
 			pre.Next = nil
 		}
-		ans = append(ans, head)
+		res = append(res, head)
 	}
-	return ans
+	return res
 }
