@@ -760,6 +760,92 @@ func TestSplitListToParts(t *testing.T) {
 	}
 }
 
+/*编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+
+示例1:
+
+输入：[1, 2, 3, 3, 2, 1]
+输出：[1, 2, 3]
+示例2:
+
+输入：[1, 1, 1, 1, 2]
+输出：[1, 2]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/remove-duplicate-node-lcci
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestRemoveDuplicateNodes(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 3, 2, 1})
+	fmt.Println(LinkedListToArray(RemoveDuplicateNodes2(head)))
+}
+
+/*给你一个单链表的引用结点 head。链表中每个结点的值不是 0 就是 1。已知此链表是一个整数数字的二进制表示形式。
+请你返回该链表所表示数字的 十进制值 。
+
+示例 1：
+输入：head = [1,0,1]
+输出：5
+解释：二进制数 (101) 转化为十进制数 (5)
+
+示例 2：
+输入：head = [0]
+输出：0
+
+示例 3：
+输入：head = [1]
+输出：1
+
+示例 4：
+输入：head = [1,0,0,1,0,0,1,1,1,0,0,0,0,0,0]
+输出：18880
+
+示例 5：
+输入：head = [0,0]
+输出：0
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/convert-binary-number-in-a-linked-list-to-integer
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestGetDecimalValue(t *testing.T) {
+	//head := ArrayToLinkedList([]int{1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0})
+	head := ArrayToLinkedList([]int{1, 0, 1})
+	fmt.Println(GetDecimalValue(head))
+}
+
+/*设计一个电话目录管理系统，让它支持以下功能：
+	get: 分配给用户一个未被使用的电话号码，获取失败请返回 -1
+	check: 检查指定的电话号码是否被使用
+	release: 释放掉一个电话号码，使其能够重新被分配
+
+示例：
+// 初始化电话目录，包括 3 个电话号码：0，1 和 2。
+PhoneDirectory2 directory = new PhoneDirectory2(3);
+
+// 可以返回任意未分配的号码，这里我们假设它返回 0。
+directory.get();
+
+// 假设，函数返回 1。
+directory.get();
+
+// 号码 2 未分配，所以返回为 true。
+directory.check(2);
+
+// 返回 2，分配后，只剩一个号码未被分配。
+directory.get();
+
+// 此时，号码 2 已经被分配，所以返回 false。
+directory.check(2);
+
+// 释放号码 2，将该号码变回未分配状态。
+directory.release(2);
+
+// 号码 2 现在是未分配状态，所以返回 true。
+directory.check(2);
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/design-phone-directory
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 func TestPhoneDirectory(t *testing.T) {
 	// 初始化电话目录，包括 3 个电话号码：0，1 和 2。
 	directory := DirConstructor(3)
@@ -814,57 +900,4 @@ func TestTreeToDoublyList(t *testing.T) {
 
 func TreeToDoublyList(root *TreeNode) *TreeNode {
 	return nil
-}
-
-/*编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
-
-示例1:
-
-输入：[1, 2, 3, 3, 2, 1]
-输出：[1, 2, 3]
-示例2:
-
-输入：[1, 1, 1, 1, 2]
-输出：[1, 2]
-
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/remove-duplicate-node-lcci
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
-
-func TestRemoveDuplicateNodes(t *testing.T) {
-	head := ArrayToLinkedList([]int{1, 2, 3, 3, 2, 1})
-	fmt.Println(LinkedListToArray(RemoveDuplicateNodes2(head)))
-}
-
-/*给你一个单链表的引用结点 head。链表中每个结点的值不是 0 就是 1。已知此链表是一个整数数字的二进制表示形式。
-请你返回该链表所表示数字的 十进制值 。
-
-示例 1：
-输入：head = [1,0,1]
-输出：5
-解释：二进制数 (101) 转化为十进制数 (5)
-
-示例 2：
-输入：head = [0]
-输出：0
-
-示例 3：
-输入：head = [1]
-输出：1
-
-示例 4：
-输入：head = [1,0,0,1,0,0,1,1,1,0,0,0,0,0,0]
-输出：18880
-
-示例 5：
-输入：head = [0,0]
-输出：0
-
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/convert-binary-number-in-a-linked-list-to-integer
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
-func TestGetDecimalValue(t *testing.T) {
-	//head := ArrayToLinkedList([]int{1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0})
-	head := ArrayToLinkedList([]int{1, 0, 1})
-	fmt.Println(GetDecimalValue(head))
 }
