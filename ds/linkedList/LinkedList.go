@@ -4,19 +4,20 @@ import (
 	"fmt"
 )
 
-type Node struct {
-	Next *Node
-	Val  interface{}
-}
-
 type ListNode struct {
 	Val  int
 	Next *ListNode
 }
 
 type LinkedList struct {
-	Head   *Node
+	Head   *ListNode
 	Length int
+}
+
+type RandomListNode struct {
+	Val    int
+	Next   *RandomListNode
+	Random *RandomListNode
 }
 
 type Operation interface {
@@ -44,7 +45,7 @@ func (LinkedList *LinkedList) IsEmpty() bool         { return LinkedList.Head ==
 func (LinkedList *LinkedList) _append(x interface{}) {
 	if LinkedList.Head == nil {
 		LinkedList.Length++
-		LinkedList.Head = &Node{Val: x}
+		LinkedList.Head = &ListNode{Val: x.(int)}
 		return
 	}
 	tmp := LinkedList.Head
@@ -52,7 +53,7 @@ func (LinkedList *LinkedList) _append(x interface{}) {
 	for tmp.Next != nil {
 		tmp = tmp.Next
 	}
-	tmp.Next = &Node{Val: x}
+	tmp.Next = &ListNode{Val: x.(int)}
 }
 
 func _innerDisplay(LinkedList *LinkedList) {
@@ -64,7 +65,7 @@ func _innerDisplay(LinkedList *LinkedList) {
 	fmt.Println()
 }
 
-func (LinkedList *LinkedList) _display(node *Node) {
+func (LinkedList *LinkedList) _display(node *ListNode) {
 	tmp := node
 	for tmp != nil {
 		fmt.Printf("%d => ", tmp.Val)
@@ -73,16 +74,16 @@ func (LinkedList *LinkedList) _display(node *Node) {
 	fmt.Println()
 }
 
-func (LinkedList *LinkedList) _displayR(node *Node) {
+func (LinkedList *LinkedList) _displayR(node *ListNode) {
 	fmt.Print(node.Val)
 	if node.Next != nil {
 		LinkedList._displayR(node.Next)
 	}
 }
 
-func (LinkedList *LinkedList) ReverseL(head *Node) *Node {
+func (LinkedList *LinkedList) ReverseL(head *ListNode) *ListNode {
 	cur := head
-	var pre *Node
+	var pre *ListNode
 	for cur != nil {
 		tmp := cur.Next
 		cur.Next = pre
@@ -92,7 +93,7 @@ func (LinkedList *LinkedList) ReverseL(head *Node) *Node {
 	return pre
 }
 
-func (LinkedList *LinkedList) _reverseR(head *Node) *Node {
+func (LinkedList *LinkedList) _reverseR(head *ListNode) *ListNode {
 	if head.Next == nil {
 		return head
 	}
@@ -102,9 +103,9 @@ func (LinkedList *LinkedList) _reverseR(head *Node) *Node {
 	return last
 }
 
-func (LinkedList *LinkedList) _prepend(x interface{}) *Node {
+func (LinkedList *LinkedList) _prepend(x interface{}) *ListNode {
 	LinkedList.Length++
-	tmp := &Node{Val: x}
+	tmp := &ListNode{Val: x.(int)}
 	tmp.Next = LinkedList.Head
 	return tmp
 }
@@ -125,22 +126,25 @@ func TestLinkedList() {
 	fmt.Println(node.Size())
 }
 
-func IsCircular(head *Node) bool {
+func IsCircular(head *ListNode) bool {
 	if head == nil || head.Next == nil {
 		return false
 	}
-	slow, fast := head, head.Next
-	for slow != fast {
+	slow, fast := head, head
+	for {
 		if fast == nil || fast.Next == nil {
 			return false
 		}
 		slow = slow.Next
 		fast = fast.Next.Next
+		if fast == slow {
+			break
+		}
 	}
 	return true
 }
 
-func circle(root *Node) {
+func circle(root *ListNode) {
 	second := root.Next
 	for root.Next != nil {
 		root = root.Next
@@ -148,7 +152,7 @@ func circle(root *Node) {
 	root.Next = second
 }
 
-func GetCircleLink() *Node {
+func GetCircleLink() *ListNode {
 	node := LinkedList{}
 	arr := []int{3, 2, 0, -4}
 	for _, v := range arr {

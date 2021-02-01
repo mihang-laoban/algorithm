@@ -122,20 +122,27 @@ func ReverseListR(head *ListNode) *ListNode {
 	if head.Next == nil {
 		return head
 	}
-	last := ReverseListR(head.Next)
-	head.Next.Next = head
-	head.Next = nil
+	last := ReverseListR(head.Next) // 递推到最后把尾节点一直向上抛出，回归时的当前头节点就是上一个节点
+	head.Next.Next = head           // 头节点的下一个节点向前指向头节点形成循环链表(目标达成)
+	head.Next = nil                 // 头节点断开
 	return last
 }
 
+/*
+	关键步骤：
+	1.需要当前节点指向前面一个节点，由于要继续遍历，需要保存当前节点的后继节点，所以我们需要先记录 tmp := cur.Next
+	2.当前节点可以指向前驱节点了, cur.Next = pre
+	3.此时，前驱节点可以更新为当前节点了 pre = cur
+	4.继续看后面的元素，当前节点指向之前预存的后继节点cur = tmp
+*/
 func ReverseListL(head *ListNode) *ListNode {
 	cur := head
 	var pre *ListNode
 	for cur != nil {
-		tmp := cur.Next
-		cur.Next = pre
-		pre = cur
-		cur = tmp
+		tmp := cur.Next // 存出后续节点 tmp = 2 > 3 > 4
+		cur.Next = pre  // 头节点的后继节点指向前驱节点 cur(1) > pre(nil)
+		pre = cur       // 前驱节点替换为当前节点 pre = 1 > nil
+		cur = tmp       // 当前节点替换为存储的后续节点 cur = 2 > 3 > 4
 	}
 	return pre
 }
@@ -485,22 +492,251 @@ func DeleteDuplicatesIIL(head *ListNode) *ListNode {
 	return dummy.Next
 }
 
-func SortedListToBST(head *ListNode) *TreeNode {
+// nlogn - logn
+func SortedListToBST1(head *ListNode) *TreeNode {
 	if head == nil {
 		return nil
 	}
 	slow, fast := head, head
-	var preSlow *ListNode = nil
+	var preSlow *ListNode
+	// 找到中间节点
 	for fast != nil && fast.Next != nil {
 		preSlow = slow
 		slow = slow.Next
 		fast = fast.Next.Next
 	}
+	// 根节点为中间值
 	root := &TreeNode{Val: slow.Val}
 	if preSlow != nil {
+		// 只传入前半段，即左子树
 		preSlow.Next = nil
-		root.Left = SortedListToBST(head)
+		root.Left = SortedListToBST1(head)
 	}
-	root.Right = SortedListToBST(slow.Next)
+	root.Right = SortedListToBST1(slow.Next)
 	return root
+}
+
+/*
+   0
+  / \
+-10  5
+   \  \
+    3  9
+*/
+
+// n - n
+func SortedListToBST2(head *ListNode) *TreeNode {
+	nums := []int{}
+	for head != nil {
+		nums = append(nums, head.Val)
+		head = head.Next
+	}
+	var build func(int, int) *TreeNode
+	build = func(start, end int) *TreeNode {
+		if start > end {
+			return nil
+		}
+		mid := (start + end) >> 1
+		root := &TreeNode{Val: nums[mid]}
+		root.Left = build(start, mid-1)
+		root.Right = build(mid+1, end)
+		return root
+	}
+	return build(0, len(nums)-1)
+}
+
+// n - logn
+func SortedListToBST3(head *ListNode) *TreeNode {
+	if head == nil {
+		return nil
+	}
+	cur, length := head, 0
+	for head != nil {
+		length++
+		head = head.Next
+	}
+	var buildBST func(int, int) *TreeNode
+	buildBST = func(start, end int) *TreeNode {
+		if start > end {
+			return nil
+		}
+		mid := (start + end) >> 1
+		// 只看左半
+		left := buildBST(start, mid-1)
+		root := &TreeNode{Val: cur.Val}
+		cur = cur.Next
+		root.Left = left
+		// 只看右半
+		root.Right = buildBST(mid+1, end)
+		return root
+	}
+	return buildBST(0, length-1)
+}
+
+func GetRandomList(nums [][]interface{}) *RandomListNode {
+	dummy := &RandomListNode{}
+	pre := dummy
+	nodeMap := map[int]*RandomListNode{}
+	arr := []*RandomListNode{}
+	for i := 0; i < len(nums); i++ {
+		cur := &RandomListNode{
+			Val:    nums[i][0].(int),
+			Next:   nil,
+			Random: nil,
+		}
+		arr = append(arr, cur)
+		nodeMap[i] = cur
+		pre.Next = cur
+		pre = pre.Next
+	}
+	for i := 0; i < len(nums); i++ {
+		if nums[i][1] != nil {
+			arr[i].Random = nodeMap[nums[i][1].(int)]
+		}
+	}
+	return dummy.Next
+}
+
+func CopyRandomListNew(head *RandomListNode) *RandomListNode {
+	if head == nil {
+		return nil
+	}
+	// 复制链表
+	cur := head
+	for cur != nil {
+		tmp := &RandomListNode{Val: cur.Val}
+		tmp.Next = cur.Next
+		cur.Next = tmp
+		cur = tmp.Next
+	}
+	// 处理random
+	cur = head
+	for cur != nil {
+		if cur.Random != nil {
+			cur.Next.Random = cur.Random.Next
+		}
+		cur = cur.Next.Next
+	}
+	// 拆分链表
+	first, second, tmp := head, head.Next, head.Next
+	for first != nil {
+		first.Next = first.Next.Next
+		if second.Next != nil {
+			second.Next = second.Next.Next
+		}
+		first, second = first.Next, second.Next
+	}
+	return tmp
+}
+
+func CopyRandomList(head *RandomListNode) *RandomListNode {
+	visited := map[*RandomListNode]*RandomListNode{}
+	var copyNodesR func(*RandomListNode) *RandomListNode
+	copyNodesR = func(head *RandomListNode) *RandomListNode {
+		if head == nil {
+			return head
+		}
+		if v, ok := visited[head]; ok {
+			if ok {
+				return v
+			}
+		}
+		node := &RandomListNode{Val: head.Val}
+		visited[head] = node
+		node.Next = copyNodesR(head.Next)
+		node.Random = copyNodesR(head.Random)
+		return node
+	}
+	return copyNodesR(head)
+}
+
+func DuplicateLinkedList(head *ListNode) *ListNode {
+	cur := head
+	for cur != nil {
+		tmp := &ListNode{Val: cur.Val}
+		tmp.Next = cur.Next
+		cur.Next = tmp
+		cur = tmp.Next
+	}
+	return head
+}
+
+func InsertionSortList(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+	dummy := &ListNode{Next: head}
+	lastSort, cur := head, head.Next
+	for cur != nil {
+		if lastSort.Val <= cur.Val {
+			lastSort = lastSort.Next
+		} else {
+			pre := dummy
+			// 从头找到第一个大于当前元素的元素
+			for pre.Next.Val <= cur.Val {
+				pre = pre.Next
+			}
+			lastSort.Next = cur.Next
+			cur.Next = pre.Next
+			pre.Next = cur
+		}
+		cur = lastSort.Next
+	}
+	return dummy.Next
+}
+
+func OddEvenList(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+	evenHead := head.Next
+	odd, even := head, head.Next
+	for even != nil && even.Next != nil {
+		odd.Next = even.Next
+		odd = odd.Next
+		even.Next = odd.Next
+		even = even.Next
+	}
+	odd.Next = evenHead
+	return head
+}
+
+func DetectCycle(head *ListNode) *ListNode {
+	slow, fast := head, head
+	for {
+		if fast == nil || fast.Next == nil {
+			return nil
+		}
+		slow = slow.Next
+		fast = fast.Next.Next
+		if fast == slow {
+			break
+		}
+	}
+	fast = head
+	for slow != fast {
+		fast = fast.Next
+		slow = slow.Next
+	}
+	return fast
+}
+
+func GetIntersectionNode(headA, headB *ListNode) *ListNode {
+	if headA == nil || headB == nil {
+		return nil
+	}
+	a, b := headA, headB
+	for a != b {
+		if a == nil {
+			a = headB
+		} else {
+			a = a.Next
+		}
+		if b == nil {
+			b = headA
+		} else {
+			b = b.Next
+		}
+	}
+	return a
 }

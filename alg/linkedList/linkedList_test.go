@@ -2,7 +2,7 @@ package linkedList
 
 import (
 	. "dp/ds/linkedList"
-	"dp/ds/tree"
+	. "dp/ds/tree"
 	"fmt"
 	"testing"
 )
@@ -10,12 +10,7 @@ import (
 func TestIsCircle(t *testing.T) {
 	node := GetCircleLink()
 	fmt.Println(IsCircular(node))
-	fmt.Println(isCircular(node))
 	TestLinkedList()
-}
-
-func isCircular(node *Node) bool {
-	return true
 }
 
 /*
@@ -521,6 +516,12 @@ func DeleteDuplicatesIIR(head *ListNode) *ListNode {
   /   /
 -10  5
 
+   0
+  / \
+-10  5
+   \  \
+    3  9
+
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
@@ -529,5 +530,278 @@ func DeleteDuplicatesIIR(head *ListNode) *ListNode {
 
 func TestTree(t *testing.T) {
 	head := ArrayToLinkedList([]int{-10, -3, 0, 5, 9})
-	fmt.Println(tree.TreeToArray(SortedListToBST(head)))
+	fmt.Println(TreeToArray(SortedListToBST1(head)))
+	head = ArrayToLinkedList([]int{-10, -3, 0, 5, 9})
+	fmt.Println(TreeToArray(SortedListToBST2(head)))
+	head = ArrayToLinkedList([]int{-10, -3, 0, 5, 9})
+	fmt.Println(TreeToArray(SortedListToBST3(head)))
+}
+
+/*给定一个链表，每个节点包含一个额外增加的随机指针，该指针可以指向链表中的任何节点或空节点。
+要求返回这个链表的 深拷贝。
+我们用一个由 n 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 [val, random_index] 表示：
+val：一个表示 RandomListNode.val 的整数。
+random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为  null 。
+
+示例 1：
+
+输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+
+示例 2：
+输入：head = [[1,1],[2,1]]
+输出：[[1,1],[2,1]]
+示例 3：
+
+输入：head = [[3,null],[3,0],[3,null]]
+输出：[[3,null],[3,0],[3,null]]
+示例 4：
+
+输入：head = []
+输出：[]
+解释：给定的链表为空（空指针），因此返回 null。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/copy-list-with-random-pointer
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestCopyRandomList(t *testing.T) {
+	head := GetRandomList([][]interface{}{
+		[]interface{}{7, nil},
+		[]interface{}{13, 0},
+		[]interface{}{11, 4},
+		[]interface{}{10, 2},
+		[]interface{}{1, 0},
+	})
+	newHead1 := CopyRandomList(head)
+	newHead2 := CopyRandomListNew(head)
+	fmt.Println(newHead1, newHead2)
+}
+
+/*对链表进行插入排序。
+
+插入排序的动画演示如上。从第一个元素开始，该链表可以被认为已经部分排序（用黑色表示）。
+每次迭代时，从输入数据中移除一个元素（用红色表示），并原地将其插入到已排好序的链表中。
+
+插入排序算法：
+插入排序是迭代的，每次只移动一个元素，直到所有元素可以形成一个有序的输出列表。
+每次迭代中，插入排序只从输入数据中移除一个待排序的元素，找到它在序列中适当的位置，并将其插入。
+重复直到所有输入数据插入完为止。
+
+示例 1：
+输入: 4->2->1->3
+输出: 1->2->3->4
+
+示例 2：
+输入: -1->5->3->4->0
+输出: -1->0->3->4->5
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/insertion-sort-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestInsertionSortList(t *testing.T) {
+	head := ArrayToLinkedList([]int{-1, 5, 3, 4, 0})
+	fmt.Println(LinkedListToArray(InsertionSortList(head)))
+}
+
+/*给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
+请尝试使用原地算法完成。你的算法的空间复杂度应为 O(1)，时间复杂度应为 O(nodes)，nodes 为节点总数。
+
+示例 1:
+输入: 1->2->3->4->5->NULL
+输出: 1->3->5->2->4->NULL
+
+示例 2:
+输入: 2->1->3->5->6->4->7->NULL
+输出: 2->3->6->7->1->5->4->NULL
+
+说明:
+应当保持奇数节点和偶数节点的相对顺序。
+链表的第一个节点视为奇数节点，第二个节点视为偶数节点，以此类推。*/
+
+func TestOddEvenList(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
+	fmt.Println(LinkedListToArray(OddEvenList(head)))
+}
+
+/*给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+说明：不允许修改给定的链表。
+
+进阶：
+你是否可以使用 O(1) 空间解决此题？
+
+示例 1：
+输入：head = [3,2,0,-4], pos = 1
+输出：返回索引为 1 的链表节点
+解释：链表中有一个环，其尾部连接到第二个节点。
+
+示例 2：
+输入：head = [1,2], pos = 0
+输出：返回索引为 0 的链表节点
+解释：链表中有一个环，其尾部连接到第一个节点。
+
+示例 3：
+输入：head = [1], pos = -1
+输出：返回 null
+解释：链表中没有环。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/linked-list-cycle-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestCir(t *testing.T) {
+	head := ArrayToLinkedList([]int{3, 2, 0, -1})
+	cur := head
+	for cur.Next != nil {
+		cur = cur.Next
+	}
+	cur.Next = head.Next
+	fmt.Println(DetectCycle(head))
+}
+
+/*编写一个程序，找到两个单链表相交的起始节点。
+
+示例 1：
+输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,0,1,8,4,5], skipA = 2, skipB = 3
+输出：Reference of the node with value = 8
+输入解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,0,1,8,4,5]。在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。
+
+示例 2：
+输入：intersectVal = 2, listA = [0,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1
+输出：Reference of the node with value = 2
+输入解释：相交节点的值为 2 （注意，如果两个链表相交则不能为 0）。从各自的表头开始算起，链表 A 为 [0,9,1,2,4]，链表 B 为 [3,2,4]。在 A 中，相交节点前有 3 个节点；在 B 中，相交节点前有 1 个节点。
+
+
+示例 3：
+输入：intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2
+输出：null
+输入解释：从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。由于这两个链表不相交，所以 intersectVal 必须为 0，而 skipA 和 skipB 可以是任意值。
+解释：这两个链表不相交，因此返回 null。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/intersection-of-two-linked-lists
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestGetIntersectionNode(t *testing.T) {
+	head := ArrayToLinkedList([]int{8, 4, 5})
+	a := ArrayToLinkedList([]int{4, 1})
+	b := ArrayToLinkedList([]int{5, 0, 1})
+	a.Next.Next = head
+	b.Next.Next.Next = head
+	fmt.Println(GetIntersectionNode(a, b).Val)
+}
+
+/*给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
+
+示例 1:
+输入: 1->2->3->4->5->NULL, k = 2
+输出: 4->5->1->2->3->NULL
+解释:
+向右旋转 1 步: 5->1->2->3->4->NULL
+向右旋转 2 步: 4->5->1->2->3->NULL
+
+示例 2:
+输入: 0->1->2->NULL, k = 4
+输出: 2->0->1->NULL
+解释:
+向右旋转 1 步: 2->0->1->NULL
+向右旋转 2 步: 1->2->0->NULL
+向右旋转 3 步: 0->1->2->NULL
+向右旋转 4 步: 2->0->1->NULL
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/rotate-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestRotateRight(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
+	fmt.Println(LinkedListToArray(RotateRight(head, 2)))
+}
+
+func RotateRight(head *ListNode, k int) *ListNode {
+	if head == nil {
+		return nil
+	}
+	length, last := 1, head
+	for last.Next != nil {
+		length++
+		last = last.Next
+	}
+	last.Next = head
+	newHead := head
+	for i := 1; i < length-k%length; i++ {
+		newHead = newHead.Next
+	}
+	head, newHead.Next = newHead.Next, nil
+	return head
+}
+
+/*给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
+每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 null。
+这k个部分应该按照在链表中出现的顺序进行输出，并且排在前面的部分的长度应该大于或等于后面的长度。
+返回一个符合上述规则的链表的列表。
+
+举例： 1->2->3->4, k = 5 // 5 结果 [ [1], [2], [3], [4], null ]
+
+示例 1：
+输入:
+root = [1, 2, 3], k = 5
+输出: [[1],[2],[3],[],[]]
+解释:
+输入输出各部分都应该是链表，而不是数组。
+例如, 输入的结点 root 的 val= 1, root.next.val = 2, \root.next.next.val = 3, 且 root.next.next.next = null。
+第一个输出 output[0] 是 output[0].val = 1, output[0].next = null。
+最后一个元素 output[4] 为 null, 它代表了最后一个部分为空链表。
+
+示例 2：
+输入:
+root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 3
+输出: [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]]
+解释:
+输入被分成了几个连续的部分，并且每部分的长度相差不超过1.前面部分的长度大于等于后面部分的长度。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/split-linked-list-in-parts
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestSplitListToParts(t *testing.T) {
+	head1 := ArrayToLinkedList([]int{1, 2, 3})
+	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+	heads1 := SplitListToParts(head1, 5)
+	heads2 := SplitListToParts(head2, 3)
+	for i := 0; i < len(heads1); i++ {
+		fmt.Println(LinkedListToArray(heads1[i]))
+	}
+	for i := 0; i < len(heads2); i++ {
+		fmt.Println(LinkedListToArray(heads2[i]))
+	}
+}
+
+func SplitListToParts(root *ListNode, k int) []*ListNode {
+	cur, size := root, 0
+	for cur != nil {
+		cur = cur.Next
+		size++
+	}
+	width, rem, ans := size/k, size%k, make([]*ListNode, k)
+	cur = root
+	for i := 0; i < k; i++ {
+		head, good := cur, 0
+		if i < rem {
+			good = 1
+		} else {
+			good = 0
+		}
+		for j := 0; j < width+good-1; j++ {
+			if cur != nil {
+				cur = cur.Next
+			}
+		}
+		if cur != nil {
+			prev := cur
+			cur, prev.Next = cur.Next, nil
+		}
+		ans[i] = head
+	}
+	return ans
 }
