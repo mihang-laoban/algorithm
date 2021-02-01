@@ -740,3 +740,84 @@ func GetIntersectionNode(headA, headB *ListNode) *ListNode {
 	}
 	return a
 }
+
+func SplitListToParts(root *ListNode, k int) []*ListNode {
+	cur, size := root, 0
+	for cur != nil {
+		cur = cur.Next
+		size++
+	}
+	width, rem, res := size/k, size%k, []*ListNode{}
+	cur = root
+	for i := 0; i < k; i++ {
+		head, seq := cur, 0
+		if i < rem {
+			seq = 0
+		} else {
+			seq = 1
+		}
+		for j := 0; j < width-seq; j++ {
+			if cur != nil {
+				cur = cur.Next
+			}
+		}
+		if cur != nil {
+			pre := cur
+			cur = cur.Next
+			pre.Next = nil
+		}
+		res = append(res, head)
+	}
+	return res
+}
+
+func RotateRight(head *ListNode, k int) *ListNode {
+	if head == nil {
+		return nil
+	}
+	length, last := 1, head
+	for last.Next != nil {
+		length++
+		last = last.Next
+	}
+	last.Next = head
+	newHead := head
+	for i := 1; i < length-k%length; i++ {
+		newHead = newHead.Next
+	}
+	head, newHead.Next = newHead.Next, nil
+	return head
+}
+
+func RemoveDuplicateNodes1(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+	record := map[int]bool{}
+	record[head.Val] = true
+	cur := head
+	for cur.Next != nil {
+		// 如果存在，删除当前联表
+		if record[cur.Next.Val] {
+			cur.Next = cur.Next.Next
+		} else {
+			// 如果当前值不存在，记录
+			record[cur.Next.Val] = true
+			cur = cur.Next
+		}
+	}
+	return head
+}
+
+func RemoveDuplicateNodes2(head *ListNode) *ListNode {
+	a, pre := map[int]bool{}, head
+	for cur := head; cur != nil; cur = cur.Next {
+		if _, ok := a[cur.Val]; ok {
+			pre.Next = cur.Next
+		} else {
+			a[cur.Val] = true
+			pre = cur
+		}
+	}
+	return head
+}

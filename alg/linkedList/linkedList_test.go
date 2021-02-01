@@ -718,24 +718,6 @@ func TestRotateRight(t *testing.T) {
 	fmt.Println(LinkedListToArray(RotateRight(head, 2)))
 }
 
-func RotateRight(head *ListNode, k int) *ListNode {
-	if head == nil {
-		return nil
-	}
-	length, last := 1, head
-	for last.Next != nil {
-		length++
-		last = last.Next
-	}
-	last.Next = head
-	newHead := head
-	for i := 1; i < length-k%length; i++ {
-		newHead = newHead.Next
-	}
-	head, newHead.Next = newHead.Next, nil
-	return head
-}
-
 /*给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
 每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 null。
 这k个部分应该按照在链表中出现的顺序进行输出，并且排在前面的部分的长度应该大于或等于后面的长度。
@@ -778,32 +760,22 @@ func TestSplitListToParts(t *testing.T) {
 	}
 }
 
-func SplitListToParts(root *ListNode, k int) []*ListNode {
-	cur, size := root, 0
-	for cur != nil {
-		cur = cur.Next
-		size++
-	}
-	width, rem, res := size/k, size%k, []*ListNode{}
-	cur = root
-	for i := 0; i < k; i++ {
-		head, seq := cur, 0
-		if i < rem {
-			seq = 0
-		} else {
-			seq = 1
-		}
-		for j := 0; j < width-seq; j++ {
-			if cur != nil {
-				cur = cur.Next
-			}
-		}
-		if cur != nil {
-			pre := cur
-			cur = cur.Next
-			pre.Next = nil
-		}
-		res = append(res, head)
-	}
-	return res
+/*编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+
+示例1:
+
+输入：[1, 2, 3, 3, 2, 1]
+输出：[1, 2, 3]
+示例2:
+
+输入：[1, 1, 1, 1, 2]
+输出：[1, 2]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/remove-duplicate-node-lcci
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestRemoveDuplicateNodes(t *testing.T) {
+	head := ArrayToLinkedList([]int{1, 2, 3, 3, 2, 1})
+	fmt.Println(LinkedListToArray(RemoveDuplicateNodes2(head)))
 }
