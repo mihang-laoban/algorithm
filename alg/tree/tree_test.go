@@ -270,12 +270,11 @@ func isValidBSTInOrder(root *TreeNode) bool {
 */
 //https://leetcode-cn.com/problems/number-of-islands/solution/number-of-islands-shen-du-you-xian-bian-li-dfs-or-/
 func Test(t *testing.T) {
-	root := InitTree([]int{5, 2, 6, 1, 3}).GetRoot()
+	root := ArrayToTree([]interface{}{5, 2, 6, 1, 3})
 	//52136
 	fmt.Println(Pre(root))
 	//12356
 	fmt.Println(In(root))
-	//fmt.Println(InOrderLoop(root))
 	//13265
 	fmt.Println(Post(root))
 	//fmt.Println(BFS(root))
@@ -283,7 +282,7 @@ func Test(t *testing.T) {
 
 func Pre(root *TreeNode) (res []int) {
 	stack := []*TreeNode{}
-	for root != nil || len(stack) > 0 {
+	for len(stack) > 0 || root != nil {
 		if root != nil {
 			res = append(res, root.Val)
 			if root.Right != nil {
@@ -295,21 +294,20 @@ func Pre(root *TreeNode) (res []int) {
 			stack = stack[:len(stack)-1]
 		}
 	}
-
 	return
 }
 
 func In(root *TreeNode) (res []int) {
 	stack := []*TreeNode{}
-	for root != nil || len(stack) > 0 {
+	for len(stack) > 0 || root != nil {
 		if root != nil {
 			stack = append(stack, root)
 			root = root.Left
 		} else {
-			cur := stack[len(stack)-1]
+			root = stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
-			res = append(res, cur.Val)
-			root = cur.Right
+			res = append(res, root.Val)
+			root = root.Right
 		}
 	}
 	return
@@ -325,7 +323,7 @@ func In(root *TreeNode) (res []int) {
 */
 func Post(root *TreeNode) (res []int) {
 	stack := []*TreeNode{}
-	for root != nil || len(stack) > 0 {
+	for len(stack) > 0 || root != nil {
 		if root != nil {
 			res = append([]int{root.Val}, res...)
 			if root.Left != nil {
@@ -471,7 +469,7 @@ func IslandBfs(grid [][]string) int {
 链接：https://leetcode-cn.com/problems/valid-perfect-square
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
-func TestPerfectSqure(t *testing.T) {
+func TestPerfectSquare(t *testing.T) {
 	fmt.Println(isPerfectSquare(16))
 	fmt.Println(isPerfectSquareOld(16))
 }
@@ -671,4 +669,97 @@ func TestReverseTree(t *testing.T) {
 func TestVerifyPostOrder(t *testing.T) {
 	//fmt.Println(VerifyPostOrder([]int{1, 6, 3, 2, 5}))
 	fmt.Println(VerifyPostOrder([]int{1, 3, 2, 6, 5}))
+}
+
+/*将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
+本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+示例:
+给定有序数组: [-10,-3,0,5,9],
+一个可能的答案是：[0,-3,9,-10,null,5]，它可以表示下面这个高度平衡二叉搜索树：
+     0
+    / \
+  -3   9
+  /   /
+-10  5
+
+[0 -10 5 <nil> -3 <nil> 9]
+     0
+    / \
+  -10  5
+    \   \
+    -3   9
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestSortedArrayToBST(t *testing.T) {
+	head := SortedArrayToBST([]int{-10, -3, 0, 5, 9})
+	fmt.Println(TreeToArray(head))
+}
+
+/*给定一个二叉树，找出其最大深度。
+二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+说明: 叶子节点是指没有子节点的节点。
+
+示例：
+给定二叉树 [3,9,20,null,null,15,7]，
+
+    3
+   / \
+  9  20
+ / \
+15  7
+返回它的最大深度 3 。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/maximum-depth-of-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestMaxDepth(t *testing.T) {
+	fmt.Println(MaxDepth(ArrayToTree([]interface{}{3, 9, 20, nil, nil, 15, 7})))
+}
+
+func MaxDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	return Max(MaxDepth(root.Right), MaxDepth(root.Left)) + 1
+}
+
+/*翻转一棵二叉树。
+示例：
+输入：
+
+    4
+   / \
+  2   7
+ / \ / \
+1  3 6  9
+输出：
+
+    4
+   / \
+  7   2
+ / \ / \
+9  6 3  1
+
+备注:
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/invert-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestInvertTree(t *testing.T) {
+	root := ArrayToTree([]interface{}{4, 2, 7, 1, 3, 6, 9})
+	newRoot := InvertTree(root)
+	fmt.Println(TreeToArray(newRoot))
+}
+
+func InvertTree(root *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	root.Left, root.Right = root.Right, root.Left
+	InvertTree(root.Left)
+	InvertTree(root.Right)
+	return root
 }

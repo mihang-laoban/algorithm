@@ -515,3 +515,18 @@ func VerifyPostOrder(postOrder []int) bool {
 	}
 	return true
 }
+
+func SortedArrayToBST(nums []int) *TreeNode {
+	var find func([]int, int, int) *TreeNode
+	find = func(nums []int, start, end int) *TreeNode {
+		if start > end {
+			return nil
+		}
+		mid := (start + end) >> 1
+		root := &TreeNode{Val: nums[mid]}
+		root.Left = find(nums, start, mid-1)
+		root.Right = find(nums, mid+1, end)
+		return root
+	}
+	return find(nums, 0, len(nums)-1)
+}
