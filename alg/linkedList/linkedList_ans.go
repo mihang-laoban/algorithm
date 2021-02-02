@@ -967,7 +967,7 @@ func GetDecimalValue(head *ListNode) int {
 }
 
 func NumComponents(head *ListNode, G []int) int {
-	ans, cur, record := 0, head, map[int]bool{}
+	ans, cur, record := 0, head, make(map[int]bool, len(G))
 	for _, value := range G {
 		record[value] = true
 	}
