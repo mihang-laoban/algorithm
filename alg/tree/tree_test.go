@@ -778,16 +778,16 @@ func TestInvertTree(t *testing.T) {
 
 func TestLevelOrderBottom(t *testing.T) {
 	root := ArrayToTree([]interface{}{})
-	res := LevelOrderBottom2(root)
+	res := LevelOrderBottom(root)
 	fmt.Println(res)
 }
 
-func LevelOrderBottom2(root *TreeNode) [][]int {
+func LevelOrderBottom(root *TreeNode) [][]int {
 	res := [][]int{}
-	queue := []*TreeNode{root}
 	if root == nil {
 		return res
 	}
+	queue := []*TreeNode{root}
 	for len(queue) > 0 {
 		level := []int{}
 		size := len(queue)
@@ -806,7 +806,7 @@ func LevelOrderBottom2(root *TreeNode) [][]int {
 	}
 	size := len(res)
 	for i := 0; i < size>>1; i++ {
-		res[i], res[size-i-1] = res[size-i-1], res[i]
+		res[i], res[size-1-i] = res[size-1-i], res[i]
 	}
 	return res
 }
