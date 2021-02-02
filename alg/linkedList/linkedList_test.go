@@ -806,6 +806,50 @@ func TestNumComponents(t *testing.T) {
 	fmt.Println(NumComponents(head, []int{0, 3, 1, 4}))
 }
 
+/*给你两个链表 list1 和 list2 ，它们包含的元素分别为 n 个和 m 个。
+请你将 list1 中第 a 个节点到第 b 个节点删除，并将list2 接在被删除节点的位置。
+下图中蓝色边和节点展示了操作后的结果：
+请你返回结果链表的头指针。
+
+示例 1：
+输入：list1 = [0,1,2,3,4,5], a = 3, b = 4, list2 = [1000000,1000001,1000002]
+输出：[0,1,2,1000000,1000001,1000002,5]
+解释：我们删除 list1 中第三和第四个节点，并将 list2 接在该位置。上图中蓝色的边和节点为答案链表。
+
+示例 2：
+输入：list1 = [0,1,2,3,4,5,6], a = 2, b = 5, list2 = [1000000,1000001,1000002,1000003,1000004]
+输出：[0,1,1000000,1000001,1000002,1000003,1000004,6]
+解释：上图中蓝色的边和节点为答案链表。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/merge-in-between-linked-lists
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestMergeInBetween(t *testing.T) {
+	head1 := ArrayToLinkedList([]int{0, 1, 2, 3, 4, 5})
+	head2 := ArrayToLinkedList([]int{1000000, 1000001, 1000002})
+	fmt.Println(LinkedListToArray(MergeInBetween(head1, 3, 4, head2)))
+	//head1 := ArrayToLinkedList([]int{0, 1, 2, 3, 4, 5, 6})
+	//head2 := ArrayToLinkedList([]int{1000000, 1000001, 1000002, 1000003, 1000004})
+	//fmt.Println(LinkedListToArray(MergeInBetween(head1, 2, 5, head2)))
+}
+
+func MergeInBetween(list1 *ListNode, a int, b int, list2 *ListNode) *ListNode {
+	slow, fast := list1, list1
+	for i := 0; i < b+1 && fast != nil; i++ {
+		if i < a-1 {
+			slow = slow.Next
+		}
+		fast = fast.Next
+	}
+	slow.Next = list2
+	cur := list2
+	for cur.Next != nil {
+		cur = cur.Next
+	}
+	cur.Next = fast
+	return list1
+}
+
 /*将一个 二叉搜索树 就地转化为一个 已排序的双向循环链表 。
 对于双向循环列表，你可以将左右孩子指针作为双向循环链表的前驱和后继指针，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
 特别地，我们希望可以 就地 完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中最小元素的指针。
