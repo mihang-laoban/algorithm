@@ -778,6 +778,49 @@ func TestPhoneDirectory(t *testing.T) {
 	fmt.Println()
 }
 
+/*给定链表头结点 head，该链表上的每个结点都有一个 唯一的整型值 。
+同时给定列表 G，该列表是上述链表中整型值的一个子集。
+返回列表 G 中组件的个数，这里对组件的定义为：链表中一段最长连续结点的值（该值必须在列表 G 中）构成的集合。
+
+示例 1：
+输入:
+head: 0->1->2->3
+G = [0, 1, 3]
+输出: 2
+解释:
+链表中,0 和 1 是相连接的，且 G 中不包含 2，所以 [0, 1] 是 G 的一个组件，同理 [3] 也是一个组件，故返回 2。
+
+示例 2：
+输入:
+head: 0->1->2->3->4
+G = [0, 3, 1, 4]
+输出: 2
+解释:
+链表中，0 和 1 是相连接的，3 和 4 是相连接的，所以 [0, 1] 和 [3, 4] 是两个组件，故返回 2。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/linked-list-components
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestNumComponents(t *testing.T) {
+	head := ArrayToLinkedList([]int{0, 1, 2, 3, 4})
+	fmt.Println(NumComponents(head, []int{0, 3, 1, 4}))
+}
+
+func NumComponents(head *ListNode, G []int) int {
+	ans, cur, record := 0, head, map[int]bool{}
+	for _, value := range G {
+		record[value] = true
+	}
+	for cur != nil {
+		// 当前值在记录中，下一个值不存在或者或者下一个存在但并不在记录中，则为一个组件
+		if record[cur.Val] && (cur.Next == nil || !record[cur.Next.Val]) {
+			ans++
+		}
+		cur = cur.Next
+	}
+	return ans
+}
+
 /*将一个 二叉搜索树 就地转化为一个 已排序的双向循环链表 。
 对于双向循环列表，你可以将左右孩子指针作为双向循环链表的前驱和后继指针，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
 特别地，我们希望可以 就地 完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中最小元素的指针。
