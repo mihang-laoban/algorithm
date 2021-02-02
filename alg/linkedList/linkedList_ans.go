@@ -980,3 +980,20 @@ func NumComponents(head *ListNode, G []int) int {
 	}
 	return ans
 }
+
+func MergeInBetween(list1 *ListNode, a int, b int, list2 *ListNode) *ListNode {
+	slow, fast := list1, list1
+	for i := 0; i < b+1 && fast != nil; i++ {
+		if i < a-1 {
+			slow = slow.Next
+		}
+		fast = fast.Next
+	}
+	slow.Next = list2
+	cur := list2
+	for cur.Next != nil {
+		cur = cur.Next
+	}
+	cur.Next = fast
+	return list1
+}
