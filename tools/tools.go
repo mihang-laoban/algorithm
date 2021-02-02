@@ -96,6 +96,13 @@ func Abs(x int) int {
 	return x
 }
 
+func AbsFloat(x float64) float64 {
+	if x < 0 {
+		return -1 * x
+	}
+	return x
+}
+
 func PreInt(val int, arr []int) []int {
 	return append([]int{val}, arr...)
 }

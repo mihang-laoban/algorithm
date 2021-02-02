@@ -530,3 +530,13 @@ func SortedArrayToBST(nums []int) *TreeNode {
 	}
 	return find(nums, 0, len(nums)-1)
 }
+
+func InvertTree(root *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	root.Left, root.Right = root.Right, root.Left
+	InvertTree(root.Left)
+	InvertTree(root.Right)
+	return root
+}

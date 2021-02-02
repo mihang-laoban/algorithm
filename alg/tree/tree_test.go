@@ -754,12 +754,100 @@ func TestInvertTree(t *testing.T) {
 	fmt.Println(TreeToArray(newRoot))
 }
 
-func InvertTree(root *TreeNode) *TreeNode {
+/*
+给定一个二叉树，返回其节点值自底向上的层序遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+
+例如：
+给定二叉树 [3,9,20,null,null,15,7],
+
+  3
+ / \
+9   20
+   /  \
+  15   7
+返回其自底向上的层序遍历为：
+[
+	[15,7],
+	[9,20],
+	[3]
+]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestLevelOrderBottom(t *testing.T) {
+	root := ArrayToTree([]interface{}{3, 9, 20, nil, nil, 15, 7})
+	res := LevelOrderBottom(root)
+	fmt.Println(res)
+}
+
+func LevelOrderBottom(root *TreeNode) [][]int {
+	levelOrder := [][]int{}
 	if root == nil {
-		return nil
+		return levelOrder
 	}
-	root.Left, root.Right = root.Right, root.Left
-	InvertTree(root.Left)
-	InvertTree(root.Right)
-	return root
+	queue := []*TreeNode{root}
+	queue = append(queue, root)
+	for len(queue) > 0 {
+		level := []int{}
+		size := len(queue)
+		for i := 0; i < size; i++ {
+			node := queue[0]
+			queue = queue[1:]
+			level = append(level, node.Val)
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+		}
+		levelOrder = append(levelOrder, level)
+	}
+	for i := 0; i < len(levelOrder)/2; i++ {
+		levelOrder[i], levelOrder[len(levelOrder)-1-i] = levelOrder[len(levelOrder)-1-i], levelOrder[i]
+	}
+	return levelOrder
+}
+
+/*给定一个不为空的二叉搜索树和一个目标值 target，请在该二叉搜索树中找到最接近目标值 target 的数值。
+注意：
+给定的目标值 target 是一个浮点数
+题目保证在该二叉搜索树中只会存在一个最接近目标值的数
+示例：
+
+输入: root = [4,2,5,1,3]，目标值 target = 3.714286
+    4
+   / \
+  2   5
+ / \
+1   3
+输出: 4
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/closest-binary-search-tree-value
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestClosestValue(t *testing.T) {
+	root := ArrayToTree([]interface{}{4, 2, 5, 1, 3})
+	fmt.Println(ClosestValue(root, 3.714286))
+}
+
+func ClosestValue(root *TreeNode, target float64) int {
+	var l, r float64
+	for root != nil {
+		if float64(root.Val) > target {
+			l = float64(root.Val)
+			root = root.Left
+		} else if float64(root.Val) < target {
+			r = float64(root.Val)
+			root = root.Right
+		} else {
+			return root.Val
+		}
+	}
+	if AbsFloat(target-l) > AbsFloat(r-target) {
+		return int(r)
+	}
+	return int(l)
 }
