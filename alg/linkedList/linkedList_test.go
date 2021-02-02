@@ -108,75 +108,6 @@ func TestReverseLinkedList(t *testing.T) {
 	//fmt.Println(LinkedListToArray(ReverseListBetweenL2(head, 2, 4)))
 }
 
-func ReverseListBetweenL(head *ListNode, m, n int) *ListNode {
-	dummy := &ListNode{Val: -1}
-	dummy.Next = head
-	guard, point := dummy, dummy.Next
-	for i := 0; i < m-1; i++ {
-		guard, point = guard.Next, point.Next
-	}
-	for i := 0; i < n-m; i++ {
-		removed := point.Next
-		point.Next = point.Next.Next
-		removed.Next = guard.Next
-		guard.Next = removed
-	}
-	return dummy.Next
-}
-
-func ReverseListBetweenL2(head *ListNode, m, n int) *ListNode {
-	dummy := &ListNode{Val: -1}
-	dummy.Next = head
-	node := dummy
-	//找到需要反转的那一段的上一个节点。
-	for i := 1; i < m; i++ {
-		node = node.Next
-	}
-	//node.next就是需要反转的这段的起点。
-	cur := node.Next
-	var tmp, pre *ListNode
-	//反转m到n这一段
-	for i := m; i <= n; i++ {
-		tmp = cur.Next
-		cur.Next = pre
-		pre = cur
-		cur = tmp
-	}
-	//将反转的起点的next指向next。
-	node.Next.Next = tmp
-	//需要反转的那一段的上一个节点的next节点指向反转后链表的头结点
-	node.Next = pre
-	return dummy.Next
-}
-
-func ReverseListBetweenR(head *ListNode, m, n int) *ListNode {
-	if m == 1 {
-		return ReverseKListR(head, n)
-	}
-	head.Next = ReverseListBetweenR(head.Next, m-1, n-1)
-	return head
-}
-
-func ReverseKListR(head *ListNode, n int) *ListNode {
-	var (
-		successor      *ListNode
-		_reverseFirstK func(*ListNode, int) *ListNode
-	)
-
-	_reverseFirstK = func(head *ListNode, n int) *ListNode {
-		if n == 1 {
-			successor = head.Next
-			return head
-		}
-		last := _reverseFirstK(head.Next, n-1)
-		head.Next.Next = head
-		head.Next = successor
-		return last
-	}
-
-	return _reverseFirstK(head, n)
-}
-
 /*
 用一个 非空 单链表来表示一个非负整数，然后将这个整数加一。
 
@@ -481,25 +412,6 @@ func TestDeleteDuplicatesII(t *testing.T) {
 	head := ArrayToLinkedList([]int{1, 2, 3, 3, 4, 4, 5})
 	//fmt.Println(LinkedListToArray(DeleteDuplicatesIIL(head)))
 	fmt.Println(LinkedListToArray(DeleteDuplicatesIIR(head)))
-}
-
-func DeleteDuplicatesIIR(head *ListNode) *ListNode {
-	if head == nil || head.Next == nil {
-		return head
-	}
-	if head.Val == head.Next.Val {
-		for head != nil && head.Next != nil && head.Val == head.Next.Val {
-			head = head.Next
-		}
-		if head != nil {
-			return DeleteDuplicatesIIR(head.Next)
-		} else {
-			return nil
-		}
-	} else {
-		head.Next = DeleteDuplicatesIIR(head.Next)
-		return head
-	}
 }
 
 /*
