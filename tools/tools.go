@@ -91,14 +91,14 @@ func Mini(a ...int) (res int) {
 
 func Abs(x int) int {
 	if x < 0 {
-		return -1 * x
+		return -x
 	}
 	return x
 }
 
 func AbsFloat(x float64) float64 {
 	if x < 0 {
-		return -1 * x
+		return -x
 	}
 	return x
 }

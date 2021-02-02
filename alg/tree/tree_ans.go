@@ -540,3 +540,22 @@ func InvertTree(root *TreeNode) *TreeNode {
 	InvertTree(root.Right)
 	return root
 }
+
+func ClosestValue(root *TreeNode, target float64) int {
+	l, r := float64(root.Val), float64(root.Val)
+	for root != nil {
+		if float64(root.Val) > target {
+			l = float64(root.Val)
+			root = root.Left
+		} else if float64(root.Val) < target {
+			r = float64(root.Val)
+			root = root.Right
+		} else {
+			return root.Val
+		}
+	}
+	if math.Abs(l-target) > math.Abs(r-target) {
+		return int(r)
+	}
+	return int(l)
+}

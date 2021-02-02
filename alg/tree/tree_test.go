@@ -829,25 +829,8 @@ func LevelOrderBottom(root *TreeNode) [][]int {
 链接：https://leetcode-cn.com/problems/closest-binary-search-tree-value
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 func TestClosestValue(t *testing.T) {
-	root := ArrayToTree([]interface{}{4, 2, 5, 1, 3})
-	fmt.Println(ClosestValue(root, 3.714286))
-}
-
-func ClosestValue(root *TreeNode, target float64) int {
-	var l, r float64
-	for root != nil {
-		if float64(root.Val) > target {
-			l = float64(root.Val)
-			root = root.Left
-		} else if float64(root.Val) < target {
-			r = float64(root.Val)
-			root = root.Right
-		} else {
-			return root.Val
-		}
-	}
-	if AbsFloat(target-l) > AbsFloat(r-target) {
-		return int(r)
-	}
-	return int(l)
+	//root := ArrayToTree([]interface{}{4, 2, 5, 1, 3})
+	//fmt.Println(ClosestValue(root, 3.714286))
+	root := ArrayToTree([]interface{}{1500000000, 1400000000})
+	fmt.Println(ClosestValue(root, -1500000000.0))
 }
