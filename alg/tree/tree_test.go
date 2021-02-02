@@ -777,38 +777,38 @@ func TestInvertTree(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestLevelOrderBottom(t *testing.T) {
-	root := ArrayToTree([]interface{}{3, 9, 20, nil, nil, 15, 7})
-	res := LevelOrderBottom(root)
+	root := ArrayToTree([]interface{}{})
+	res := LevelOrderBottom2(root)
 	fmt.Println(res)
 }
 
-func LevelOrderBottom(root *TreeNode) [][]int {
-	levelOrder := [][]int{}
-	if root == nil {
-		return levelOrder
-	}
+func LevelOrderBottom2(root *TreeNode) [][]int {
+	res := [][]int{}
 	queue := []*TreeNode{root}
-	queue = append(queue, root)
+	if root == nil {
+		return res
+	}
 	for len(queue) > 0 {
 		level := []int{}
 		size := len(queue)
 		for i := 0; i < size; i++ {
-			node := queue[0]
+			cur := queue[0]
 			queue = queue[1:]
-			level = append(level, node.Val)
-			if node.Left != nil {
-				queue = append(queue, node.Left)
+			level = append(level, cur.Val)
+			if cur.Left != nil {
+				queue = append(queue, cur.Left)
 			}
-			if node.Right != nil {
-				queue = append(queue, node.Right)
+			if cur.Right != nil {
+				queue = append(queue, cur.Right)
 			}
 		}
-		levelOrder = append(levelOrder, level)
+		res = append(res, level)
 	}
-	for i := 0; i < len(levelOrder)/2; i++ {
-		levelOrder[i], levelOrder[len(levelOrder)-1-i] = levelOrder[len(levelOrder)-1-i], levelOrder[i]
+	size := len(res)
+	for i := 0; i < size>>1; i++ {
+		res[i], res[size-i-1] = res[size-i-1], res[i]
 	}
-	return levelOrder
+	return res
 }
 
 /*给定一个不为空的二叉搜索树和一个目标值 target，请在该二叉搜索树中找到最接近目标值 target 的数值。
