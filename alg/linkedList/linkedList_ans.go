@@ -965,3 +965,18 @@ func GetDecimalValue(head *ListNode) int {
 	}
 	return res
 }
+
+func NumComponents(head *ListNode, G []int) int {
+	ans, cur, record := 0, head, map[int]bool{}
+	for _, value := range G {
+		record[value] = true
+	}
+	for cur != nil {
+		// 当前值在记录中，下一个值不存在或者或者下一个存在但并不在记录中，则为一个组件
+		if record[cur.Val] && (cur.Next == nil || !record[cur.Next.Val]) {
+			ans++
+		}
+		cur = cur.Next
+	}
+	return ans
+}
