@@ -146,35 +146,32 @@ func merge(left []int, right []int) []int {
 	return result
 }
 
-func Heap(arr []int) []int {
-	arrLen := len(arr)
-	buildMaxHeap(arr, arrLen)
-	for i := arrLen - 1; i >= 0; i-- {
-		arr[0], arr[i] = arr[i], arr[0]
-		arrLen--
-		heapify(arr, 0, arrLen)
+func Heap(nums []int) []int {
+	size := len(nums)
+	// 创建大根堆
+	for i := size >> 1; i >= 0; i-- {
+		heapify(nums, i, size)
 	}
-	return arr
+	for i := size - 1; i >= 0; i-- {
+		nums[0], nums[i] = nums[i], nums[0]
+		size--
+		heapify(nums, 0, size)
+	}
+	return nums
 }
 
-func buildMaxHeap(arr []int, arrLen int) {
-	for i := arrLen >> 1; i >= 0; i-- {
-		heapify(arr, i, arrLen)
-	}
-}
-
-func heapify(arr []int, i, arrLen int) {
+func heapify(nums []int, i, size int) {
 	left, right := i<<1+1, i<<1+2
 	largest := i
-	if left < arrLen && arr[left] > arr[largest] {
+	if left < size && nums[left] > nums[largest] {
 		largest = left
 	}
-	if right < arrLen && arr[right] > arr[largest] {
+	if right < size && nums[right] > nums[largest] {
 		largest = right
 	}
 	if largest != i {
-		arr[i], arr[largest] = arr[largest], arr[i]
-		heapify(arr, largest, arrLen)
+		nums[i], nums[largest] = nums[largest], nums[i]
+		heapify(nums, largest, size)
 	}
 }
 
