@@ -84,30 +84,35 @@ func Shell(arr []int) []int {
 }
 
 func Quick(arr []int) []int {
-	return _quickSort(arr, 0, len(arr)-1)
+	return QuickSort(arr, 0, len(arr)-1)
 }
 
-func _quickSort(arr []int, left, right int) []int {
-	if left < right {
-		partitionIndex := partition(arr, left, right)
-		_quickSort(arr, left, partitionIndex-1)
-		_quickSort(arr, partitionIndex+1, right)
-	}
-	return arr
-}
+func QuickSort(arr []int, start, end int) []int {
+	if start < end {
+		i, j := start, end
+		key := arr[(start+end)>>1]
+		for i <= j {
+			for arr[i] < key {
+				i++
+			}
+			for arr[j] > key {
+				j--
+			}
+			if i <= j {
+				arr[i], arr[j] = arr[j], arr[i]
+				i++
+				j--
+			}
+		}
 
-func partition(arr []int, left, right int) int {
-	pivot := left
-	index := pivot + 1
-
-	for i := index; i <= right; i++ {
-		if arr[i] < arr[pivot] {
-			arr[i], arr[index] = arr[index], arr[i]
-			index += 1
+		if start < j {
+			QuickSort(arr, start, j)
+		}
+		if end > i {
+			QuickSort(arr, i, end)
 		}
 	}
-	arr[pivot], arr[index-1] = arr[index-1], arr[pivot]
-	return index - 1
+	return arr
 }
 
 func Merge(arr []int) []int {
@@ -130,11 +135,11 @@ func merge(left []int, right []int) []int {
 			right = right[1:]
 		}
 	}
-	for len(left) != 0 {
+	for len(left) > 0 {
 		result = append(result, left[0])
 		left = left[1:]
 	}
-	for len(right) != 0 {
+	for len(right) > 0 {
 		result = append(result, right[0])
 		right = right[1:]
 	}
