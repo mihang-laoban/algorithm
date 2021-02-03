@@ -242,15 +242,15 @@ func PlusOne(head *ListNode) *ListNode {
 
 func MergeKLists(lists []*ListNode) *ListNode {
 	var mergeKLists func(int, int) *ListNode
-	mergeKLists = func(low, hight int) *ListNode {
-		if low == hight {
+	mergeKLists = func(low, high int) *ListNode {
+		if low == high {
 			return lists[low]
 		}
-		if low > hight {
+		if low > high {
 			return nil
 		}
-		mid := (low + hight) >> 1
-		return MergeLinkedListL(mergeKLists(low, mid), mergeKLists(mid+1, hight))
+		mid := (low + high) >> 1
+		return MergeLinkedListL(mergeKLists(low, mid), mergeKLists(mid+1, high))
 	}
 	return mergeKLists(0, len(lists)-1)
 }
