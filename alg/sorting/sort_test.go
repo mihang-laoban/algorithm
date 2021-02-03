@@ -151,7 +151,7 @@ func Heap(arr []int) []int {
 	buildMaxHeap(arr, arrLen)
 	for i := arrLen - 1; i >= 0; i-- {
 		arr[0], arr[i] = arr[i], arr[0]
-		arrLen -= 1
+		arrLen--
 		heapify(arr, 0, arrLen)
 	}
 	return arr
@@ -164,8 +164,7 @@ func buildMaxHeap(arr []int, arrLen int) {
 }
 
 func heapify(arr []int, i, arrLen int) {
-	left := i<<1 + 1
-	right := i<<1 + 2
+	left, right := i<<1+1, i<<1+2
 	largest := i
 	if left < arrLen && arr[left] > arr[largest] {
 		largest = left
