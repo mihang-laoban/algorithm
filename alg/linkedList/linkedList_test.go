@@ -173,6 +173,7 @@ func TestMergeKLists(t *testing.T) {
 func MergeKLists3(nodes []*ListNode) *ListNode {
 	return nil
 }
+
 func MergeKLists2(lists []*ListNode) *ListNode {
 	size, head := len(lists), &ListNode{}
 	if size == 0 {
@@ -191,6 +192,7 @@ func MergeKLists2(lists []*ListNode) *ListNode {
 	}
 	// 创建记录链表的游标
 	cur := head
+	// 链接数组
 	for size > 0 {
 		cur.Next = lists[0]
 		cur = cur.Next
