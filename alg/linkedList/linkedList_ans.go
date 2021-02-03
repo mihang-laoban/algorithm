@@ -158,12 +158,10 @@ func SwapPairsL(head *ListNode) *ListNode {
 }
 
 func ReverseKGroup(head *ListNode, k int) *ListNode {
-	// 链表头节点
-	dum := &ListNode{Val: -1}
 	// 表头指向入参头节点
-	dum.Next = head
+	dummy := &ListNode{Next: head}
 	// 初始化起点和终点
-	start, end := dum, dum
+	start, end := dummy, dummy
 	for end.Next != nil {
 		// 遍历到第K个元素
 		for i := 0; i < k && end != nil; i++ {
@@ -184,7 +182,7 @@ func ReverseKGroup(head *ListNode, k int) *ListNode {
 		// 重新设置起点
 		start, end = cur, cur
 	}
-	return dum.Next
+	return dummy.Next
 }
 
 func ReverseListR(head *ListNode) *ListNode {
