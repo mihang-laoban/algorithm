@@ -102,16 +102,12 @@ func partition(arr []int, left, right int) int {
 
 	for i := index; i <= right; i++ {
 		if arr[i] < arr[pivot] {
-			swap(arr, i, index)
+			arr[i], arr[index] = arr[index], arr[i]
 			index += 1
 		}
 	}
-	swap(arr, pivot, index-1)
+	arr[pivot], arr[index-1] = arr[index-1], arr[pivot]
 	return index - 1
-}
-
-func swap(arr []int, i, j int) {
-	arr[i], arr[j] = arr[j], arr[i]
 }
 
 func Merge(arr []int) []int {
@@ -154,7 +150,7 @@ func Heap(arr []int) []int {
 	arrLen := len(arr)
 	buildMaxHeap(arr, arrLen)
 	for i := arrLen - 1; i >= 0; i-- {
-		swap(arr, 0, i)
+		arr[0], arr[i] = arr[i], arr[0]
 		arrLen -= 1
 		heapify(arr, 0, arrLen)
 	}
@@ -178,7 +174,7 @@ func heapify(arr []int, i, arrLen int) {
 		largest = right
 	}
 	if largest != i {
-		swap(arr, i, largest)
+		arr[i], arr[largest] = arr[largest], arr[i]
 		heapify(arr, largest, arrLen)
 	}
 }
