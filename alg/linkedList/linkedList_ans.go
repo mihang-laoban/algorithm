@@ -162,6 +162,7 @@ func ReverseKGroup(head *ListNode, k int) *ListNode {
 	dummy := &ListNode{Next: head}
 	// 初始化起点和终点
 	start, end := dummy, dummy
+	// 以end节点是否到尾部来判定循环是否结束
 	for end.Next != nil {
 		// 遍历到第K个元素
 		for i := 0; i < k && end != nil; i++ {
