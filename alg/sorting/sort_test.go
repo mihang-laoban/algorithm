@@ -132,17 +132,14 @@ func merge(left []int, right []int) []int {
 			right = right[1:]
 		}
 	}
-
 	for len(left) != 0 {
 		result = append(result, left[0])
 		left = left[1:]
 	}
-
 	for len(right) != 0 {
 		result = append(result, right[0])
 		right = right[1:]
 	}
-
 	return result
 }
 
@@ -152,6 +149,7 @@ func Heap(nums []int) []int {
 	for i := size >> 1; i >= 0; i-- {
 		heapify(nums, i, size)
 	}
+	// 从最后一个元素开始排序，把最后一个节点拿到堆顶
 	for i := size - 1; i >= 0; i-- {
 		nums[0], nums[i] = nums[i], nums[0]
 		size--
@@ -161,14 +159,15 @@ func Heap(nums []int) []int {
 }
 
 func heapify(nums []int, i, size int) {
-	left, right := i<<1+1, i<<1+2
-	largest := i
+	// 当前元素的左右孩子的位置，并假定当前节点就是最大值的位置
+	left, right, largest := i<<1+1, i<<1+2, i
 	if left < size && nums[left] > nums[largest] {
 		largest = left
 	}
 	if right < size && nums[right] > nums[largest] {
 		largest = right
 	}
+	// 如果更新过最大节点后和原有最大节点不一致，则交换最大节点和当前节点的位置，并继续寻找
 	if largest != i {
 		nums[i], nums[largest] = nums[largest], nums[i]
 		heapify(nums, largest, size)
