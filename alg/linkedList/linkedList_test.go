@@ -161,6 +161,7 @@ func TestMergeKLists(t *testing.T) {
 	head2 := ArrayToLinkedList([]int{1, 3, 4})
 	head3 := ArrayToLinkedList([]int{1, 6})
 	fmt.Println(LinkedListToArray(MergeKListsStack([]*ListNode{head1, head2, head3})))
+	//fmt.Println(LinkedListToArray(MergeKLists([]*ListNode{head1, head2, head3})))
 	//fmt.Println(LinkedListToArray(MergeKListsPriorityQueue([]*ListNode{head1, head2, head3})))
 	//head4 := ArrayToLinkedList([]int{2})
 	//head5 := ArrayToLinkedList([]int{})
@@ -168,63 +169,6 @@ func TestMergeKLists(t *testing.T) {
 	//head8 := ArrayToLinkedList([]int{3})
 	//head7 := ArrayToLinkedList([]int{})
 	//fmt.Println(LinkedListToArray(MergeKLists3([]*ListNode{head4, head5, head6, head7, head8})))
-}
-
-func MergeKListsStack(lists []*ListNode) *ListNode {
-	size, dummy := len(lists), &ListNode{}
-	if size == 0 {
-		return nil
-	}
-	// 初始化，填充空数组，找到最小元素所在的子数组并放到首位
-	for i := size - 1; i >= 0; i-- {
-		// 如果右子数组为空，则整体数组大小缩小
-		if lists[i] == nil {
-			// 存在多个空数组的话，就用最后一个有元素的值来填充当前位置
-			size--
-			lists[i] = lists[size]
-		}
-		// 把最小元素和当前元素位置替换
-		heapify(lists, i, size)
-	}
-	// 创建记录链表的游标
-	cur := dummy
-	// 链接数组
-	for size > 0 {
-		cur.Next = lists[0]
-		cur = cur.Next
-		// 当前最小元素向后移动一位
-		lists[0] = lists[0].Next
-		// 如果第一条链表处理完了，继续处理下一条
-		if lists[0] == nil {
-			size--
-			// 检验整个数组是否处理完了
-			if size == 0 {
-				break
-			}
-			// 每次把最后一个链表放到头部优先处理
-			lists[0] = lists[size]
-		}
-		// 把最小元素和当前元素位置替换
-		heapify(lists, 0, size)
-	}
-	return dummy.Next
-}
-
-func heapify(lists []*ListNode, index, size int) {
-	cur := lists[index]
-	for i := index<<1 + 1; i < size; i = i<<1 + 1 {
-		// 找到最小的那个节点下标
-		if i+1 < size && lists[i].Val > lists[i+1].Val {
-			i++
-		}
-		if lists[index].Val > lists[i].Val {
-			// 如果当前元素大于最小元素的值，则当前元素更新为最小元素
-			lists[index] = lists[i]
-			// 标记被更新的元素下标，已备后续更新
-			index = i
-		}
-	}
-	lists[index] = cur
 }
 
 /*给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
