@@ -855,16 +855,53 @@ func TestMergeInBetween(t *testing.T) {
 输入：root = [1]
 输出：[1]
 
+    4
+   / \
+  2   5
+ / \
+1   3
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/convert-binary-search-tree-to-sorted-doubly-linked-list
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestTreeToDoublyList(t *testing.T) {
-	head := ArrayToTree([]interface{}{4, 2, 5, 1, 3})
-	new1 := TreeToDoublyList(head)
-	fmt.Println(TreeToArray(new1))
+	nums := []interface{}{4, 2, 5, 1, 3}
+	size := len(nums)
+	root := ArrayToTree(nums)
+	head := TreeToDoublyList(root)
+	res := make([]int, size)
+	for i := 0; i < size; i++ {
+		res[i] = head.Val
+		head = head.Right
+	}
+	fmt.Println(res)
 }
 
 func TreeToDoublyList(root *TreeNode) *TreeNode {
-	return nil
+	var pre, head *TreeNode
+	if root == nil {
+		return nil
+	}
+	stack := []*TreeNode{}
+	for root != nil || len(stack) > 0 {
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if pre == nil {
+			head = root
+		} else {
+			pre.Right = root
+			root.Left = pre
+		}
+		pre = root
+		root = root.Right
+	}
+	if head != nil && pre != nil {
+		head.Left = pre
+		pre.Right = head
+	}
+	return head
 }
