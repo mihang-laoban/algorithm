@@ -178,7 +178,7 @@ func MergeKLists2(lists []*ListNode) *ListNode {
 	if size == 0 {
 		return nil
 	}
-	// 找到初始最小值
+	// 初始化，填充空数组，找到最小元素所在的子数组并放到首位
 	for i := size - 1; i >= 0; i-- {
 		// 如果右子数组为空，则整体数组大小缩小
 		if lists[i] == nil {
