@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var x  = []int {6,4,2,8,9,5,1,3,7,6,8}
+var x = []int{6, 4, 2, 8, 9, 5, 1, 3, 7, 6, 8}
 var length = len(x)
 
 type Sorting interface {
@@ -70,7 +70,7 @@ func Insert(arr []int) []int {
 }
 
 func Shell(arr []int) []int {
-	for gap := length / 2; gap > 0; gap /= 2 {
+	for gap := length >> 1; gap > 0; gap >>= 1 {
 		//从第gap个元素，逐个对其所在组进行直接插入排序操作
 		for i := gap; i < length; i++ {
 			j := i
@@ -86,7 +86,6 @@ func Shell(arr []int) []int {
 func Quick(arr []int) []int {
 	return _quickSort(arr, 0, len(arr)-1)
 }
-
 
 func _quickSort(arr []int, left, right int) []int {
 	if left < right {
@@ -120,7 +119,7 @@ func Merge(arr []int) []int {
 	if length < 2 {
 		return arr
 	}
-	middle := length / 2
+	middle := length >> 1
 	left := arr[0:middle]
 	right := arr[middle:]
 	return merge(Merge(left), Merge(right))
@@ -163,14 +162,14 @@ func Heap(arr []int) []int {
 }
 
 func buildMaxHeap(arr []int, arrLen int) {
-	for i := arrLen / 2; i >= 0; i-- {
+	for i := arrLen >> 1; i >= 0; i-- {
 		heapify(arr, i, arrLen)
 	}
 }
 
 func heapify(arr []int, i, arrLen int) {
-	left := 2*i + 1
-	right := 2*i + 2
+	left := i<<1 + 1
+	right := i<<1 + 2
 	largest := i
 	if left < arrLen && arr[left] > arr[largest] {
 		largest = left
@@ -206,7 +205,6 @@ func Counting(arr []int) []int {
 	return arr
 }
 
-
 func Bucket(arr []int) []int {
 	tmp := make([]int, 100)
 	for _, v := range arr {
@@ -237,7 +235,7 @@ func Radix(arr []int) []int {
 	// 计算最大值的位数
 	maxDigit := 0
 	for max > 0 {
-		max = max/10
+		max = max / 10
 		maxDigit++
 	}
 	// 定义每一轮的除数，1,10,100...
@@ -272,5 +270,4 @@ func Radix(arr []int) []int {
 		divisor = divisor * 10
 	}
 	return arr
-
 }

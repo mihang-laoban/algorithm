@@ -241,18 +241,17 @@ func PlusOne(head *ListNode) *ListNode {
 }
 
 func MergeKLists(lists []*ListNode) *ListNode {
-	var mergeKLists func(int, int) *ListNode
-	mergeKLists = func(low, high int) *ListNode {
-		if low == high {
-			return lists[low]
-		}
-		if low > high {
-			return nil
-		}
-		mid := (low + high) >> 1
-		return MergeLinkedListL(mergeKLists(low, mid), mergeKLists(mid+1, high))
+	length := len(lists)
+	if length < 1 {
+		return nil
 	}
-	return mergeKLists(0, len(lists)-1)
+	if length == 1 {
+		return lists[0]
+	}
+	num := length >> 1
+	left := MergeKLists(lists[:num])
+	right := MergeKLists(lists[num:])
+	return MergeLinkedListL(left, right)
 }
 
 /*本题考查最小堆的用法 最小堆里面的每个元素可以是一个结构体，只要正确实现了Less方法即可*/
