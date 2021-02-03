@@ -116,9 +116,7 @@ func Merge(arr []int) []int {
 		return arr
 	}
 	middle := length >> 1
-	left := arr[0:middle]
-	right := arr[middle:]
-	return merge(Merge(left), Merge(right))
+	return merge(Merge(arr[0:middle]), Merge(arr[middle:]))
 }
 
 func merge(left []int, right []int) []int {
