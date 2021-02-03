@@ -150,18 +150,18 @@ func Heap(nums []int) []int {
 	size := len(nums)
 	// 创建大根堆
 	for i := size >> 1; i >= 0; i-- {
-		heapify(nums, i, size)
+		heapifyL(nums, i, size)
 	}
 	// 从最后一个元素开始排序，把最后一个节点拿到堆顶
 	for i := size - 1; i >= 0; i-- {
 		nums[0], nums[i] = nums[i], nums[0]
 		size--
-		heapify(nums, 0, size)
+		heapifyR(nums, 0, size)
 	}
 	return nums
 }
 
-func heapify(nums []int, i, size int) {
+func heapifyR(nums []int, i, size int) {
 	// 当前元素的左右孩子的位置，并假定当前节点就是最大值的位置
 	left, right, largest := i<<1+1, i<<1+2, i
 	if left < size && nums[left] > nums[largest] {
@@ -173,8 +173,21 @@ func heapify(nums []int, i, size int) {
 	// 如果更新过最大节点后和原有最大节点不一致，则交换最大节点和当前节点的位置，并继续寻找
 	if largest != i {
 		nums[i], nums[largest] = nums[largest], nums[i]
-		heapify(nums, largest, size)
+		heapifyR(nums, largest, size)
 	}
+}
+
+func heapifyL(lists []int, index, size int) {
+	cur := lists[index]
+	for i := index<<1 + 1; i < size; i = i<<1 + 1 {
+		if i+1 < size && lists[i] < lists[i+1] {
+			i++
+		}
+		if cur < lists[i] {
+			lists[index], index = lists[i], i
+		}
+	}
+	lists[index] = cur
 }
 
 func Counting(arr []int) []int {

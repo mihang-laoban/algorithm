@@ -157,19 +157,24 @@ func TestPlusOne(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestMergeKLists(t *testing.T) {
-	head1 := ArrayToLinkedList([]int{1, 4, 5})
+	head1 := ArrayToLinkedList([]int{2, 4, 5})
 	head2 := ArrayToLinkedList([]int{1, 3, 4})
-	head3 := ArrayToLinkedList([]int{2, 6})
+	head3 := ArrayToLinkedList([]int{1, 6})
 	fmt.Println(LinkedListToArray(MergeKLists2([]*ListNode{head1, head2, head3})))
 	//fmt.Println(LinkedListToArray(MergeKListsPriorityQueue([]*ListNode{head1, head2, head3})))
+	//head4 := ArrayToLinkedList([]int{})
+	//fmt.Println(LinkedListToArray(MergeKLists2([]*ListNode{head4})))
 }
 
+func MergeKLists3(nodes []*ListNode) *ListNode {
+	return nil
+}
 func MergeKLists2(lists []*ListNode) *ListNode {
-	size := len(lists)
-	head := &ListNode{}
+	size, head := len(lists), &ListNode{}
 	if size == 0 {
-		return head.Next
+		return nil
 	}
+
 	for i := size - 1; i >= 0; i-- {
 		if lists[i] == nil {
 			size--
@@ -195,17 +200,17 @@ func MergeKLists2(lists []*ListNode) *ListNode {
 }
 
 func heapify(lists []*ListNode, i, size int) {
-	temp := lists[i]
+	cur := lists[i]
 	for k := i<<1 + 1; k < size; k = k<<1 + 1 {
 		if k+1 < size && lists[k].Val > lists[k+1].Val {
 			k++
 		}
-		if temp.Val > lists[k].Val {
+		if cur.Val > lists[k].Val {
 			lists[i] = lists[k]
 			i = k
 		}
 	}
-	lists[i] = temp
+	lists[i] = cur
 }
 
 /*给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
