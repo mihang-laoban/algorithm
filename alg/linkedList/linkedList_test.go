@@ -157,25 +157,21 @@ func TestPlusOne(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestMergeKLists(t *testing.T) {
-	//head1 := ArrayToLinkedList([]int{2, 4, 5})
-	//head2 := ArrayToLinkedList([]int{1, 3, 4})
-	//head3 := ArrayToLinkedList([]int{1, 6})
-	//fmt.Println(LinkedListToArray(MergeKLists2([]*ListNode{head1, head2, head3})))
+	head1 := ArrayToLinkedList([]int{2, 4, 5})
+	head2 := ArrayToLinkedList([]int{1, 3, 4})
+	head3 := ArrayToLinkedList([]int{1, 6})
+	fmt.Println(LinkedListToArray(MergeKListsStack([]*ListNode{head1, head2, head3})))
 	//fmt.Println(LinkedListToArray(MergeKListsPriorityQueue([]*ListNode{head1, head2, head3})))
-	head4 := ArrayToLinkedList([]int{2})
-	head5 := ArrayToLinkedList([]int{})
-	head6 := ArrayToLinkedList([]int{1})
-	head8 := ArrayToLinkedList([]int{3})
-	head7 := ArrayToLinkedList([]int{})
-	fmt.Println(LinkedListToArray(MergeKLists2([]*ListNode{head4, head5, head6, head7, head8})))
+	//head4 := ArrayToLinkedList([]int{2})
+	//head5 := ArrayToLinkedList([]int{})
+	//head6 := ArrayToLinkedList([]int{1})
+	//head8 := ArrayToLinkedList([]int{3})
+	//head7 := ArrayToLinkedList([]int{})
+	//fmt.Println(LinkedListToArray(MergeKLists3([]*ListNode{head4, head5, head6, head7, head8})))
 }
 
-func MergeKLists3(nodes []*ListNode) *ListNode {
-	return nil
-}
-
-func MergeKLists2(lists []*ListNode) *ListNode {
-	size, head := len(lists), &ListNode{}
+func MergeKListsStack(lists []*ListNode) *ListNode {
+	size, dummy := len(lists), &ListNode{}
 	if size == 0 {
 		return nil
 	}
@@ -191,7 +187,7 @@ func MergeKLists2(lists []*ListNode) *ListNode {
 		heapify(lists, i, size)
 	}
 	// 创建记录链表的游标
-	cur := head
+	cur := dummy
 	// 链接数组
 	for size > 0 {
 		cur.Next = lists[0]
@@ -211,7 +207,7 @@ func MergeKLists2(lists []*ListNode) *ListNode {
 		// 把最小元素和当前元素位置替换
 		heapify(lists, 0, size)
 	}
-	return head.Next
+	return dummy.Next
 }
 
 func heapify(lists []*ListNode, index, size int) {
