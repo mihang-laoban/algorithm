@@ -879,9 +879,6 @@ func TestTreeToDoublyList(t *testing.T) {
 
 func TreeToDoublyList(root *TreeNode) *TreeNode {
 	var pre, head *TreeNode
-	if root == nil {
-		return nil
-	}
 	stack := []*TreeNode{}
 	for root != nil || len(stack) > 0 {
 		for root != nil {
