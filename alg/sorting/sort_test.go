@@ -180,13 +180,17 @@ func heapifyR(nums []int, i, size int) {
 func heapifyL(lists []int, index, size int) {
 	cur := lists[index]
 	for i := index<<1 + 1; i < size; i = i<<1 + 1 {
+		// 找到最小的那个节点下标
 		if i+1 < size && lists[i] < lists[i+1] {
 			i++
 		}
-		if cur < lists[i] {
+		if lists[index] < lists[i] {
+			// 如果当前元素大于最小元素的值，则当前元素更新为最小元素
+			// 标记被更新的元素下标，已备后续更新
 			lists[index], index = lists[i], i
 		}
 	}
+	// 如果迭代过后下标被更新了，则发生位置交换，否则无交换
 	lists[index] = cur
 }
 
