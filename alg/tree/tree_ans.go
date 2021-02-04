@@ -559,3 +559,65 @@ func ClosestValue(root *TreeNode, target float64) int {
 	}
 	return int(l)
 }
+
+func DiameterOfBinaryTree(root *TreeNode) int {
+	res := 0
+	var cal func(*TreeNode) int
+	cal = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+		left := cal(root.Left)
+		right := cal(root.Right)
+		res = Max(res, left+right)
+		return Max(left, right) + 1
+	}
+	cal(root)
+	return res
+}
+
+func MergeTreesR(t1 *TreeNode, t2 *TreeNode) *TreeNode {
+	if t1 == nil {
+		return t2
+	}
+	if t2 == nil {
+		return t1
+	}
+	t1.Val += t2.Val
+	t1.Left = MergeTreesR(t1.Left, t2.Left)
+	t1.Right = MergeTreesR(t1.Right, t2.Right)
+	return t1
+}
+
+func MergeTreesL(t1 *TreeNode, t2 *TreeNode) *TreeNode {
+	if t1 == nil {
+		return t2
+	}
+	if t2 == nil {
+		return t1
+	}
+	stack := [][2]*TreeNode{[2]*TreeNode{t1, t2}}
+	for len(stack) > 0 {
+		cur := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		// 两颗树的当前节点都不为空
+		if cur[0] != nil && cur[1] != nil {
+			cur[0].Val += cur[1].Val
+		}
+
+		if cur[0].Right != nil && cur[1].Right != nil {
+			stack = append(stack, [2]*TreeNode{cur[0].Right, cur[1].Right})
+		}
+		if cur[0].Left != nil && cur[1].Left != nil {
+			stack = append(stack, [2]*TreeNode{cur[0].Left, cur[1].Left})
+		}
+
+		if cur[0].Left == nil && cur[1].Left != nil {
+			cur[0].Left = cur[1].Left
+		}
+		if cur[0].Right == nil && cur[1].Right != nil {
+			cur[0].Right = cur[1].Right
+		}
+	}
+	return t1
+}

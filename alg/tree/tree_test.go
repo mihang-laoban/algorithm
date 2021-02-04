@@ -834,3 +834,119 @@ func TestClosestValue(t *testing.T) {
 	root := ArrayToTree([]interface{}{1500000000, 1400000000})
 	fmt.Println(ClosestValue(root, -1500000000.0))
 }
+
+/*给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过也可能不穿过根结点。
+
+示例 :
+给定二叉树
+    1
+   / \
+  2   3
+ / \
+4   5
+返回 3, 它的长度是路径 [4,2,1,3] 或者 [5,2,1,3]。
+
+注意：两结点之间的路径长度是以它们之间边的数目表示。
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/diameter-of-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestDiameterOfBinaryTree(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 3, 4, 5})
+	fmt.Println(DiameterOfBinaryTree(root))
+}
+
+/*给定两个二叉树，想象当你将它们中的一个覆盖到另一个上时，两个二叉树的一些节点便会重叠。
+你需要将他们合并为一个新的二叉树。合并的规则是如果两个节点重叠，那么将他们的值相加作为节点合并后的新值，否则不为 NULL 的节点将直接作为新二叉树的节点。
+
+示例 1:
+
+输入:
+Tree 1                     Tree 2				Tree 3
+    1                         2                    2
+   / \                       / \                  / \
+  3   2                     1   3                1   3
+ /                           \   \              / \
+5                             4   7            4   7
+输出:
+合并后的树:
+    3                 3
+   / \               / \
+  4   5             4   5
+ / \   \           / \
+5   4   7         9   7
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/merge-two-binary-trees
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestMergeTrees(t *testing.T) {
+	root1 := ArrayToTree([]interface{}{1, 3, 2, 5})
+	root2 := ArrayToTree([]interface{}{2, 1, 3, 4, 7})
+	MergeTreesL(root1, root2)
+	fmt.Println(TreeToArray(root1))
+	//fmt.Println(TreeToArray(MergeTreesL(root1, root2)))
+}
+
+/*给定一个二叉树，检查它是否是镜像对称的。
+
+例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+
+  1
+ / \
+2   2
+ \   \
+  3   3
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/symmetric-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestIsSymmetric(t *testing.T) {
+	root1 := ArrayToTree([]interface{}{1, 2, 2, 3, 4, 4, 3})
+	root2 := ArrayToTree([]interface{}{1, 2, 2, 3, 3})
+	fmt.Println(IsSymmetricL(root1))
+	fmt.Println(IsSymmetricL(root2))
+}
+
+func IsSymmetricL(root *TreeNode) bool {
+	queue := []*TreeNode{root, root}
+	for len(queue) > 0 {
+		l, r := queue[0], queue[1]
+		queue = queue[2:]
+		if l == nil && r == nil {
+			continue
+		}
+		if l == nil || r == nil {
+			return false
+		}
+		if l.Val != r.Val {
+			return false
+		}
+		queue = append(queue, l.Left)
+		queue = append(queue, r.Right)
+		queue = append(queue, l.Right)
+		queue = append(queue, r.Left)
+	}
+	return true
+}
+
+func IsSymmetricR(root *TreeNode) bool {
+	var check func(*TreeNode, *TreeNode) bool
+	check = func(l, r *TreeNode) bool {
+		if l == nil && r == nil {
+			return true
+		}
+		if l == nil || r == nil {
+			return false
+		}
+		return l.Val == r.Val && check(l.Left, r.Right) && check(l.Right, r.Left)
+	}
+	return check(root, root)
+}
