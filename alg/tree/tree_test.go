@@ -4,260 +4,11 @@ import (
 	. "dp/ds/tree"
 	. "dp/tools"
 	"fmt"
-	"math"
 	"testing"
 )
 
 func init() {
 	Max(1, 2)
-}
-
-func traverse(order int) {
-	preFunc := []func(*TreeNode) []int{PreOrderLabel, PreOrderRecur, PreOrderLoop, MyPreOrder}
-	inFunc := []func(*TreeNode) []int{InOrderLabel, InOrderRecur, InOrderLoop, MyInOrder}
-	postFunc := []func(*TreeNode) []int{PostOrderLabel, PostOrderRecur, PostOrderLoop, MyPostOrder}
-
-	for _, root := range GetRootForTraverse() {
-		switch order {
-		case PRE:
-			fmt.Println("Pre:")
-			Ordering(root, preFunc)
-		case IN:
-			fmt.Println("In:")
-			Ordering(root, inFunc)
-		case POST:
-			fmt.Println("Post:")
-			Ordering(root, postFunc)
-		}
-	}
-}
-
-func MyPreOrder(root *TreeNode) (res []int) {
-	return
-}
-
-func MyInOrder(root *TreeNode) (res []int) {
-	return
-}
-func MyPostOrder(root *TreeNode) (res []int) {
-	return
-}
-
-func AllOrderTraverse() {
-	for _, v := range []int{PRE, IN, POST} {
-		traverse(v)
-	}
-}
-
-func SerAndDes() {
-	// "[1,2,3,nil,nil,4,5,nil,nil,nil,nil]"
-	root := GetRootForSerialize()
-	str := Serialize(root)
-	res := Deserialize(str)
-	fmt.Println(Serialize(res))
-}
-
-/*给定一个二叉树，判断其是否是一个有效的二叉搜索树。
-
-假设一个二叉搜索树具有如下特征：
-
-节点的左子树只包含小于当前节点的数。
-节点的右子树只包含大于当前节点的数。
-所有左子树和右子树自身必须也是二叉搜索树。
-示例 1:
-
-输入:
-  2
- / \
-1   3
-输出: true
-示例 2:
-
-输入:
-  5
- / \
-1   4
-   / \
-  3   6
-输出: false
-解释: 输入为: [5,1,4,nil,nil,3,6]。
-     根节点的值为 5 ，但是其右子节点值为 4 。
-
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/validate-binary-search-tree
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
-
-func BuildTreeToValidate() (root *TreeNode) {
-	root = &TreeNode{Val: 5}
-	root.Left = &TreeNode{Val: 1}
-	root.Right = &TreeNode{Val: 4}
-	root.Right.Left = &TreeNode{Val: 3}
-	root.Right.Right = &TreeNode{Val: 6}
-	return
-}
-
-func checker(root *TreeNode) bool {
-	type Node struct {
-		isCur bool
-		node  *TreeNode
-	}
-	last, stack := math.MinInt64, []*Node{{true, root}}
-	for len(stack) > 0 {
-		cur := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		if cur.node == nil {
-			continue
-		}
-		if cur.isCur {
-			stack = append(stack, &Node{true, cur.node.Right})
-			stack = append(stack, &Node{false, cur.node})
-			stack = append(stack, &Node{true, cur.node.Left})
-		} else {
-			if last >= cur.node.Val {
-				return false
-			}
-			last = cur.node.Val
-		}
-	}
-	return true
-}
-
-/*输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
-
-示例 1:
-给定二叉树 [3,9,20,nil,nil,15,7]
-
-  3
- / \
-9  20
-  /  \
-15    7
-返回 true 。
-
-示例 2:
-
-给定二叉树 [1,2,2,3,3,nil,nil,4,4]
-
-      1
-     / \
-    2   2
-   / \
-  3   3
- / \
-4   4
-
-	  1
-	 / \
-	2   2
-   /     \
-  3       3
- /
-4
-[1,2,2,3,nil,nil,3,4,nil,nil,4]
-
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/ping-heng-er-cha-shu-lcof
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
-*/
-
-func TestIsBalancedBottom(t *testing.T) {
-	root := ArrayToTree([]interface{}{1, 2, 2, 3, nil, nil, 3, 4, nil, nil, 4})
-	fmt.Println(balance(root) >= 0)
-}
-
-func balance(node *TreeNode) int {
-	if node == nil {
-		return 0
-	}
-	left, right := balance(node.Left), balance(node.Right)
-	if left == -1 || right == 1 || Abs(left-right) > 1 {
-		return -1
-	}
-	return Max(left, right) + 1
-}
-
-func TestGo(t *testing.T) {
-	AllOrderTraverse()
-	//root := BuildTreeToValidate()
-	//fmt.Println(checker(root))
-}
-
-func TestTreeAndArray(t *testing.T) {
-	arr := []interface{}{5, 1, 4, nil, nil, 3, 6}
-	fmt.Println(arr)
-	root := ArrayToTree(arr)
-	res := TreeToArray(root)
-	fmt.Println(res)
-}
-
-/*给定一个二叉树，判断其是否是一个有效的二叉搜索树。
-
-假设一个二叉搜索树具有如下特征：
-
-节点的左子树只包含小于当前节点的数。
-节点的右子树只包含大于当前节点的数。
-所有左子树和右子树自身必须也是二叉搜索树。
-示例 1:
-
-输入:
-  2
- / \
-1   3
-输出: true
-示例 2:
-
-输入:
-    5
-   / \
-  1   4
-     / \
-    3   6
-输出: false
-解释: 输入为: [5,1,4,nil,nil,3,6]。
-     根节点的值为 5 ，但是其右子节点值为 4 。
-
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/validate-binary-search-tree
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
-
-func TestValidateBinaryTree(t *testing.T) {
-	nums := []interface{}{5, 1, 4, nil, nil, 3, 6}
-	root := ArrayToTree(nums)
-	fmt.Println(isValidBST(root))
-	fmt.Println(isValidBSTInOrder(root))
-}
-
-func isValidBST(root *TreeNode) bool {
-	return helper(root, math.MinInt64, math.MaxInt64)
-}
-
-func helper(root *TreeNode, lower, upper int) bool {
-	if root == nil {
-		return true
-	}
-	if root.Val <= lower || root.Val >= upper {
-		return false
-	}
-	return helper(root.Left, lower, root.Val) && helper(root.Right, root.Val, upper)
-}
-
-func isValidBSTInOrder(root *TreeNode) bool {
-	stack := []*TreeNode{}
-	inOrder := math.MinInt64
-	for len(stack) > 0 || root != nil {
-		for root != nil {
-			stack = append(stack, root)
-			root = root.Left
-		}
-		root = stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		if root.Val <= inOrder {
-			return false
-		}
-		inOrder = root.Val
-		root = root.Right
-	}
-	return true
 }
 
 /*
@@ -269,7 +20,7 @@ func isValidBSTInOrder(root *TreeNode) bool {
 
 */
 //https://leetcode-cn.com/problems/number-of-islands/solution/number-of-islands-shen-du-you-xian-bian-li-dfs-or-/
-func Test(t *testing.T) {
+func TestTraverse(t *testing.T) {
 	root := ArrayToTree([]interface{}{5, 2, 6, 1, 3})
 	//52136
 	fmt.Println(Pre(root))
@@ -277,7 +28,8 @@ func Test(t *testing.T) {
 	fmt.Println(In(root))
 	//13265
 	fmt.Println(Post(root))
-	//fmt.Println(BFS(root))
+	//52613
+	fmt.Println(Bfs(root))
 }
 
 func Pre(root *TreeNode) (res []int) {
@@ -338,6 +90,116 @@ func Post(root *TreeNode) (res []int) {
 	return
 }
 
+func Bfs(root *TreeNode) (res []int) {
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		res = append(res, cur.Val)
+		if cur.Left != nil {
+			queue = append(queue, cur.Left)
+		}
+		if cur.Right != nil {
+			queue = append(queue, cur.Right)
+		}
+	}
+	return
+}
+
+/*输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
+
+示例 1:
+给定二叉树 [3,9,20,nil,nil,15,7]
+
+  3
+ / \
+9  20
+  /  \
+15    7
+返回 true 。
+
+示例 2:
+
+给定二叉树 [1,2,2,3,3,nil,nil,4,4]
+
+      1
+     / \
+    2   2
+   / \
+  3   3
+ / \
+4   4
+
+	  1
+	 / \
+	2   2
+   /     \
+  3       3
+ /
+4
+[1,2,2,3,nil,nil,3,4,nil,nil,4]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/ping-heng-er-cha-shu-lcof
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestIsBalancedBottom(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 2, 3, nil, nil, 3, 4, nil, nil, 4})
+	fmt.Println(balance(root) >= 0)
+}
+
+func TestTreeAndArray(t *testing.T) {
+	arr := []interface{}{5, 1, 4, nil, nil, 3, 6}
+	fmt.Println(arr)
+	root := ArrayToTree(arr)
+	res := TreeToArray(root)
+	fmt.Println(res)
+}
+
+/*给定一个二叉树，判断其是否是一个有效的二叉搜索树。
+
+假设一个二叉搜索树具有如下特征：
+
+节点的左子树只包含小于当前节点的数。
+节点的右子树只包含大于当前节点的数。
+所有左子树和右子树自身必须也是二叉搜索树。
+示例 1:
+
+输入:
+  2
+ / \
+1   3
+输出: true
+示例 2:
+
+输入:
+    5
+   / \
+  1   4
+     / \
+    3   6
+输出: false
+解释: 输入为: [5,1,4,nil,nil,3,6]。
+     根节点的值为 5 ，但是其右子节点值为 4 。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/validate-binary-search-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestBuildTreeToValidate(t *testing.T) {
+	AllOrderTraverse()
+	root := BuildTreeToValidate()
+	fmt.Println(checker(root))
+}
+
+func TestValidateBinaryTree(t *testing.T) {
+	nums := []interface{}{5, 1, 4, nil, nil, 3, 6}
+	root := ArrayToTree(nums)
+	fmt.Println(isValidBST(root))
+	fmt.Println(isValidBSTInOrder(root))
+}
+
 /*给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
 
 示例：
@@ -362,43 +224,8 @@ func Post(root *TreeNode) (res []int) {
 
 func TestBFS(t *testing.T) {
 	root := ArrayToTree([]interface{}{3, 9, 20, nil, nil, 15, 7})
-	fmt.Println(BFS2(root))
-}
-
-func BFSArr(root *TreeNode) (res [][]int) {
-	queue := []*TreeNode{root}
-	for len(queue) > 0 {
-		tmp, size := []int{}, len(queue)
-		for i := 0; i < size; i++ {
-			cur := queue[0]
-			queue = queue[1:]
-			tmp = append(tmp, cur.Val)
-			if cur.Left != nil {
-				queue = append(queue, cur.Left)
-			}
-			if cur.Right != nil {
-				queue = append(queue, cur.Right)
-			}
-		}
-		res = append(res, tmp)
-	}
-	return
-}
-
-func BFS2(root *TreeNode) (res []int) {
-	queue := []*TreeNode{root}
-	for len(queue) > 0 {
-		cur := queue[0]
-		queue = queue[1:]
-		res = append(res, cur.Val)
-		if cur.Left != nil {
-			queue = append(queue, cur.Left)
-		}
-		if cur.Right != nil {
-			queue = append(queue, cur.Right)
-		}
-	}
-	return
+	//fmt.Println(BFS2(root))
+	fmt.Println(BFSArr(root))
 }
 
 /*
@@ -474,33 +301,6 @@ func TestPerfectSquare(t *testing.T) {
 	fmt.Println(isPerfectSquareOld(16))
 }
 
-func isPerfectSquareOld(num int) interface{} {
-	if num < 2 {
-		return true
-	}
-	l, r := 0, num
-	for l <= r {
-		mid := l + (r-l)/2
-		if mid*mid == num {
-			return true
-		} else if mid*mid > num {
-			r = mid - 1
-		} else {
-			l = mid + 1
-		}
-	}
-	return false
-}
-
-func isPerfectSquare(n int) interface{} {
-	start := 1
-	for n > 0 {
-		n -= start
-		start += 2
-	}
-	return n == 0
-}
-
 /*
 升序排列的整数数组 nums 在预先未知的某个点上进行了旋转（例如， [0,1,2,4,5,6,7] 经旋转后可能变为 [4,5,6,7,0,1,2] ）。
 请你在数组中搜索 target ，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
@@ -525,46 +325,8 @@ func isPerfectSquare(n int) interface{} {
 */
 
 func TestSearchRotatedArray(t *testing.T) {
-
 	target, nums := 5, []int{4, 5, 6, 7, 0, 1, 2}
 	fmt.Println(search(target, nums))
-}
-
-func search(target int, nums []int) int {
-	n := len(nums)
-	if n == 0 {
-		return -1
-	}
-	// 如果只有一个数字
-	if n == 1 {
-		if nums[0] == target {
-			return 0
-		}
-		return -1
-	}
-	l, r := 0, n-1
-	for l <= r {
-		mid := (l + r) / 2
-		if nums[mid] == target {
-			return mid
-		}
-		if nums[0] <= nums[mid] { // 当右半边递增
-			//如果目标值在右半边
-			if nums[0] <= target && target < nums[mid] {
-				r = mid - 1
-			} else {
-				l = mid + 1
-			}
-		} else { // 当左半边递增
-			//如果目标值在右半边
-			if nums[mid] < target && target <= nums[n-1] {
-				l = mid + 1
-			} else {
-				r = mid - 1
-			}
-		}
-	}
-	return -1
 }
 
 /*给你二叉搜索树的根节点 root ，该树中的两个节点被错误地交换。请在不改变其结构的情况下，恢复这棵树。
@@ -585,36 +347,11 @@ https://leetcode-cn.com/problems/recover-binary-search-tree/solution/hui-fu-er-c
 func TestRecoverTree(t *testing.T) {
 	tree1 := ArrayToTree([]interface{}{1, 3, nil, nil, 2})
 	//tree2 := ArrayToTree([]interface{}{3, 1, 4, nil, nil, 2})
-	//recoverT(tree1)
+	recoverT(tree1)
 	RecoverTree(tree1)
 	//RecoverTreeMorris(tree2)
 	fmt.Println(BFStoArray(tree1))
 	//fmt.Println(BFStoArray(tree2))
-}
-
-func recoverT(root *TreeNode) {
-	stack := []*TreeNode{}
-	var x, y, pre *TreeNode
-	for root != nil || len(stack) > 0 {
-		if root != nil {
-			stack = append(stack, root)
-			root = root.Left
-		} else {
-			root = stack[len(stack)-1]
-			stack = stack[:len(stack)-1]
-			if pre != nil && root.Val < pre.Val {
-				y = root
-				if x == nil {
-					x = pre
-				} else {
-					break
-				}
-			}
-			pre = root
-			root = root.Right
-		}
-	}
-	x.Val, y.Val = y.Val, x.Val
 }
 
 /*翻转一棵二叉树。
@@ -719,13 +456,6 @@ func TestMaxDepth(t *testing.T) {
 	fmt.Println(MaxDepth(ArrayToTree([]interface{}{3, 9, 20, nil, nil, 15, 7})))
 }
 
-func MaxDepth(root *TreeNode) int {
-	if root == nil {
-		return 0
-	}
-	return Max(MaxDepth(root.Right), MaxDepth(root.Left)) + 1
-}
-
 /*翻转一棵二叉树。
 示例：
 输入：
@@ -780,35 +510,6 @@ func TestLevelOrderBottom(t *testing.T) {
 	root := ArrayToTree([]interface{}{})
 	res := LevelOrderBottom(root)
 	fmt.Println(res)
-}
-
-func LevelOrderBottom(root *TreeNode) [][]int {
-	res := [][]int{}
-	if root == nil {
-		return res
-	}
-	queue := []*TreeNode{root}
-	for len(queue) > 0 {
-		level := []int{}
-		size := len(queue)
-		for i := 0; i < size; i++ {
-			cur := queue[0]
-			queue = queue[1:]
-			level = append(level, cur.Val)
-			if cur.Left != nil {
-				queue = append(queue, cur.Left)
-			}
-			if cur.Right != nil {
-				queue = append(queue, cur.Right)
-			}
-		}
-		res = append(res, level)
-	}
-	size := len(res)
-	for i := 0; i < size>>1; i++ {
-		res[i], res[size-1-i] = res[size-1-i], res[i]
-	}
-	return res
 }
 
 /*给定一个不为空的二叉搜索树和一个目标值 target，请在该二叉搜索树中找到最接近目标值 target 的数值。
@@ -913,40 +614,4 @@ func TestIsSymmetric(t *testing.T) {
 	root2 := ArrayToTree([]interface{}{1, 2, 2, 3, 3})
 	fmt.Println(IsSymmetricL(root1))
 	fmt.Println(IsSymmetricL(root2))
-}
-
-func IsSymmetricL(root *TreeNode) bool {
-	queue := []*TreeNode{root, root}
-	for len(queue) > 0 {
-		l, r := queue[0], queue[1]
-		queue = queue[2:]
-		if l == nil && r == nil {
-			continue
-		}
-		if l == nil || r == nil {
-			return false
-		}
-		if l.Val != r.Val {
-			return false
-		}
-		queue = append(queue, l.Left)
-		queue = append(queue, r.Right)
-		queue = append(queue, l.Right)
-		queue = append(queue, r.Left)
-	}
-	return true
-}
-
-func IsSymmetricR(root *TreeNode) bool {
-	var check func(*TreeNode, *TreeNode) bool
-	check = func(l, r *TreeNode) bool {
-		if l == nil && r == nil {
-			return true
-		}
-		if l == nil || r == nil {
-			return false
-		}
-		return l.Val == r.Val && check(l.Left, r.Right) && check(l.Right, r.Left)
-	}
-	return check(root, root)
 }

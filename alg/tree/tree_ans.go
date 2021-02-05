@@ -412,6 +412,51 @@ func GetRootForSerialize() *TreeNode {
 	return root
 }
 
+func traverse(order int) {
+	preFunc := []func(*TreeNode) []int{PreOrderLabel, PreOrderRecur, PreOrderLoop, MyPreOrder}
+	inFunc := []func(*TreeNode) []int{InOrderLabel, InOrderRecur, InOrderLoop, MyInOrder}
+	postFunc := []func(*TreeNode) []int{PostOrderLabel, PostOrderRecur, PostOrderLoop, MyPostOrder}
+
+	for _, root := range GetRootForTraverse() {
+		switch order {
+		case PRE:
+			fmt.Println("Pre:")
+			Ordering(root, preFunc)
+		case IN:
+			fmt.Println("In:")
+			Ordering(root, inFunc)
+		case POST:
+			fmt.Println("Post:")
+			Ordering(root, postFunc)
+		}
+	}
+}
+
+func MyPreOrder(root *TreeNode) (res []int) {
+	return
+}
+
+func MyInOrder(root *TreeNode) (res []int) {
+	return
+}
+func MyPostOrder(root *TreeNode) (res []int) {
+	return
+}
+
+func AllOrderTraverse() {
+	for _, v := range []int{PRE, IN, POST} {
+		traverse(v)
+	}
+}
+
+func SerAndDes() {
+	// "[1,2,3,nil,nil,4,5,nil,nil,nil,nil]"
+	root := GetRootForSerialize()
+	str := Serialize(root)
+	res := Deserialize(str)
+	fmt.Println(Serialize(res))
+}
+
 func BFSArray(root *TreeNode) (res [][]int) {
 	if root == nil {
 		return res
@@ -435,6 +480,131 @@ func BFSArray(root *TreeNode) (res [][]int) {
 		res = append(res, tmp)
 	}
 	return
+}
+
+func isPerfectSquareOld(num int) interface{} {
+	if num < 2 {
+		return true
+	}
+	l, r := 0, num
+	for l <= r {
+		mid := l + (r-l)/2
+		if mid*mid == num {
+			return true
+		} else if mid*mid > num {
+			r = mid - 1
+		} else {
+			l = mid + 1
+		}
+	}
+	return false
+}
+
+func isPerfectSquare(n int) interface{} {
+	start := 1
+	for n > 0 {
+		n -= start
+		start += 2
+	}
+	return n == 0
+}
+
+func search(target int, nums []int) int {
+	n := len(nums)
+	if n == 0 {
+		return -1
+	}
+	// 如果只有一个数字
+	if n == 1 {
+		if nums[0] == target {
+			return 0
+		}
+		return -1
+	}
+	l, r := 0, n-1
+	for l <= r {
+		mid := (l + r) / 2
+		if nums[mid] == target {
+			return mid
+		}
+		if nums[0] <= nums[mid] { // 当右半边递增
+			//如果目标值在右半边
+			if nums[0] <= target && target < nums[mid] {
+				r = mid - 1
+			} else {
+				l = mid + 1
+			}
+		} else { // 当左半边递增
+			//如果目标值在右半边
+			if nums[mid] < target && target <= nums[n-1] {
+				l = mid + 1
+			} else {
+				r = mid - 1
+			}
+		}
+	}
+	return -1
+}
+
+func MaxDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	return Max(MaxDepth(root.Right), MaxDepth(root.Left)) + 1
+}
+
+func LevelOrderBottom(root *TreeNode) [][]int {
+	res := [][]int{}
+	if root == nil {
+		return res
+	}
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		level := []int{}
+		size := len(queue)
+		for i := 0; i < size; i++ {
+			cur := queue[0]
+			queue = queue[1:]
+			level = append(level, cur.Val)
+			if cur.Left != nil {
+				queue = append(queue, cur.Left)
+			}
+			if cur.Right != nil {
+				queue = append(queue, cur.Right)
+			}
+		}
+		res = append(res, level)
+	}
+	size := len(res)
+	for i := 0; i < size>>1; i++ {
+		res[i], res[size-1-i] = res[size-1-i], res[i]
+	}
+	return res
+}
+
+func recoverT(root *TreeNode) {
+	stack := []*TreeNode{}
+	var x, y, pre *TreeNode
+	for root != nil || len(stack) > 0 {
+		if root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		} else {
+			root = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			if pre != nil && root.Val < pre.Val {
+				y = root
+				if x == nil {
+					x = pre
+				} else {
+					break
+				}
+			}
+			pre = root
+			root = root.Right
+		}
+	}
+	x.Val, y.Val = y.Val, x.Val
 }
 
 func IslandBFS(grid [][]string) int {
@@ -512,6 +682,75 @@ func VerifyPostOrder(postOrder []int) bool {
 		}
 		// 每次循环都会把当前元素入栈
 		stack = append(stack, postOrder[i])
+	}
+	return true
+}
+
+func BFSArr(root *TreeNode) (res [][]int) {
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		tmp, size := []int{}, len(queue)
+		for i := 0; i < size; i++ {
+			cur := queue[0]
+			queue = queue[1:]
+			tmp = append(tmp, cur.Val)
+			if cur.Left != nil {
+				queue = append(queue, cur.Left)
+			}
+			if cur.Right != nil {
+				queue = append(queue, cur.Right)
+			}
+		}
+		res = append(res, tmp)
+	}
+	return
+}
+
+func BFS2(root *TreeNode) (res []int) {
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		res = append(res, cur.Val)
+		if cur.Left != nil {
+			queue = append(queue, cur.Left)
+		}
+		if cur.Right != nil {
+			queue = append(queue, cur.Right)
+		}
+	}
+	return
+}
+
+func isValidBST(root *TreeNode) bool {
+	return helper(root, math.MinInt64, math.MaxInt64)
+}
+
+func helper(root *TreeNode, lower, upper int) bool {
+	if root == nil {
+		return true
+	}
+	if root.Val <= lower || root.Val >= upper {
+		return false
+	}
+	return helper(root.Left, lower, root.Val) && helper(root.Right, root.Val, upper)
+}
+
+func isValidBSTInOrder(root *TreeNode) bool {
+	stack := []*TreeNode{}
+	inOrder := math.MinInt64
+	for len(stack) > 0 || root != nil {
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if root.Val <= inOrder {
+			return false
+		}
+		inOrder = root.Val
+		root = root.Right
 	}
 	return true
 }
@@ -620,4 +859,86 @@ func MergeTreesL(t1 *TreeNode, t2 *TreeNode) *TreeNode {
 		}
 	}
 	return t1
+}
+
+func balance(node *TreeNode) int {
+	if node == nil {
+		return 0
+	}
+	left, right := balance(node.Left), balance(node.Right)
+	if left == -1 || right == 1 || Abs(left-right) > 1 {
+		return -1
+	}
+	return Max(left, right) + 1
+}
+
+func BuildTreeToValidate() (root *TreeNode) {
+	root = &TreeNode{Val: 5}
+	root.Left = &TreeNode{Val: 1}
+	root.Right = &TreeNode{Val: 4}
+	root.Right.Left = &TreeNode{Val: 3}
+	root.Right.Right = &TreeNode{Val: 6}
+	return
+}
+
+func checker(root *TreeNode) bool {
+	type Node struct {
+		isCur bool
+		node  *TreeNode
+	}
+	last, stack := math.MinInt64, []*Node{{true, root}}
+	for len(stack) > 0 {
+		cur := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if cur.node == nil {
+			continue
+		}
+		if cur.isCur {
+			stack = append(stack, &Node{true, cur.node.Right})
+			stack = append(stack, &Node{false, cur.node})
+			stack = append(stack, &Node{true, cur.node.Left})
+		} else {
+			if last >= cur.node.Val {
+				return false
+			}
+			last = cur.node.Val
+		}
+	}
+	return true
+}
+
+func IsSymmetricL(root *TreeNode) bool {
+	queue := []*TreeNode{root, root}
+	for len(queue) > 0 {
+		l, r := queue[0], queue[1]
+		queue = queue[2:]
+		if l == nil && r == nil {
+			continue
+		}
+		if l == nil || r == nil {
+			return false
+		}
+		if l.Val != r.Val {
+			return false
+		}
+		queue = append(queue, l.Left)
+		queue = append(queue, r.Right)
+		queue = append(queue, l.Right)
+		queue = append(queue, r.Left)
+	}
+	return true
+}
+
+func IsSymmetricR(root *TreeNode) bool {
+	var check func(*TreeNode, *TreeNode) bool
+	check = func(l, r *TreeNode) bool {
+		if l == nil && r == nil {
+			return true
+		}
+		if l == nil || r == nil {
+			return false
+		}
+		return l.Val == r.Val && check(l.Left, r.Right) && check(l.Right, r.Left)
+	}
+	return check(root, root)
 }
