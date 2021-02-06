@@ -24,12 +24,104 @@ func TestTraverse(t *testing.T) {
 	root := ArrayToTree([]interface{}{5, 2, 6, 1, 3})
 	//52136
 	fmt.Println(Pre(root))
+	fmt.Println(MorrisPre(root))
 	//12356
 	fmt.Println(In(root))
+	fmt.Println(MorrisIn(root))
 	//13265
 	fmt.Println(Post(root))
+	fmt.Println(MorrisPost(root))
 	//52613
 	fmt.Println(Bfs(root))
+}
+
+func MorrisPre(root *TreeNode) (res []int) {
+	if root == nil {
+		return
+	}
+	cur1 := root       //当前开始遍历的节点
+	var cur2 *TreeNode //记录当前结点的左子树
+	for cur1 != nil {
+		cur2 = cur1.Left
+		if cur2 != nil {
+			for cur2.Right != nil && cur2.Right != cur1 { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
+				cur2 = cur2.Right
+			}
+			if cur2.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
+				cur2.Right = cur1
+				res = append(res, cur1.Val)
+				cur1 = cur1.Left
+				continue
+			} else { //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
+				cur2.Right = nil
+			}
+		} else {
+			res = append(res, cur1.Val)
+		}
+		cur1 = cur1.Right //一直往右边走，参考图
+	}
+	return
+}
+
+func MorrisIn(root *TreeNode) (res []int) {
+	if root == nil {
+		return
+	}
+	pre := root       //当前开始遍历的节点
+	var cur *TreeNode //记录当前结点的左子树
+	for pre != nil {
+		cur = pre.Left
+		if cur != nil {
+			for cur.Right != nil && cur.Right != pre { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
+				cur = cur.Right
+			}
+			if cur.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
+				cur.Right = pre
+				pre = pre.Left
+				continue
+			} else { //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
+				cur.Right = nil
+			}
+		}
+		res = append(res, pre.Val)
+		pre = pre.Right //一直往右边走，参考图
+	}
+	return
+}
+
+func MorrisPost(root *TreeNode) (res []int) {
+	reverse := func(nums []int) {
+		for i, n := 0, len(nums); i < n/2; i++ {
+			nums[i], nums[n-1-i] = nums[n-1-i], nums[i]
+		}
+	}
+
+	addPath := func(node *TreeNode) {
+		resSize := len(res)
+		for ; node != nil; node = node.Right {
+			res = append(res, node.Val)
+		}
+		reverse(res[resSize:])
+	}
+
+	p1 := root
+	for p1 != nil {
+		if p2 := p1.Left; p2 != nil {
+			for p2.Right != nil && p2.Right != p1 {
+				p2 = p2.Right
+			}
+			if p2.Right == nil {
+				p2.Right = p1
+				p1 = p1.Left
+				continue
+			}
+			p2.Right = nil
+			addPath(p1.Left)
+		}
+		p1 = p1.Right
+	}
+	addPath(root)
+	return
 }
 
 func Pre(root *TreeNode) (res []int) {
