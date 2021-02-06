@@ -942,3 +942,55 @@ func IsSymmetricR(root *TreeNode) bool {
 	}
 	return check(root, root)
 }
+
+func BinaryTreePathsR(root *TreeNode) []string {
+	res := []string{}
+	var build func(*TreeNode, string)
+	build = func(root *TreeNode, path string) {
+		if root == nil {
+			return
+		}
+		if root.Right == nil && root.Left == nil {
+			path += strconv.Itoa(root.Val)
+			res = append(res, path)
+			return
+		}
+		path += strconv.Itoa(root.Val) + "->"
+		build(root.Left, path)
+		build(root.Right, path)
+	}
+	build(root, "")
+	return res
+}
+
+func HasPathSum(root *TreeNode, targetSum int) bool {
+	if root == nil {
+		return false
+	}
+	if root.Left == nil && root.Right == nil {
+		return targetSum == root.Val
+	}
+	return HasPathSum(root.Left, targetSum-root.Val) || HasPathSum(root.Right, targetSum-root.Val)
+}
+
+func FindSecondMinimumValue(root *TreeNode) int {
+	var find func(*TreeNode, int) int
+	find = func(root *TreeNode, mi int) int {
+		if root == nil {
+			return -1
+		}
+		if root.Val > mi {
+			return root.Val
+		}
+		left := find(root.Left, mi)
+		right := find(root.Right, mi)
+		if left == -1 {
+			return right
+		}
+		if right == -1 {
+			return left
+		}
+		return Min(right, left)
+	}
+	return find(root, root.Val)
+}

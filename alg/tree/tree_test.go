@@ -4,6 +4,7 @@ import (
 	. "dp/ds/tree"
 	. "dp/tools"
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -23,14 +24,18 @@ func init() {
 func TestTraverse(t *testing.T) {
 	root := ArrayToTree([]interface{}{5, 2, 6, 1, 3})
 	//52136
+	fmt.Println("pre")
 	fmt.Println(Pre(root))
+	fmt.Println(Pre2(root))
 	fmt.Println(MorrisPre(root))
-	//12356
+	fmt.Println("in")
 	fmt.Println(In(root))
 	fmt.Println(MorrisIn(root))
+	fmt.Println("post")
 	//13265
 	fmt.Println(Post(root))
 	fmt.Println(MorrisPost(root))
+	fmt.Println("bfs")
 	//52613
 	fmt.Println(Bfs(root))
 }
@@ -121,6 +126,22 @@ func MorrisPost(root *TreeNode) (res []int) {
 		p1 = p1.Right
 	}
 	addPath(root)
+	return
+}
+
+func Pre2(root *TreeNode) (res []int) {
+	stack := []*TreeNode{root}
+	for len(stack) > 0 {
+		cur := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		res = append(res, cur.Val)
+		if cur.Right != nil {
+			stack = append(stack, cur.Right)
+		}
+		if cur.Left != nil {
+			stack = append(stack, cur.Left)
+		}
+	}
 	return
 }
 
@@ -706,4 +727,188 @@ func TestIsSymmetric(t *testing.T) {
 	root2 := ArrayToTree([]interface{}{1, 2, 2, 3, 3})
 	fmt.Println(IsSymmetricL(root1))
 	fmt.Println(IsSymmetricL(root2))
+}
+
+/*给定一个二叉树，返回所有从根节点到叶子节点的路径。
+说明: 叶子节点是指没有子节点的节点。
+示例:
+
+输入:
+  1
+ / \
+2   3
+ \
+  5
+
+输出: ["1->2->5", "1->3"]
+
+解释: 所有根节点到叶子节点的路径为: 1->2->5, 1->3
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/binary-tree-paths
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestBinaryTreePaths(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 3, 5})
+	fmt.Println(BinaryTreePathsR(root))
+}
+
+/*
+给你二叉树的根节点 root 和一个表示目标和的整数 targetSum ，判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。
+叶子节点 是指没有子节点的节点。
+
+示例 1：
+输入：root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+输出：true
+
+示例 2：
+输入：root = [1,2,3], targetSum = 5
+输出：false
+
+示例 3：
+输入：root = [1,2], targetSum = 0
+输出：false
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/path-sum
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestHasPathSum(t *testing.T) {
+	root := ArrayToTree([]interface{}{5, 4, 8, 11, nil, 13, 4, 7, 2, nil, nil, nil, 1})
+	fmt.Println(HasPathSum(root, 22))
+}
+
+/*给你两棵二叉树的根节点 p 和 q ，编写一个函数来检验这两棵树是否相同。
+如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
+
+示例 1：
+输入：p = [1,2,3], q = [1,2,3]
+输出：true
+
+示例 2：
+输入：p = [1,2], q = [1,null,2]
+输出：false
+
+示例 3：
+输入：p = [1,2,1], q = [1,1,2]
+输出：false
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/same-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestIsSameTree(t *testing.T) {
+	root1 := ArrayToTree([]interface{}{1, 2, 1})
+	root2 := ArrayToTree([]interface{}{1, 1, 2})
+	fmt.Println(IsSameTree(root1, root2))
+}
+
+func IsSameTree(p *TreeNode, q *TreeNode) bool {
+	if q == nil && p == nil {
+		return true
+	}
+	if q == nil || p == nil {
+		return false
+	}
+	if q.Val != p.Val {
+		return false
+	}
+	return IsSameTree(p.Left, q.Left) && IsSameTree(p.Right, q.Right)
+}
+
+/*给定一个非空特殊的二叉树，每个节点都是正数，并且每个节点的子节点数量只能为 2 或 0。如果一个节点有两个子节点的话，那么该节点的值等于两个子节点中较小的一个。
+更正式地说，root.val = min(root.left.val, root.right.val) 总成立。
+给出这样的一个二叉树，你需要输出所有节点中的第二小的值。如果第二小的值不存在的话，输出 -1 。
+
+示例 1：
+  2
+ / \
+2   5
+   / \
+  5   7
+输入：root = [2,2,5,null,null,5,7]
+输出：5
+解释：最小的值是 2 ，第二小的值是 5 。
+
+示例 2：
+输入：root = [2,2,2]
+输出：-1
+解释：最小的值是 2, 但是不存在第二小的值。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/second-minimum-node-in-a-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestFindSecondMinimumValue(t *testing.T) {
+	//root := ArrayToTree([]interface{}{2, 2, 5, nil, nil, 5, 7})
+	root := ArrayToTree([]interface{}{1, 1, 3, 1, 1, 3, 4, 3, 1, 1, 1, 3, 8, 4, 8, 3, 3, 1, 6, 2, 1}) // 2
+	fmt.Println(FindSecondMinimumValue(root))
+}
+
+/*给定一个二叉搜索树的根节点 root，返回树中任意两节点的差的最小值。
+
+示例：
+输入: root = [4,2,6,1,3,null,null]
+输出: 1
+解释:
+注意，root是树节点对象(TreeNode object)，而不是数组。
+
+给定的树 [4,2,6,1,3,null,null] 可表示为下图:
+
+    4
+   / \
+  2   6
+ / \
+1   3
+
+最小的差值是 1, 它是节点1和节点2的差值, 也是节点3和节点2的差值。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/minimum-distance-between-bst-nodes
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestMinDiffInBST(t *testing.T) {
+	//root := ArrayToTree([]interface{}{4, 2, 6, 1, 3, nil, nil})
+	root := ArrayToTree([]interface{}{90, 69, nil, 49, 89, nil, 52})
+	//root := ArrayToTree([]interface{}{1, 0, 48, nil, nil, 12, 49})
+	fmt.Println(MinDiffInBSTR(root))
+	fmt.Println(MinDiffInBSTL(root))
+}
+
+func MinDiffInBSTL(root *TreeNode) int {
+	mi, pre := math.MaxInt64, -1
+	stack := []*TreeNode{}
+	for len(stack) > 0 || root != nil {
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if pre != -1 {
+			mi = Min(mi, root.Val-pre)
+		}
+		pre = root.Val
+		root = root.Right
+	}
+	return mi
+}
+
+func MinDiffInBSTR(root *TreeNode) int {
+	mi, pre := math.MaxInt64, -1
+	var find func(root *TreeNode)
+	find = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		find(root.Left)
+		if pre != -1 {
+			mi = Min(mi, root.Val-pre)
+		}
+		pre = root.Val
+		find(root.Right)
+	}
+	find(root)
+	return mi
 }
