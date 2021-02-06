@@ -4,7 +4,6 @@ import (
 	. "dp/ds/tree"
 	. "dp/tools"
 	"fmt"
-	"math"
 	"testing"
 )
 
@@ -876,39 +875,63 @@ func TestMinDiffInBST(t *testing.T) {
 	fmt.Println(MinDiffInBSTL(root))
 }
 
-func MinDiffInBSTL(root *TreeNode) int {
-	mi, pre := math.MaxInt64, -1
-	stack := []*TreeNode{}
-	for len(stack) > 0 || root != nil {
-		for root != nil {
-			stack = append(stack, root)
-			root = root.Left
-		}
-		root = stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		if pre != -1 {
-			mi = Min(mi, root.Val-pre)
-		}
-		pre = root.Val
-		root = root.Right
-	}
-	return mi
+/*给定两个非空二叉树 s 和 t，检验 s 中是否包含和 t 具有相同结构和节点值的子树。s 的一个子树包括 s 的一个节点和这个节点的所有子孙。s 也可以看做它自身的一棵子树。
+
+示例 1:
+给定的树 s:
+
+    3
+   / \
+  4   5
+ / \
+1   2
+给定的树 t：
+  4
+ / \
+1   2
+返回 true，因为 t 与 s 的一个子树拥有相同的结构和节点值。
+
+示例 2:
+给定的树 s：
+    3
+   / \
+  4   5
+ / \
+1   2
+   /
+  0
+给定的树 t：
+
+  4
+ / \
+1   2
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/subtree-of-another-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestIsSubtree(t *testing.T) {
+	root1 := ArrayToTree([]interface{}{3, 4, 5, 1, 2})
+	root2 := ArrayToTree([]interface{}{4, 1, 2})
+	fmt.Println(IsSubtree(root1, root2))
 }
 
-func MinDiffInBSTR(root *TreeNode) int {
-	mi, pre := math.MaxInt64, -1
-	var find func(root *TreeNode)
-	find = func(root *TreeNode) {
-		if root == nil {
-			return
-		}
-		find(root.Left)
-		if pre != -1 {
-			mi = Min(mi, root.Val-pre)
-		}
-		pre = root.Val
-		find(root.Right)
+func IsSubtree(s *TreeNode, t *TreeNode) bool {
+	if s == nil {
+		return false
 	}
-	find(root)
-	return mi
+	var check func(*TreeNode, *TreeNode) bool
+	check = func(a, b *TreeNode) bool {
+		if a == nil && b == nil {
+			return true
+		}
+		if a == nil || b == nil {
+			return false
+		}
+		if a.Val != b.Val {
+			return false
+		}
+		return check(a.Left, b.Left) && check(a.Right, b.Right)
+	}
+	return check(s, t) || IsSubtree(s.Right, t) || IsSubtree(s.Left, t)
 }

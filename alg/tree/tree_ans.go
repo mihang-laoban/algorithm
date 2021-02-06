@@ -994,3 +994,40 @@ func FindSecondMinimumValue(root *TreeNode) int {
 	}
 	return find(root, root.Val)
 }
+
+func MinDiffInBSTL(root *TreeNode) int {
+	mi, pre := math.MaxInt64, -1
+	stack := []*TreeNode{}
+	for len(stack) > 0 || root != nil {
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if pre != -1 {
+			mi = Min(mi, root.Val-pre)
+		}
+		pre = root.Val
+		root = root.Right
+	}
+	return mi
+}
+
+func MinDiffInBSTR(root *TreeNode) int {
+	mi, pre := math.MaxInt64, -1
+	var find func(root *TreeNode)
+	find = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		find(root.Left)
+		if pre != -1 {
+			mi = Min(mi, root.Val-pre)
+		}
+		pre = root.Val
+		find(root.Right)
+	}
+	find(root)
+	return mi
+}
