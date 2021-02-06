@@ -114,3 +114,18 @@ func ToInt(str string) int {
 		panic(err)
 	}
 }
+
+func ReverseArr2(nums []int) {
+	for i, size := 0, len(nums); i < size>>1; i++ {
+		nums[i], nums[size-1-i] = nums[size-1-i], nums[i]
+	}
+}
+
+func ReverseArr1(nums []int) {
+	l, r := 0, len(nums)-1
+	for l < r {
+		nums[l], nums[r] = nums[r], nums[l]
+		l++
+		r--
+	}
+}
