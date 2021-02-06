@@ -1031,3 +1031,64 @@ func MinDiffInBSTR(root *TreeNode) int {
 	find(root)
 	return mi
 }
+
+func IsSubtree(s *TreeNode, t *TreeNode) bool {
+	if s == nil {
+		return false
+	}
+	var check func(*TreeNode, *TreeNode) bool
+	check = func(a, b *TreeNode) bool {
+		if a == nil && b == nil {
+			return true
+		}
+		if a == nil || b == nil {
+			return false
+		}
+		if a.Val != b.Val {
+			return false
+		}
+		return check(a.Left, b.Left) && check(a.Right, b.Right)
+	}
+	return check(s, t) || IsSubtree(s.Right, t) || IsSubtree(s.Left, t)
+}
+
+func Tree2str(root *TreeNode) string {
+	if root == nil {
+		return ""
+	}
+	if root.Right == nil && root.Left == nil {
+		return strconv.Itoa(root.Val)
+	}
+	if root.Right == nil {
+		return strconv.Itoa(root.Val) + "(" + Tree2str(root.Left) + ")"
+	}
+	return strconv.Itoa(root.Val) + "(" + Tree2str(root.Left) + ")(" + Tree2str(root.Right) + ")"
+}
+
+func Tree2str2(t *TreeNode) string {
+	if t == nil {
+		return ""
+	}
+	builder := strings.Builder{}
+
+	var construct func(*TreeNode)
+	construct = func(t *TreeNode) {
+		if t == nil {
+			return
+		}
+		builder.WriteString(strconv.Itoa(t.Val))
+		if t.Left == nil && t.Right == nil {
+			return
+		}
+		builder.WriteString("(")
+		construct(t.Left)
+		builder.WriteString(")")
+		if t.Right != nil {
+			builder.WriteString("(")
+			construct(t.Right)
+			builder.WriteString(")")
+		}
+	}
+	construct(t)
+	return builder.String()
+}

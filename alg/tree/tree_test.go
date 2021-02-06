@@ -43,26 +43,26 @@ func MorrisPre(root *TreeNode) (res []int) {
 	if root == nil {
 		return
 	}
-	cur1 := root       //当前开始遍历的节点
-	var cur2 *TreeNode //记录当前结点的左子树
-	for cur1 != nil {
-		cur2 = cur1.Left
-		if cur2 != nil {
-			for cur2.Right != nil && cur2.Right != cur1 { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
-				cur2 = cur2.Right
+	cur := root       //当前开始遍历的节点
+	var pre *TreeNode //记录当前结点的左子树
+	for cur != nil {
+		pre = cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
+				pre = pre.Right
 			}
-			if cur2.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
-				cur2.Right = cur1
-				res = append(res, cur1.Val)
-				cur1 = cur1.Left
+			if pre.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
+				pre.Right = cur
+				res = append(res, cur.Val)
+				cur = cur.Left
 				continue
 			} else { //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
-				cur2.Right = nil
+				pre.Right = nil
 			}
 		} else {
-			res = append(res, cur1.Val)
+			res = append(res, cur.Val)
 		}
-		cur1 = cur1.Right //一直往右边走，参考图
+		cur = cur.Right //一直往右边走，参考图
 	}
 	return
 }
@@ -916,22 +916,139 @@ func TestIsSubtree(t *testing.T) {
 	fmt.Println(IsSubtree(root1, root2))
 }
 
-func IsSubtree(s *TreeNode, t *TreeNode) bool {
-	if s == nil {
-		return false
+/*
+你需要采用前序遍历的方式，将一个二叉树转换成一个由括号和整数组成的字符串。
+
+空节点则用一对空括号 "()" 表示。而且你需要省略所有不影响字符串与原始二叉树之间的一对一映射关系的空括号对。
+
+示例 1:
+
+输入: 二叉树: [1,2,3,4]
+    1
+   / \
+  2   3
+ /
+4
+输出: "1(2(4))(3)"
+
+解释: 原本将是“1(2(4)())(3())”，
+在你省略所有不必要的空括号对之后，
+它将是“1(2(4))(3)”。
+示例 2:
+
+输入: 二叉树: [1,2,3,null,4]
+  1
+ / \
+2   3
+ \
+  4
+输出: "1(2()(4))(3)"
+
+解释: 和第一个示例相似，
+除了我们不能省略第一个对括号来中断输入和输出之间的一对一映射关系。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/construct-string-from-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestTree2str(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 3, 4})
+	fmt.Println(Tree2str(root))
+	fmt.Println(Tree2str2(root))
+}
+
+/*给定一个有相同值的二叉搜索树（BST），找出 BST 中的所有众数（出现频率最高的元素）。
+
+假定 BST 有如下定义：
+
+结点左子树中所含结点的值小于等于当前结点的值
+结点右子树中所含结点的值大于等于当前结点的值
+左子树和右子树都是二叉搜索树
+例如：
+给定 BST [1,null,2,2],
+
+	1
+	 \
+	  2
+	 /
+	2
+返回[2].
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/find-mode-in-binary-search-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestFindMode(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, nil, 2, 2})
+	fmt.Println(FindMode(root))
+	fmt.Println(FindModeMorris(root))
+}
+
+func FindMode(root *TreeNode) (answer []int) {
+	var base, count, maxCount int
+
+	update := func(x int) {
+		if x == base {
+			count++
+		} else {
+			base, count = x, 1
+		}
+		if count == maxCount {
+			answer = append(answer, base)
+		} else if count > maxCount {
+			maxCount = count
+			answer = []int{base}
+		}
 	}
-	var check func(*TreeNode, *TreeNode) bool
-	check = func(a, b *TreeNode) bool {
-		if a == nil && b == nil {
-			return true
+
+	var dfs func(*TreeNode)
+	dfs = func(node *TreeNode) {
+		if node == nil {
+			return
 		}
-		if a == nil || b == nil {
-			return false
-		}
-		if a.Val != b.Val {
-			return false
-		}
-		return check(a.Left, b.Left) && check(a.Right, b.Right)
+		dfs(node.Left)
+		update(node.Val)
+		dfs(node.Right)
 	}
-	return check(s, t) || IsSubtree(s.Right, t) || IsSubtree(s.Left, t)
+	dfs(root)
+	return
+}
+
+func FindModeMorris(root *TreeNode) (answer []int) {
+	var base, count, maxCount int
+	update := func(x int) {
+		if x == base {
+			count++
+		} else {
+			base, count = x, 1
+		}
+		if count == maxCount {
+			answer = append(answer, base)
+		} else if count > maxCount {
+			maxCount = count
+			answer = []int{base}
+		}
+	}
+	cur := root
+	for cur != nil {
+		if cur.Left == nil {
+			update(cur.Val)
+			cur = cur.Right
+			continue
+		}
+		pre := cur.Left
+		for pre.Right != nil && pre.Right != cur {
+			pre = pre.Right
+		}
+		if pre.Right == nil {
+			pre.Right = cur
+			cur = cur.Left
+		} else {
+			pre.Right = nil
+			update(cur.Val)
+			cur = cur.Right
+		}
+	}
+	return
 }
