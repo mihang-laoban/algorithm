@@ -29,6 +29,7 @@ func TestTraverse(t *testing.T) {
 	fmt.Println(MorrisPre(root))
 	fmt.Println("in")
 	fmt.Println(In(root))
+	fmt.Println(In2(root))
 	fmt.Println(MorrisIn(root))
 	fmt.Println("post")
 	//13265
@@ -43,10 +44,9 @@ func MorrisPre(root *TreeNode) (res []int) {
 	if root == nil {
 		return
 	}
-	cur := root       //当前开始遍历的节点
-	var pre *TreeNode //记录当前结点的左子树
+	cur := root //当前开始遍历的节点
 	for cur != nil {
-		pre = cur.Left
+		pre := cur.Left
 		if pre != nil {
 			for pre.Right != nil && pre.Right != cur { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
 				pre = pre.Right
@@ -71,24 +71,23 @@ func MorrisIn(root *TreeNode) (res []int) {
 	if root == nil {
 		return
 	}
-	pre := root       //当前开始遍历的节点
-	var cur *TreeNode //记录当前结点的左子树
-	for pre != nil {
-		cur = pre.Left
-		if cur != nil {
-			for cur.Right != nil && cur.Right != pre { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
-				cur = cur.Right
+	cur := root //当前开始遍历的节点
+	for cur != nil {
+		pre := cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
+				pre = pre.Right
 			}
-			if cur.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
-				cur.Right = pre
-				pre = pre.Left
+			if pre.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
+				pre.Right = cur
+				cur = cur.Left
 				continue
 			} else { //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
-				cur.Right = nil
+				pre.Right = nil
 			}
 		}
-		res = append(res, pre.Val)
-		pre = pre.Right //一直往右边走，参考图
+		res = append(res, cur.Val)
+		cur = cur.Right //一直往右边走，参考图
 	}
 	return
 }
@@ -173,6 +172,21 @@ func In(root *TreeNode) (res []int) {
 			res = append(res, root.Val)
 			root = root.Right
 		}
+	}
+	return
+}
+
+func In2(root *TreeNode) (res []int) {
+	stack := []*TreeNode{}
+	for len(stack) > 0 || root != nil {
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		res = append(res, root.Val)
+		root = root.Right
 	}
 	return
 }
