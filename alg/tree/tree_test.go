@@ -34,28 +34,7 @@ func TestTraverse(t *testing.T) {
 }
 
 func MorrisPre2(root *TreeNode) (res []int) {
-	if root == nil {
-		return
-	}
-	cur := root
-	for cur != nil {
-		post := cur.Left
-		if post != nil {
-			for post.Right != nil && post.Right != cur {
-				post = post.Right
-			}
-			if post.Right == nil {
-				post.Right = cur
-				cur = cur.Left
-				continue
-			} else {
-				post.Right = nil
-			}
-		} else {
-			res = append(res, cur.Val)
-		}
-		cur = cur.Right
-	}
+
 	return
 }
 
@@ -128,7 +107,7 @@ func MorrisIn(root *TreeNode) (res []int) {
 
 func MorrisPost(root *TreeNode) (res []int) {
 	reverse := func(nums []int) {
-		for i, n := 0, len(nums); i < n/2; i++ {
+		for i, n := 0, len(nums); i < n>>1; i++ {
 			nums[i], nums[n-1-i] = nums[n-1-i], nums[i]
 		}
 	}
@@ -141,21 +120,22 @@ func MorrisPost(root *TreeNode) (res []int) {
 		reverse(res[resSize:])
 	}
 
-	p1 := root
-	for p1 != nil {
-		if p2 := p1.Left; p2 != nil {
-			for p2.Right != nil && p2.Right != p1 {
-				p2 = p2.Right
+	cur := root
+	for cur != nil {
+		post := cur.Left
+		if post != nil {
+			for post.Right != nil && post.Right != cur {
+				post = post.Right
 			}
-			if p2.Right == nil {
-				p2.Right = p1
-				p1 = p1.Left
+			if post.Right == nil {
+				post.Right = cur
+				cur = cur.Left
 				continue
 			}
-			p2.Right = nil
-			addPath(p1.Left)
+			post.Right = nil
+			addPath(cur.Left)
 		}
-		p1 = p1.Right
+		cur = cur.Right
 	}
 	addPath(root)
 	return
