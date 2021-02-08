@@ -46,7 +46,6 @@ func MorrisPre2(root *TreeNode) (res []int) {
 			}
 			if post.Right == nil {
 				post.Right = cur
-				res = append(res, cur.Val)
 				cur = cur.Left
 				continue
 			} else {
@@ -100,17 +99,17 @@ func MorrisIn(root *TreeNode) (res []int) {
 	}
 	cur := root //当前开始遍历的节点
 	for cur != nil {
-		pre := cur.Left
-		if pre != nil {
-			for pre.Right != nil && pre.Right != cur { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
-				pre = pre.Right
+		post := cur.Left
+		if post != nil {
+			for post.Right != nil && post.Right != cur { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
+				post = post.Right
 			}
-			if pre.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
-				pre.Right = cur
+			if post.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
+				post.Right = cur
 				cur = cur.Left
 				continue
 			} else { //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
-				pre.Right = nil
+				post.Right = nil
 			}
 		}
 		res = append(res, cur.Val)
