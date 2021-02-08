@@ -61,9 +61,8 @@ func MorrisPre(root *TreeNode) (res []int) {
 				res = append(res, cur.Val)
 				cur = cur.Left
 				continue
-			} else { //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
-				post.Right = nil
 			}
+			post.Right = nil
 		} else {
 			res = append(res, cur.Val)
 		}
@@ -87,9 +86,8 @@ func MorrisIn(root *TreeNode) (res []int) {
 				post.Right = cur
 				cur = cur.Left
 				continue
-			} else { //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
-				post.Right = nil
 			}
+			post.Right = nil //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
 		}
 		res = append(res, cur.Val)
 		cur = cur.Right //一直往右边走，参考图
