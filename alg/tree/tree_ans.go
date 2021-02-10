@@ -1233,7 +1233,44 @@ func GetMinimumDifference2(root *TreeNode) int {
 		}
 		inOrder(node.Right)
 	}
-
 	inOrder(root)
 	return r
+}
+
+func AverageOfLevels(root *TreeNode) []float64 {
+	stack := []*TreeNode{root}
+	res := []float64{}
+	for len(stack) > 0 {
+		size := len(stack)
+		levelSum := 0
+		for i := 0; i < size; i++ {
+			cur := stack[0]
+			stack = stack[1:]
+			levelSum += cur.Val
+			if cur.Left != nil {
+				stack = append(stack, cur.Left)
+			}
+			if cur.Right != nil {
+				stack = append(stack, cur.Right)
+			}
+		}
+		res = append(res, float64(levelSum)/float64(size))
+	}
+	return res
+}
+
+func FindTilt(root *TreeNode) int {
+	res := 0
+	var bfs func(*TreeNode) int
+	bfs = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+		l := bfs(root.Left)
+		r := bfs(root.Right)
+		res += Abs(l - r)
+		return root.Val + l + r
+	}
+	bfs(root)
+	return res
 }
