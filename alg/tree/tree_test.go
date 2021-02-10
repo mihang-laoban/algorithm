@@ -1007,67 +1007,24 @@ func TestFindMode(t *testing.T) {
 	fmt.Println(FindModeMorris(root))
 }
 
-func FindMode(root *TreeNode) (answer []int) {
-	var base, count, maxCount int
+/*
+给你一棵所有节点为非负值的二叉搜索树，请你计算树中任意两节点的差的绝对值的最小值。
+示例：
+输入：
+1
+ \
+  3
+ /
+2
 
-	update := func(x int) {
-		if x == base {
-			count++
-		} else {
-			base, count = x, 1
-		}
-		if count == maxCount {
-			answer = append(answer, base)
-		} else if count > maxCount {
-			maxCount = count
-			answer = []int{base}
-		}
-	}
+输出：
+1
 
-	var dfs func(*TreeNode)
-	dfs = func(node *TreeNode) {
-		if node == nil {
-			return
-		}
-		dfs(node.Left)
-		update(node.Val)
-		dfs(node.Right)
-	}
-	dfs(root)
-	return
-}
-
-func FindModeMorris(root *TreeNode) (answer []int) {
-	var base, count, maxCount int
-	update := func(x int) {
-		if x == base {
-			count++
-		} else {
-			base, count = x, 1
-		}
-		if count == maxCount {
-			answer = append(answer, base)
-		} else if count > maxCount {
-			maxCount = count
-			answer = []int{base}
-		}
-	}
-	cur := root
-	for cur != nil {
-		pre := cur.Left
-		if pre != nil {
-			for pre.Right != nil && pre.Right != cur {
-				pre = pre.Right
-			}
-			if pre.Right == nil {
-				pre.Right = cur
-				cur = cur.Left
-				continue
-			}
-			pre.Right = nil
-		}
-		update(cur.Val)
-		cur = cur.Right
-	}
-	return
+解释：
+最小绝对差为 1，其中 2 和 1 的差的绝对值为 1（或者 2 和 3）。*/
+func TestGetMinimumDifference(t *testing.T) {
+	root := &TreeNode{Val: 1}
+	root.Right = &TreeNode{Val: 3}
+	root.Right.Left = &TreeNode{Val: 2}
+	fmt.Println(GetMinimumDifference1(root))
 }
