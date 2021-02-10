@@ -13,13 +13,14 @@ func init() {
 
 //https://leetcode-cn.com/problems/number-of-islands/solution/number-of-islands-shen-du-you-xian-bian-li-dfs-or-/
 func TestTraverse(t *testing.T) {
-	root := ArrayToTree([]interface{}{5, 2, 6, 1, 3, 4})
+	root := ArrayToTree([]interface{}{5, 2, 6, 1, 3})
 	//52136
 	fmt.Println("pre")
 	fmt.Println(Pre(root))
 	fmt.Println(Pre2(root))
 	fmt.Println(MorrisPre(root))
 	fmt.Println(MorrisPre2(root))
+	// 12356
 	fmt.Println("in")
 	fmt.Println(In(root))
 	fmt.Println(In2(root))
@@ -104,18 +105,13 @@ func MorrisIn(root *TreeNode) (res []int) {
 */
 
 func MorrisPost(root *TreeNode) (res []int) {
-	reverse := func(nums []int) {
-		for i, n := 0, len(nums); i < n>>1; i++ {
-			nums[i], nums[n-1-i] = nums[n-1-i], nums[i]
-		}
-	}
-
 	addPath := func(node *TreeNode) {
 		resSize := len(res)
-		for ; node != nil; node = node.Right {
+		for node != nil {
 			res = append(res, node.Val)
+			node = node.Right
 		}
-		reverse(res[resSize:])
+		ReverseArr1(res[resSize:])
 	}
 
 	cur := root
@@ -1058,23 +1054,20 @@ func FindModeMorris(root *TreeNode) (answer []int) {
 	}
 	cur := root
 	for cur != nil {
-		if cur.Left == nil {
-			update(cur.Val)
-			cur = cur.Right
-			continue
-		}
 		pre := cur.Left
-		for pre.Right != nil && pre.Right != cur {
-			pre = pre.Right
-		}
-		if pre.Right == nil {
-			pre.Right = cur
-			cur = cur.Left
-		} else {
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur {
+				pre = pre.Right
+			}
+			if pre.Right == nil {
+				pre.Right = cur
+				cur = cur.Left
+				continue
+			}
 			pre.Right = nil
-			update(cur.Val)
-			cur = cur.Right
 		}
+		update(cur.Val)
+		cur = cur.Right
 	}
 	return
 }
