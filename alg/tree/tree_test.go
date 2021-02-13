@@ -112,25 +112,26 @@ func MorrisPost(root *TreeNode) (res []int) {
 
 	addPath := func(node *TreeNode) {
 		resSize := len(res)
-		for ; node != nil; node = node.Right {
+		for node != nil {
 			res = append(res, node.Val)
+			node = node.Right
 		}
 		reverse(res[resSize:])
 	}
 
 	cur := root
 	for cur != nil {
-		post := cur.Left
-		if post != nil {
-			for post.Right != nil && post.Right != cur {
-				post = post.Right
+		pre := cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur {
+				pre = pre.Right
 			}
-			if post.Right == nil {
-				post.Right = cur
+			if pre.Right == nil {
+				pre.Right = cur
 				cur = cur.Left
 				continue
 			}
-			post.Right = nil
+			pre.Right = nil
 			addPath(cur.Left)
 		}
 		cur = cur.Right
