@@ -1092,3 +1092,185 @@ func Tree2str2(t *TreeNode) string {
 	construct(t)
 	return builder.String()
 }
+
+func FindMode(root *TreeNode) (answer []int) {
+	var base, count, maxCount int
+
+	update := func(x int) {
+		if x == base {
+			count++
+		} else {
+			base, count = x, 1
+		}
+		if count == maxCount {
+			answer = append(answer, base)
+		} else if count > maxCount {
+			maxCount = count
+			answer = []int{base}
+		}
+	}
+
+	var dfs func(*TreeNode)
+	dfs = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+		dfs(node.Left)
+		update(node.Val)
+		dfs(node.Right)
+	}
+	dfs(root)
+	return
+}
+
+func FindModeMorris(root *TreeNode) (answer []int) {
+	var base, count, maxCount int
+	update := func(x int) {
+		if x == base {
+			count++
+		} else {
+			base, count = x, 1
+		}
+		if count == maxCount {
+			answer = append(answer, base)
+		} else if count > maxCount {
+			maxCount = count
+			answer = []int{base}
+		}
+	}
+	cur := root
+	for cur != nil {
+		pre := cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur {
+				pre = pre.Right
+			}
+			if pre.Right == nil {
+				pre.Right = cur
+				cur = cur.Left
+				continue
+			}
+			pre.Right = nil
+		}
+		update(cur.Val)
+		cur = cur.Right
+	}
+	return
+}
+
+func GetMinimumDifference1(root *TreeNode) int {
+	mi, preVal := math.MaxInt64, -1
+	if root == nil {
+		return 0
+	}
+	cur := root
+	for cur != nil {
+		pre := cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur {
+				pre = pre.Right
+			}
+			if pre.Right == nil {
+				pre.Right = cur
+				cur = cur.Left
+				continue
+			}
+			pre.Right = nil
+		}
+		mi = Min(mi, cur.Val-preVal)
+		preVal = cur.Val
+		cur = cur.Right
+	}
+
+	return mi
+}
+
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func GetMinimumDifference2(root *TreeNode) int {
+	maxOrMin := func(node *TreeNode, max bool) *TreeNode {
+		cur := node
+		last := node
+		for cur != nil {
+			last = cur
+			if max {
+				cur = cur.Right
+			} else {
+				cur = cur.Left
+			}
+		}
+		return last
+	}
+
+	r := math.MaxInt32
+	var inOrder func(*TreeNode)
+	inOrder = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+		inOrder(node.Left)
+		min := maxOrMin(node.Left, true)
+		if min != nil {
+			//左侧最大值
+			tmp := node.Val - min.Val
+			if tmp < r {
+				r = tmp
+			}
+		}
+		max := maxOrMin(node.Right, false)
+		if max != nil {
+			//右侧最小值
+			tmp := max.Val - node.Val
+			if tmp < r {
+				r = tmp
+			}
+		}
+		inOrder(node.Right)
+	}
+	inOrder(root)
+	return r
+}
+
+func AverageOfLevels(root *TreeNode) []float64 {
+	stack := []*TreeNode{root}
+	res := []float64{}
+	for len(stack) > 0 {
+		size := len(stack)
+		levelSum := 0
+		for i := 0; i < size; i++ {
+			cur := stack[0]
+			stack = stack[1:]
+			levelSum += cur.Val
+			if cur.Left != nil {
+				stack = append(stack, cur.Left)
+			}
+			if cur.Right != nil {
+				stack = append(stack, cur.Right)
+			}
+		}
+		res = append(res, float64(levelSum)/float64(size))
+	}
+	return res
+}
+
+func FindTilt(root *TreeNode) int {
+	res := 0
+	var bfs func(*TreeNode) int
+	bfs = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+		l := bfs(root.Left)
+		r := bfs(root.Right)
+		res += Abs(l - r)
+		return root.Val + l + r
+	}
+	bfs(root)
+	return res
+}
