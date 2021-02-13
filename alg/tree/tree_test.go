@@ -1150,3 +1150,61 @@ func TestFindTilt(t *testing.T) {
 	root := ArrayToTree([]interface{}{4, 2, 9, 3, 5, nil, 7})
 	fmt.Println(FindTilt(root))
 }
+
+/*给定一个二叉树，找出其最小深度。
+最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+
+说明：叶子节点是指没有子节点的节点。
+
+     3
+    / \
+   9   20
+  / \
+15   7
+
+示例 1：
+输入：root = [3,9,20,null,null,15,7]
+输出：2
+
+示例 2：
+输入：root = [2,null,3,null,4,null,5,null,6]
+输出：5
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/minimum-depth-of-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestMinDepth(t *testing.T) {
+	root1 := ArrayToTree([]interface{}{3, 9, 20, 15, 7, nil, nil})
+	fmt.Println(MinDepth1(root1))
+	fmt.Println(MinDepth2(root1))
+}
+
+/*计算给定二叉树的所有左叶子之和。
+
+示例：
+
+  3
+ / \
+9  20
+  /  \
+ 15   7
+
+在这个二叉树中，有两个左叶子，分别是 9 和 15，所以返回 24
+
+    1
+   / \
+  2   3
+ / \
+4   5
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/sum-of-left-leaves
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestSumOfLeftLeaves(t *testing.T) {
+	root1 := ArrayToTree([]interface{}{3, 9, 20, nil, nil, 15, 7})
+	root2 := ArrayToTree([]interface{}{1, 2, 3, 4, 5})
+	fmt.Println(SumOfLeftLeavesBFS(root1))
+	fmt.Println(SumOfLeftLeavesDFS(root2))
+}

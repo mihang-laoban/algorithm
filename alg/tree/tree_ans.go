@@ -1274,3 +1274,89 @@ func FindTilt(root *TreeNode) int {
 	bfs(root)
 	return res
 }
+
+func MinDepth2(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	queue := []*TreeNode{root}
+	depth := 1
+	for len(queue) > 0 {
+		size := len(queue)
+		for i := 0; i < size; i++ {
+			cur := queue[0]
+			queue = queue[1:]
+			if cur.Left == nil && cur.Right == nil {
+				return depth
+			}
+			if cur.Left != nil {
+				queue = append(queue, cur.Left)
+			}
+			if cur.Right != nil {
+				queue = append(queue, cur.Right)
+			}
+		}
+		depth++
+	}
+	return depth
+}
+
+func MinDepth1(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	if root.Right == nil && root.Left == nil {
+		return 1
+	}
+	mi := math.MaxInt64
+	if root.Left != nil {
+		mi = Min(MinDepth1(root.Left), mi)
+	}
+	if root.Right != nil {
+		mi = Min(MinDepth1(root.Right), mi)
+	}
+	return mi + 1
+}
+
+func SumOfLeftLeavesBFS(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	res := 0
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		cur := queue[0]
+		queue = queue[1:]
+		if cur.Left != nil {
+			queue = append(queue, cur.Left)
+			if cur.Left.Left == nil && cur.Left.Right == nil {
+				res += cur.Left.Val
+			}
+		}
+		if cur.Right != nil {
+			queue = append(queue, cur.Right)
+		}
+	}
+	return res
+}
+
+func SumOfLeftLeavesDFS(root *TreeNode) int {
+	res := 0
+	var counter func(*TreeNode)
+	counter = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		if root.Left != nil {
+			if root.Left.Left == nil && root.Left.Right == nil {
+				res += root.Left.Val
+			}
+			counter(root.Left)
+		}
+		if root.Right != nil {
+			counter(root.Right)
+		}
+	}
+	counter(root)
+	return res
+}
