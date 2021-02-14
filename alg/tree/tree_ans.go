@@ -319,42 +319,52 @@ func RecoverTree(root *TreeNode) {
 	x.Val, y.Val = y.Val, x.Val
 }
 
-func RecoverTreeMorris(root *TreeNode) {
-	var x, y, pred, predecessor *TreeNode
-
-	for root != nil {
-		if root.Left != nil {
-			// predecessor 节点就是当前 root 节点向左走一步，然后一直向右走至无法走为止
-			predecessor = root.Left
-			for predecessor.Right != nil && predecessor.Right != root {
-				predecessor = predecessor.Right
+func RecoverTreeMorris1(root *TreeNode) {
+	if root == nil {
+		return
+	}
+	cur := root
+	for cur != nil {
+		pre := cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur {
+				pre = pre.Right
 			}
-
-			// 让 predecessor 的右指针指向 root，继续遍历左子树
-			if predecessor.Right == nil {
-				predecessor.Right = root
-				root = root.Left
-			} else { // 说明左子树已经访问完了，我们需要断开链接
-				if pred != nil && root.Val < pred.Val {
-					y = root
-					if x == nil {
-						x = pred
-					}
-				}
-				pred = root
-				predecessor.Right = nil
-				root = root.Right
+			if pre.Right == nil {
+				pre.Right = cur
+				cur = cur.Left
+				continue
 			}
-		} else { // 如果没有左孩子，则直接访问右孩子
-			if pred != nil && root.Val < pred.Val {
-				y = root
-				if x == nil {
-					x = pred
-				}
-			}
-			pred = root
-			root = root.Right
+			pre.Right = nil
 		}
+		cur = cur.Right
+	}
+}
+
+func RecoverTreeMorris(root *TreeNode) {
+	var x, y, last *TreeNode
+	cur := root
+	for cur != nil {
+		pre := cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur {
+				pre = pre.Right
+			}
+			if pre.Right == nil {
+				pre.Right = cur
+				cur = cur.Left
+				continue
+			}
+			pre.Right = nil
+		}
+		if last != nil && cur.Val < last.Val {
+			if x == nil {
+				x = last
+			}
+			y = cur
+		}
+		last = cur
+		cur = cur.Right
 	}
 	x.Val, y.Val = y.Val, x.Val
 }
@@ -1359,4 +1369,134 @@ func SumOfLeftLeavesDFS(root *TreeNode) int {
 	}
 	counter(root)
 	return res
+}
+
+func MaxPathSum(root *TreeNode) int {
+	ma := math.MinInt64
+	var find func(*TreeNode) int
+	find = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+		l := Max(find(root.Left), 0)
+		r := Max(find(root.Right), 0)
+		cur := root.Val + l + r
+		ma = Max(cur, ma)
+		return root.Val + Max(l, r)
+	}
+	find(root)
+	return ma
+}
+
+func ClosestKValues(root *TreeNode, target float64, k int) []int {
+	res := []int{}
+
+	getRes := func(val int) {
+		if len(res) < k {
+			res = append(res, val)
+		} else if AbsFloat(float64(res[0])-float64(target)) > AbsFloat(float64(val)-float64(target)) {
+			res = res[1:]
+			res = append(res, val)
+		}
+	}
+
+	cur := root
+	for cur != nil {
+		pre := cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur {
+				pre = pre.Right
+			}
+			if pre.Right == nil {
+				pre.Right = cur
+				cur = cur.Left
+				continue
+			}
+			pre.Right = nil
+		}
+		getRes(cur.Val)
+		cur = cur.Right
+	}
+
+	return res
+}
+
+type Codec struct {
+	l []string
+}
+
+func ConstructorCodec() Codec {
+	return Codec{}
+}
+
+// Serializes a tree to a single string.
+func (this *Codec) SerializeDFS(root *TreeNode) string {
+	if root == nil {
+		return "nil"
+	}
+	left := this.SerializeDFS(root.Left)
+	right := this.SerializeDFS(root.Right)
+	return strconv.Itoa(root.Val) + "," + left + "," + right
+}
+
+// Deserializes your encoded data to tree.
+func (this *Codec) DeserializeDFS(data string) *TreeNode {
+	arr := strings.Split(data, ",")
+	var build func(*[]string) *TreeNode
+	build = func(arr *[]string) *TreeNode {
+		cur := (*arr)[0]
+		*arr = (*arr)[1:]
+		if cur == "nil" {
+			return nil
+		}
+		val, _ := strconv.Atoi(cur)
+		node := &TreeNode{Val: val}
+		node.Left = build(arr)
+		node.Right = build(arr)
+		return node
+	}
+	return build(&arr)
+}
+
+func (this *Codec) SerializeBFS(root *TreeNode) string {
+	res := []string{}
+	q := []*TreeNode{root}
+	for len(q) > 0 {
+		cur := q[0]
+		q = q[1:]
+		if cur != nil {
+			res = append(res, strconv.Itoa(cur.Val))
+			q = append(q, cur.Left)
+			q = append(q, cur.Right)
+		} else {
+			res = append(res, "nil")
+		}
+	}
+	return strings.Join(res, ",")
+}
+func (this *Codec) DeserializeBFS(data string) *TreeNode {
+	if data == "nil" {
+		return nil
+	}
+	arr := strings.Split(data, ",")
+	val, _ := strconv.Atoi(arr[0])
+	root := &TreeNode{Val: val}
+	index, q := 1, []*TreeNode{root}
+	for index < len(arr) {
+		cur := q[0]
+		q = q[1:]
+		l, r := arr[index], arr[index+1]
+		if l != "nil" {
+			v, _ := strconv.Atoi(l)
+			cur.Left = &TreeNode{Val: v}
+			q = append(q, cur.Left)
+		}
+		if r != "nil" {
+			v, _ := strconv.Atoi(r)
+			cur.Right = &TreeNode{Val: v}
+			q = append(q, cur.Right)
+		}
+		index += 2
+	}
+	return root
 }

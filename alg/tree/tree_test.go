@@ -52,18 +52,18 @@ func MorrisPre(root *TreeNode) (res []int) {
 	}
 	cur := root //当前开始遍历的节点
 	for cur != nil {
-		post := cur.Left
-		if post != nil {
-			for post.Right != nil && post.Right != cur { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
-				post = post.Right
+		pre := cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
+				pre = pre.Right
 			}
-			if post.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
-				post.Right = cur
+			if pre.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
+				pre.Right = cur
 				res = append(res, cur.Val)
 				cur = cur.Left
 				continue
 			}
-			post.Right = nil
+			pre.Right = nil
 		} else {
 			res = append(res, cur.Val)
 		}
@@ -78,17 +78,17 @@ func MorrisIn(root *TreeNode) (res []int) {
 	}
 	cur := root //当前开始遍历的节点
 	for cur != nil {
-		post := cur.Left
-		if post != nil {
-			for post.Right != nil && post.Right != cur { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
-				post = post.Right
+		pre := cur.Left
+		if pre != nil {
+			for pre.Right != nil && pre.Right != cur { //找到当前左子树的最右侧节点，且这个节点应该在指向根结点之前，否则整个节点又回到了根结点。
+				pre = pre.Right
 			}
-			if post.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
-				post.Right = cur
+			if pre.Right == nil { //这个时候如果最右侧这个节点的右指针没有指向根结点，创建连接然后往下一个左子树的根结点进行连接操作。
+				pre.Right = cur
 				cur = cur.Left
 				continue
 			}
-			post.Right = nil //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
+			pre.Right = nil //当左子树的最右侧节点有指向根结点，此时说明我们已经回到了根结点并重复了之前的操作，同时在回到根结点的时候我们应该已经处理完 左子树的最右侧节点 了，把路断开。
 		}
 		res = append(res, cur.Val)
 		cur = cur.Right //一直往右边走，参考图
@@ -481,9 +481,9 @@ https://leetcode-cn.com/problems/recover-binary-search-tree/solution/hui-fu-er-c
 func TestRecoverTree(t *testing.T) {
 	tree1 := ArrayToTree([]interface{}{1, 3, nil, nil, 2})
 	//tree2 := ArrayToTree([]interface{}{3, 1, 4, nil, nil, 2})
-	recoverT(tree1)
-	RecoverTree(tree1)
-	//RecoverTreeMorris(tree2)
+	//recoverT(tree1)
+	//RecoverTree(tree1)
+	RecoverTreeMorris(tree1)
 	fmt.Println(BFStoArray(tree1))
 	//fmt.Println(BFStoArray(tree2))
 }
@@ -1207,4 +1207,95 @@ func TestSumOfLeftLeaves(t *testing.T) {
 	root2 := ArrayToTree([]interface{}{1, 2, 3, 4, 5})
 	fmt.Println(SumOfLeftLeavesBFS(root1))
 	fmt.Println(SumOfLeftLeavesDFS(root2))
+}
+
+/*路径 被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
+路径和 是路径中各节点值的总和。
+给你一个二叉树的根节点 root ，返回其 最大路径和 。
+
+示例 1：
+  1
+ / \
+2   3
+输入：root = [1,2,3]
+输出：6
+解释：最优路径是 2 -> 1 -> 3 ，路径和为 2 + 1 + 3 = 6
+
+示例 2：
+   -10
+   / \
+  9   20
+     /  \
+    15   7
+输入：root = [-10,9,20,null,null,15,7]
+输出：42
+解释：最优路径是 15 -> 20 -> 7 ，路径和为 15 + 20 + 7 = 42
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/binary-tree-maximum-path-sum
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestMaxPathSum(t *testing.T) {
+	root := ArrayToTree([]interface{}{-10, 9, 20, nil, nil, 15, 7})
+	fmt.Println(MaxPathSum(root))
+}
+
+/*272. 最接近的二叉搜索树值 II
+给定一个不为空的二叉搜索树和一个目标值 target，请在该二叉搜索树中找到最接近目标值 target 的 k 个值。
+
+注意：
+
+给定的目标值 target 是一个浮点数
+你可以默认 k 值永远是有效的，即 k ≤ 总结点数
+题目保证该二叉搜索树中只会存在一种 k 个值集合最接近目标值
+示例：
+
+输入: root = [4,2,5,1,3]，目标值 = 3.714286，且 k = 2
+
+    4
+   / \
+  2   5
+ / \
+1   3
+
+输出: [4,3]
+拓展：
+假设该二叉搜索树是平衡的，请问您是否能在小于 O(n)（n 为总结点数）的时间复杂度内解决该问题呢？*/
+
+func TestClosestKValues(t *testing.T) {
+	root := ArrayToTree([]interface{}{4, 2, 5, 1, 3})
+	fmt.Println(ClosestKValues(root, 3.714286, 2))
+}
+
+/*序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。
+请设计一个算法来实现二叉树的序列化与反序列化。这里不限定你的序列 / 反序列化算法执行逻辑，你只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。
+提示: 输入输出格式与 LeetCode 目前使用的方式一致，详情请参阅 LeetCode 序列化二叉树的格式。你并非必须采取这种方式，你也可以采用其他的方法解决这个问题。
+
+示例 1：
+输入：root = [1,2,3,null,null,4,5]
+输出：[1,2,3,null,null,4,5]
+示例 2：
+
+输入：root = []
+输出：[]
+示例 3：
+
+输入：root = [1]
+输出：[1]
+示例 4：
+
+输入：root = [1,2]
+输出：[1,2]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestSerAndDes(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 3, nil, nil, 4, 5})
+	codec := ConstructorCodec()
+	//str := codec.SerializeDFS(root)
+	str := codec.SerializeBFS(root)
+	fmt.Println(str)
+	newRoot := codec.DeserializeDFS(str)
+	fmt.Println(TreeToArray(newRoot))
 }
