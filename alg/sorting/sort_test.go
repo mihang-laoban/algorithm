@@ -91,8 +91,7 @@ func QuickSort(arr []int, start, end int) []int {
 	if start > end {
 		return arr
 	}
-	low, high := start, end
-	mid := arr[(start+end)>>1]
+	low, mid, high := start, arr[(start+end)>>1], end
 	for low <= high {
 		for arr[low] < mid {
 			low++
