@@ -350,7 +350,7 @@ func (h *minHeap) Push(node interface{}) {
 	*h = append(*h, newNode)
 }
 
-func SortList(head *ListNode) *ListNode {
+func SortListMerge(head *ListNode) *ListNode {
 	if head == nil {
 		return head
 	}
@@ -392,6 +392,49 @@ func SortList(head *ListNode) *ListNode {
 		}
 	}
 	return dummy.Next
+}
+
+// 快速排序
+func SortListQuick(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	// [l ... r) 左闭右开的链表区间
+	quickSort(head, nil)
+	return head
+}
+
+// [l ... r) 左闭右开的链表区间
+func quickSort(l, r *ListNode) {
+	if l == r || l.Next == r {
+		return
+	}
+	mid := getIndex(l, r)
+
+	quickSort(l, mid)
+	quickSort(mid.Next, r)
+}
+
+// 获取基准元素的坐标
+func getIndex(l, r *ListNode) *ListNode {
+	if l == r || l.Next == r {
+		return l
+	}
+	// 头指针作为基准元素
+	tmp, p1, p2 := l.Val, l, l.Next
+	// *定义两个辅助指针p1，p2,这两个指针均往next方向移动，移动的过程中保持p1之前的值都小于选定的pivot，
+	//    p1和p2之间的值都大于选定的pivot，那么当p2走到末尾时交换p1的值与pivot便完成了一次切分
+	for p2 != r {
+		if p2.Val < tmp {
+			// 交换 p2的值到 p1
+			p1 = p1.Next
+			p1.Val, p2.Val = p2.Val, p1.Val
+		}
+		p2 = p2.Next
+	}
+	// p1表示的是小于tmp的最后一个元素
+	p1.Val, l.Val = l.Val, p1.Val
+	return p1
 }
 
 func MiddleNode(head *ListNode) *ListNode {
