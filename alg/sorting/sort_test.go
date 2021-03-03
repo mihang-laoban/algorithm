@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var x = []int{6, 4, 2, 8, 9, 5, 1, 3, 7, 6, 8}
+var x = []int{6, 4, 2, 8, 9, 1, 3, 7, 6, 8, 5}
 var length = len(x)
 
 type Sorting interface {
@@ -88,29 +88,29 @@ func Quick(arr []int) []int {
 }
 
 func QuickSort(arr []int, start, end int) []int {
-	if start < end {
-		i, j := start, end
-		key := arr[(start+end)>>1]
-		for i <= j {
-			for arr[i] < key {
-				i++
-			}
-			for arr[j] > key {
-				j--
-			}
-			if i <= j {
-				arr[i], arr[j] = arr[j], arr[i]
-				i++
-				j--
-			}
+	if start > end {
+		return arr
+	}
+	low, high := start, end
+	mid := arr[(start+end)>>1]
+	for low <= high {
+		for arr[low] < mid {
+			low++
 		}
-
-		if start < j {
-			QuickSort(arr, start, j)
+		for arr[high] > mid {
+			high--
 		}
-		if end > i {
-			QuickSort(arr, i, end)
+		if low <= high {
+			arr[low], arr[high] = arr[high], arr[low]
+			low++
+			high--
 		}
+	}
+	if start < high {
+		QuickSort(arr, start, high)
+	}
+	if end > low {
+		QuickSort(arr, low, end)
 	}
 	return arr
 }
