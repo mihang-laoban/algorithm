@@ -147,6 +147,36 @@ func subMerge(left, right []int) []int {
 
 func Heap(nums []int) []int {
 	size := len(nums)
+	if size < 2 {
+		return nums
+	}
+	for i := size >> 1; i >= 0; i-- {
+		h(nums, i, size)
+	}
+	for i := size - 1; i >= 0; i-- {
+		nums[0], nums[i] = nums[i], nums[0]
+		size--
+		h(nums, 0, size)
+	}
+	return nums
+}
+
+func h(nums []int, index, size int) {
+	l, r, max := index<<1+1, index<<1+2, index
+	if l < size && nums[l] > nums[max] {
+		max = l
+	}
+	if r < size && nums[r] > nums[max] {
+		max = r
+	}
+	if max != index {
+		nums[index], nums[max] = nums[max], nums[index]
+		h(nums, max, size)
+	}
+}
+
+func Heap1(nums []int) []int {
+	size := len(nums)
 	// 创建大根堆
 	for i := size >> 1; i >= 0; i-- {
 		heapifyL(nums, i, size)
@@ -160,9 +190,9 @@ func Heap(nums []int) []int {
 	return nums
 }
 
-func heapifyR(nums []int, i, size int) {
+func heapifyR(nums []int, index, size int) {
 	// 当前元素的左右孩子的位置，并假定当前节点就是最大值的位置
-	left, right, largest := i<<1+1, i<<1+2, i
+	left, right, largest := index<<1+1, index<<1+2, index
 	if left < size && nums[left] > nums[largest] {
 		largest = left
 	}
@@ -170,8 +200,8 @@ func heapifyR(nums []int, i, size int) {
 		largest = right
 	}
 	// 如果更新过最大节点后和原有最大节点不一致，则交换最大节点和当前节点的位置，并继续寻找
-	if largest != i {
-		nums[i], nums[largest] = nums[largest], nums[i]
+	if largest != index {
+		nums[index], nums[largest] = nums[largest], nums[index]
 		heapifyR(nums, largest, size)
 	}
 }
@@ -189,8 +219,11 @@ func heapifyL(lists []int, index, size int) {
 			lists[index], index = lists[i], i
 		}
 	}
-	// 如果迭代过后下标被更新了，则发生位置交换，否则无交换
-	lists[index] = cur
+	if cur != lists[index] {
+		// 如果迭代过后下标被更新了，则发生位置交换，否则无交换
+		lists[index] = cur
+		heapifyL(lists, index, size)
+	}
 }
 
 func Counting(arr []int) []int {
