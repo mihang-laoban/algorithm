@@ -119,11 +119,11 @@ func Merge(arr []int) []int {
 	if length < 2 {
 		return arr
 	}
-	middle := length >> 1
-	return subMerge(Merge(arr[0:middle]), Merge(arr[middle:]))
+	mid := length >> 1
+	return subMerge(Merge(arr[0:mid]), Merge(arr[mid:]))
 }
 
-func subMerge(left []int, right []int) []int {
+func subMerge(left, right []int) []int {
 	var result []int
 	for len(left) != 0 && len(right) != 0 {
 		if left[0] < right[0] {
