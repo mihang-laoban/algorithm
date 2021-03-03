@@ -120,13 +120,13 @@ func Merge(arr []int) []int {
 		return arr
 	}
 	middle := length >> 1
-	return merge(Merge(arr[0:middle]), Merge(arr[middle:]))
+	return subMerge(Merge(arr[0:middle]), Merge(arr[middle:]))
 }
 
-func merge(left []int, right []int) []int {
+func subMerge(left []int, right []int) []int {
 	var result []int
 	for len(left) != 0 && len(right) != 0 {
-		if left[0] <= right[0] {
+		if left[0] < right[0] {
 			result = append(result, left[0])
 			left = left[1:]
 		} else {
