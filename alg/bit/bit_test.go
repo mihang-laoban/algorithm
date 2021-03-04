@@ -242,12 +242,12 @@ func TestSubSet(t *testing.T) {
 
 func SubSet(nums []int) [][]int {
 	size := len(nums)
-	n := 1 << size
+	n := 1 << uint(size)
 	res := [][]int{}
 	for i := 0; i < n; i++ {
 		cur := []int{}
 		for j := 0; j < size; j++ {
-			if i>>j&1 == 1 {
+			if i>>uint(j)&1 == 1 {
 				//if i&(1<<j) != 0 {
 				//tmp := 1 << j
 				//one := i & tmp

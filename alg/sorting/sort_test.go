@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var x = []int{6, 4, 2, 8, 9, 1, 3, 7, 6, 8, 5}
+var x = []int{6, 4, 2, 5, 9, 3, 10, 7, 6, 8, 1}
 var length = len(x)
 
 type Sorting interface {
@@ -146,33 +146,11 @@ func subMerge(left, right []int) []int {
 }
 
 func Heap(nums []int) []int {
-	size := len(nums)
-	if size < 2 {
-		return nums
-	}
-	for i := size >> 1; i >= 0; i-- {
-		h(nums, i, size)
-	}
-	for i := size - 1; i >= 0; i-- {
-		nums[0], nums[i] = nums[i], nums[0]
-		size--
-		h(nums, 0, size)
-	}
-	return nums
+
 }
 
 func h(nums []int, index, size int) {
-	l, r, max := index<<1+1, index<<1+2, index
-	if l < size && nums[l] > nums[max] {
-		max = l
-	}
-	if r < size && nums[r] > nums[max] {
-		max = r
-	}
-	if max != index {
-		nums[index], nums[max] = nums[max], nums[index]
-		h(nums, max, size)
-	}
+
 }
 
 func Heap1(nums []int) []int {
