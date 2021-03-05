@@ -32,95 +32,111 @@ func TestCounting(t *testing.T) { LoopPrint(Counting(x)) }
 func TestBucket(t *testing.T)   { LoopPrint(Bucket(x)) }
 func TestRadix(t *testing.T)    { LoopPrint(Radix(x)) }
 
-func Bubble(arr []int) []int {
+func Bubble(nums []int) []int {
 	for i := 0; i < length; i++ {
 		for j := 0; j < length; j++ {
-			if arr[i] < arr[j] {
-				arr[i], arr[j] = arr[j], arr[i]
+			if nums[i] < nums[j] {
+				nums[i], nums[j] = nums[j], nums[i]
 			}
 		}
 	}
-	return arr
+	return nums
 }
 
-func Select(arr []int) []int {
+func Select(nums []int) []int {
 	for i := 0; i < length-1; i++ {
 		min := i
 		for j := i + 1; j < length; j++ {
-			if arr[min] > arr[j] {
+			if nums[min] > nums[j] {
 				min = j
 			}
 		}
-		arr[i], arr[min] = arr[min], arr[i]
+		nums[i], nums[min] = nums[min], nums[i]
 	}
-	return arr
+	return nums
 }
 
-func Insert(arr []int) []int {
+func Insert(nums []int) []int {
 	for i := 1; i < length; i++ { //把第一个元素作为有序序列
 		j := i
-		if arr[i] < arr[i-1] {
-			for j > 0 && arr[j] < arr[j-1] {
-				arr[j], arr[j-1] = arr[j-1], arr[j]
+		if nums[i] < nums[i-1] {
+			for j > 0 && nums[j] < nums[j-1] {
+				nums[j], nums[j-1] = nums[j-1], nums[j]
 				j--
 			}
 		}
 	}
-	return arr
+	return nums
 }
 
-func Shell(arr []int) []int {
+func Shell(nums []int) []int {
 	for gap := length >> 1; gap > 0; gap >>= 1 {
 		//从第gap个元素，逐个对其所在组进行直接插入排序操作
 		for i := gap; i < length; i++ {
 			j := i
-			for j-gap >= 0 && arr[j] < arr[j-gap] {
-				arr[j], arr[j-gap] = arr[j-gap], arr[j]
+			for j-gap >= 0 && nums[j] < nums[j-gap] {
+				nums[j], nums[j-gap] = nums[j-gap], nums[j]
 				j -= gap
 			}
 		}
 	}
-	return arr
+	return nums
 }
 
-func Quick(arr []int) []int {
-	return QuickSort(arr, 0, len(arr)-1)
+func Quick1(nums []int) []int {
+	return QuickSort(nums, 0, len(nums)-1)
 }
 
-func QuickSort(arr []int, start, end int) []int {
+func Quick(nums []int) []int {
+	return q(nums, 0, len(nums)-1)
+}
+
+func q(nums []int, start, end int) []int {
+	return nums
+}
+
+func QuickSort(nums []int, start, end int) []int {
 	if start > end {
-		return arr
+		return nums
 	}
-	low, mid, high := start, arr[(start+end)>>1], end
+	low, mid, high := start, nums[(start+end)>>1], end
 	for low <= high {
-		for arr[low] < mid {
+		for nums[low] < mid {
 			low++
 		}
-		for arr[high] > mid {
+		for nums[high] > mid {
 			high--
 		}
 		if low <= high {
-			arr[low], arr[high] = arr[high], arr[low]
+			nums[low], nums[high] = nums[high], nums[low]
 			low++
 			high--
 		}
 	}
 	if start < high {
-		QuickSort(arr, start, high)
+		QuickSort(nums, start, high)
 	}
 	if end > low {
-		QuickSort(arr, low, end)
+		QuickSort(nums, low, end)
 	}
-	return arr
+	return nums
 }
 
-func Merge(arr []int) []int {
-	length := len(arr)
+func Merge1(nums []int) []int {
+	length := len(nums)
 	if length < 2 {
-		return arr
+		return nums
 	}
 	mid := length >> 1
-	return subMerge(Merge(arr[0:mid]), Merge(arr[mid:]))
+	return subMerge(Merge(nums[0:mid]), Merge(nums[mid:]))
+}
+
+func Merge(nums []int) []int {
+	return nums
+}
+
+func s(l, r []int) []int {
+	return l
 }
 
 func subMerge(left, right []int) []int {
@@ -146,11 +162,10 @@ func subMerge(left, right []int) []int {
 }
 
 func Heap(nums []int) []int {
-
+	return nums
 }
 
 func h(nums []int, index, size int) {
-
 }
 
 func Heap1(nums []int) []int {
@@ -204,31 +219,31 @@ func heapifyL(lists []int, index, size int) {
 	}
 }
 
-func Counting(arr []int) []int {
-	bucketLen := FindX(arr, Max) + 1
+func Counting(nums []int) []int {
+	bucketLen := FindX(nums, Max) + 1
 	bucket := make([]int, bucketLen) // 初始为0的数组
 
 	sortedIndex := 0
-	length := len(arr)
+	length := len(nums)
 
 	for i := 0; i < length; i++ {
-		bucket[arr[i]] += 1
+		bucket[nums[i]] += 1
 	}
 
 	for j := 0; j < bucketLen; j++ {
 		for bucket[j] > 0 {
-			arr[sortedIndex] = j
+			nums[sortedIndex] = j
 			sortedIndex += 1
 			bucket[j] -= 1
 		}
 	}
 
-	return arr
+	return nums
 }
 
-func Bucket(arr []int) []int {
+func Bucket(nums []int) []int {
 	tmp := make([]int, 100)
-	for _, v := range arr {
+	for _, v := range nums {
 		tmp[v] += 1
 	}
 	var result []int
@@ -242,15 +257,15 @@ func Bucket(arr []int) []int {
 	return result
 }
 
-func Radix(arr []int) []int {
-	if len(arr) < 2 {
-		return arr
+func Radix(nums []int) []int {
+	if len(nums) < 2 {
+		return nums
 	}
-	max := arr[0]
-	arrLen := len(arr)
-	for i := 1; i < arrLen; i++ {
-		if arr[i] > max {
-			max = arr[i]
+	max := nums[0]
+	numsLen := len(nums)
+	for i := 1; i < numsLen; i++ {
+		if nums[i] > max {
+			max = nums[i]
 		}
 	}
 	// 计算最大值的位数
@@ -269,8 +284,8 @@ func Radix(arr []int) []int {
 	var digit int
 	// 经过maxDigit+1次装通操作，排序完成
 	for i := 1; i <= maxDigit; i++ {
-		for j := 0; j < arrLen; j++ {
-			tmp := arr[j]
+		for j := 0; j < numsLen; j++ {
+			tmp := nums[j]
 			digit = (tmp / divisor) % 10
 			bucket[digit][count[digit]] = tmp
 			count[digit]++
@@ -283,12 +298,12 @@ func Radix(arr []int) []int {
 				continue
 			}
 			for c := 0; c < count[b]; c++ {
-				arr[k] = bucket[b][c]
+				nums[k] = bucket[b][c]
 				k++
 			}
 			count[b] = 0
 		}
 		divisor = divisor * 10
 	}
-	return arr
+	return nums
 }
