@@ -33,11 +33,9 @@ func CoinChangeDFS(coins []int, amount int) int {
 
 func Exchange(coins []int, total int) int {
 	dp := make([]int, total+1)
-	for i := 0; i < total+1; i++ {
+	for i := 1; i < total+1; i++ {
 		dp[i] = total + 1
 	}
-
-	dp[0] = 0
 	for i := 1; i < total+1; i++ {
 		for _, c := range coins {
 			if i-c >= 0 {
@@ -53,7 +51,7 @@ func Exchange(coins []int, total int) int {
 
 func CoinChange(coins []int, amount int) int {
 	dp := make([]int, amount+1)
-	for i := 1; i < len(dp); i++ {
+	for i := 1; i < amount+1; i++ {
 		dp[i] = amount + 1
 	}
 	for _, coin := range coins {
