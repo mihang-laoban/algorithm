@@ -78,16 +78,19 @@ func TestMinWindow(t *testing.T) {
 	fmt.Println(MinWindow("ADOBECODEBANC", "ABC"))
 }
 
+func MinWindow2(s string, t string) string {
+	return s
+}
+
 func MinWindow(s string, t string) string {
-	if len(s) == 0 || len(t) == 0 {
+	sSize, tSize := len(s), len(t)
+	if sSize == 0 || tSize == 0 {
 		return ""
 	}
-	need := make([]int, 128)
-	// 标记T字符串的占位
-	for i := 0; i < len(t); i++ {
+	l, r, start, count, winSize, need := 0, 0, 0, tSize, math.MaxInt32, make([]int, 128)
+	for i := 0; i < count; i++ {
 		need[t[i]]++
 	}
-	l, r, count, start, winSize := 0, 0, len(t), 0, math.MaxInt32
 	// 右边界到达S字符串的末尾为止
 	for r < len(s) {
 		c := s[r]
