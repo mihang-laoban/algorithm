@@ -135,8 +135,8 @@ func Merge(nums []int) []int {
 	return nums
 }
 
-func s(l, r []int) []int {
-	return l
+func s(l, r []int) (res []int) {
+	return
 }
 
 func subMerge(left, right []int) []int {
