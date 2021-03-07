@@ -82,30 +82,39 @@ func MinWindow(s string, t string) string {
 	if len(s) == 0 || len(t) == 0 {
 		return ""
 	}
-	need := make([]int, 256)
+	need := make([]int, 128)
+	// 标记T字符串的占位
 	for i := 0; i < len(t); i++ {
 		need[t[i]]++
 	}
 	l, r, count, start, winSize := 0, 0, len(t), 0, math.MaxInt32
+	// 右边界到达S字符串的末尾为止
 	for r < len(s) {
 		c := s[r]
+		// 如果S字符串中的字符在T字符串中存在，则计数器标记找到了一个字符
 		if need[c] > 0 {
 			count--
 		}
+		// 标记S字符串中存在的字符，负数为不需要的字符
 		need[c]--
+		// 如果所有的字符全部找到
 		if count == 0 {
+			// 右指针与左指针之间还存在空隙，并且当前左指针指向的字符串已经被标记为多余字符，则移动左边界
 			for l < r && need[s[l]] < 0 {
 				need[s[l]]++
 				l++
 			}
+			// 如果当前窗口小于现有记录则更新窗口大小和左边界
 			if r-l+1 < winSize {
 				winSize = r - l + 1
 				start = l
 			}
+			// 移动左边界，需要重新寻找丢失的字符
 			need[s[l]]++
 			l++
 			count++
 		}
+		// 每次都要移动右边界
 		r++
 	}
 	if winSize == math.MaxInt32 {

@@ -1,12 +1,14 @@
 package alg
 
 import (
+	"context"
 	linkedList2 "dp/alg/linkedList"
 	. "dp/ds/linkedList"
 	"fmt"
 	"github.com/pkg/errors"
 	"testing"
 	"time"
+	"unsafe"
 )
 
 func TestAlgorithmComponentsBreakLab(t *testing.T) {
@@ -80,4 +82,84 @@ func Go(x func()) {
 		}()
 		x()
 	}()
+}
+
+type Tracker struct {
+	ch   chan string
+	stop chan struct{}
+}
+
+func NewTracker() *Tracker {
+	return &Tracker{
+		ch: make(chan string, 10),
+	}
+}
+
+func (t *Tracker) Event(ctx context.Context, data string) error {
+	select {
+	case t.ch <- data:
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
+func (t *Tracker) Run() {
+	for data := range t.ch {
+		time.Sleep(1 * time.Second)
+		fmt.Println(data)
+
+	}
+	t.stop <- struct{}{}
+}
+
+func (t *Tracker) Shutdown(ctx context.Context) {
+	close(t.ch)
+	select {
+	case <-t.stop:
+	case <-ctx.Done():
+	}
+}
+
+func TestConcurrency(t *testing.T) {
+	tr := NewTracker()
+	go tr.Run()
+	_ = tr.Event(context.Background(), "test")
+	_ = tr.Event(context.Background(), "test")
+	_ = tr.Event(context.Background(), "test")
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(1*time.Second))
+	defer cancel()
+	tr.Shutdown(ctx)
+}
+
+var errMy = errors.New("my error is here")
+
+func TestWrapErr(t *testing.T) {
+	err := service()
+	fmt.Printf("main: %+v\n", err)
+}
+
+func service() error {
+	return biz()
+}
+
+func biz() error {
+	return dao()
+}
+
+func dao() error {
+	return errors.Wrap(errMy, "dao failed")
+}
+
+func TestSize(t *testing.T) {
+	fmt.Println(unsafe.Sizeof(struct {
+		i8  int8
+		i16 int16
+		i32 int32
+	}{}))
+	fmt.Println(unsafe.Sizeof(struct {
+		i8  int64
+		i32 int32
+		i16 int16
+	}{}))
 }
