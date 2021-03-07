@@ -75,7 +75,7 @@ func LengthOfLongestSubstring(s string) int {
 */
 
 func TestMinWindow(t *testing.T) {
-	fmt.Println(MinWindow("ADOBECODEBANC", "ABC"))
+	fmt.Println(MinWindow2("ADOBECODEBANC", "ABC"))
 }
 
 func MinWindow2(s string, t string) string {
