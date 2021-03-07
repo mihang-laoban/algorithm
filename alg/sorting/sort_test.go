@@ -88,7 +88,7 @@ func Quick1(nums []int) []int {
 }
 
 func Quick(nums []int) []int {
-	return q(nums, 0, len(nums)-1)
+	return nums
 }
 
 func q(nums []int, start, end int) []int {
