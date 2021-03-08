@@ -1,6 +1,8 @@
 package backtrace
 
-import "math/bits"
+import (
+	"math/bits"
+)
 
 func Subset(nums []int) interface{} {
 	trace, res := []int{}, [][]int{}
