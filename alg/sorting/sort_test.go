@@ -88,7 +88,7 @@ func Quick1(nums []int) []int {
 }
 
 func Quick(nums []int) []int {
-	return q(nums, 0, len(nums)-1)
+	return nums
 }
 
 func q(nums []int, start, end int) []int {
@@ -135,8 +135,8 @@ func Merge(nums []int) []int {
 	return nums
 }
 
-func s(l, r []int) []int {
-	return l
+func s(l, r []int) (res []int) {
+	return
 }
 
 func subMerge(left, right []int) []int {

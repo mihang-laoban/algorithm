@@ -14,9 +14,10 @@ func init() {
 //https://leetcode-cn.com/problems/number-of-islands/solution/number-of-islands-shen-du-you-xian-bian-li-dfs-or-/
 func TestTraverse(t *testing.T) {
 	root := ArrayToTree([]interface{}{5, 2, 6, 1, 3})
+	fmt.Println("My order:")
+	fmt.Println(MyOrder(root))
 	//52136
 	fmt.Println("pre")
-	fmt.Println(MorrisPre2(root))
 	fmt.Println(Pre(root))
 	fmt.Println(Pre2(root))
 	fmt.Println(MorrisPre(root))
@@ -34,7 +35,7 @@ func TestTraverse(t *testing.T) {
 	fmt.Println(Bfs(root))
 }
 
-func MorrisPre2(root *TreeNode) (res []int) {
+func MyOrder(root *TreeNode) (res []int) {
 	return
 }
 

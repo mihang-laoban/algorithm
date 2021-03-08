@@ -3,6 +3,7 @@ package slidingWindow
 import (
 	. "dp/tools"
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -73,51 +74,55 @@ func LengthOfLongestSubstring(s string) int {
 输出："a"
 */
 
-func Test(t *testing.T) {
-	fmt.Println(MinWindow("ADOBECODEBANC", "ABC"))
+func TestMinWindow(t *testing.T) {
+	fmt.Println(MinWindow2("ADOBECODEBANC", "ABC"))
+}
+
+func MinWindow2(s string, t string) string {
+	return s
 }
 
 func MinWindow(s string, t string) string {
-	tRecord, sRecord := map[byte]int{}, map[byte]int{}
-	// 记录目标字符串
-	for i := 0; i < len(t); i++ {
-		tRecord[t[i]]++
-	}
-
-	sLen := len(s)
-	size := sLen + 1
-	ansL, ansR := -1, -1
-
-	check := func() bool {
-		for k, v := range tRecord {
-			if sRecord[k] < v {
-				return false
-			}
-		}
-		return true
-	}
-
-	for l, r := 0, 0; r < sLen; r++ {
-		// 如果当前涵盖了目标字符串中的字母并且，右边界还未到头
-		if r < sLen && tRecord[s[r]] > 0 {
-			sRecord[s[r]]++
-		}
-		for check() && l <= r {
-			// 找到最短的字符串，并记录左右下标
-			if r-l+1 < size {
-				size = r - l + 1
-				ansL, ansR = l, l+size
-			}
-			// 如果最左边记录存在则缩小窗口
-			if _, ok := tRecord[s[l]]; ok {
-				sRecord[s[l]]--
-			}
-			// 优化，缩短字符串
-			l++
-		}
-	}
-	if ansL == -1 {
+	sSize, tSize := len(s), len(t)
+	if sSize == 0 || tSize == 0 {
 		return ""
 	}
-	return s[ansL:ansR]
+	l, r, start, count, winSize, need := 0, 0, 0, tSize, math.MaxInt32, make([]int, 128)
+	for i := 0; i < count; i++ {
+		need[t[i]]++
+	}
+	// 右边界到达S字符串的末尾为止
+	for r < len(s) {
+		c := s[r]
+		// 如果S字符串中的字符在T字符串中存在，则计数器标记找到了一个字符
+		if need[c] > 0 {
+			count--
+		}
+		// 标记S字符串中存在的字符，负数为不需要的字符
+		need[c]--
+		// 如果所有的字符全部找到
+		if count == 0 {
+			// 右指针与左指针之间还存在空隙，并且当前左指针指向的字符串已经被标记为多余字符，则移动左边界
+			for l < r && need[s[l]] < 0 {
+				need[s[l]]++
+				l++
+			}
+			// 如果当前窗口小于现有记录则更新窗口大小和左边界
+			if r-l+1 < winSize {
+				winSize = r - l + 1
+				start = l
+			}
+			// 移动左边界，需要重新寻找丢失的字符
+			need[s[l]]++
+			l++
+			count++
+		}
+		// 每次都要移动右边界
+		r++
+	}
+	if winSize == math.MaxInt32 {
+		return ""
+	} else {
+		return s[start : start+winSize]
+	}
 }
