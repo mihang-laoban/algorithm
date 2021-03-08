@@ -99,7 +99,7 @@ func QuickSort(nums []int, start, end int) []int {
 	if start > end {
 		return nums
 	}
-	low, mid, high := start, nums[(start+end)>>1], end
+	low, high, mid := start, end, nums[(start+end)>>1]
 	for low <= high {
 		for nums[low] < mid {
 			low++

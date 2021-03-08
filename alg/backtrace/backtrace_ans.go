@@ -1,6 +1,8 @@
 package backtrace
 
-import "math/bits"
+import (
+	"math/bits"
+)
 
 func Subset(nums []int) interface{} {
 	trace, res := []int{}, [][]int{}
@@ -147,7 +149,7 @@ func solve2(queens []int, n, row, columns, diagonals1, diagonals2 int) {
 		solutions = append(solutions, board)
 		return
 	}
-	availablePositions := ((1 << n) - 1) & (^(columns | diagonals1 | diagonals2))
+	availablePositions := ((1 << uint(n)) - 1) & (^(columns | diagonals1 | diagonals2))
 	for availablePositions != 0 {
 		position := availablePositions & (-availablePositions)
 		availablePositions = availablePositions & (availablePositions - 1)
