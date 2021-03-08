@@ -16,10 +16,10 @@ func TestTraverse(t *testing.T) {
 	root := ArrayToTree([]interface{}{5, 2, 6, 1, 3})
 	//52136
 	fmt.Println("pre")
+	fmt.Println(MorrisPre2(root))
 	fmt.Println(Pre(root))
 	fmt.Println(Pre2(root))
 	fmt.Println(MorrisPre(root))
-	fmt.Println(MorrisPre2(root))
 	// 12356
 	fmt.Println("in")
 	fmt.Println(In(root))
@@ -35,7 +35,6 @@ func TestTraverse(t *testing.T) {
 }
 
 func MorrisPre2(root *TreeNode) (res []int) {
-
 	return
 }
 
