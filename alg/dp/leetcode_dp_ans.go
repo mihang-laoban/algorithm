@@ -58,3 +58,45 @@ func MaxSubArray(nums []int) int {
 	}
 	return res
 }
+
+func Trap(height []int) int {
+	if len(height) == 0 {
+		return 0
+	}
+	ans, size := 0, len(height)
+	lm, rm := make([]int, size), make([]int, size)
+	lm[0] = height[0]
+	for i := 1; i < size; i++ {
+		lm[i] = Max(height[i], lm[i-1])
+	}
+	rm[size-1] = height[size-1]
+	for i := size - 2; i >= 0; i-- {
+		rm[i] = Max(height[i], rm[i+1])
+	}
+	for i := 1; i < size-1; i++ {
+		ans += Min(lm[i], rm[i]) - height[i]
+	}
+	return ans
+}
+
+func Trap2(height []int) int {
+	l, r, lm, rm, res := 0, len(height)-1, 0, 0, 0
+	for l < r {
+		if height[l] < height[r] {
+			if lm < height[l] {
+				lm = height[l]
+			} else {
+				res += lm - height[l]
+			}
+			l++
+		} else {
+			if rm < height[r] {
+				rm = height[r]
+			} else {
+				res += rm - height[r]
+			}
+			r--
+		}
+	}
+	return res
+}

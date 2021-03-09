@@ -90,44 +90,41 @@ func TestTrap(t *testing.T) {
 	fmt.Println(Trap2([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}))
 }
 
-func Trap(height []int) int {
-	if len(height) == 0 {
-		return 0
-	}
-	ans, size := 0, len(height)
-	lm, rm := make([]int, size), make([]int, size)
-	lm[0] = height[0]
-	for i := 1; i < size; i++ {
-		lm[i] = Max(height[i], lm[i-1])
-	}
-	rm[size-1] = height[size-1]
-	for i := size - 2; i >= 0; i-- {
-		rm[i] = Max(height[i], rm[i+1])
-	}
-	for i := 1; i < size-1; i++ {
-		ans += Min(lm[i], rm[i]) - height[i]
-	}
-	return ans
+/*给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
+你可以对一个单词进行如下三种操作：
+插入一个字符
+删除一个字符
+替换一个字符
+
+示例 1：
+
+输入：word1 = "horse", word2 = "ros"
+输出：3
+
+解释：
+horse -> rorse (将 'h' 替换为 'r')
+rorse -> rose (删除 'r')
+rose -> ros (删除 'e')
+
+示例 2：
+输入：word1 = "intention", word2 = "execution"
+输出：5
+
+解释：
+intention -> inention (删除 't')
+inention -> enention (将 'i' 替换为 'e')
+enention -> exention (将 'n' 替换为 'x')
+exention -> exection (将 'n' 替换为 'c')
+exection -> execution (插入 'u')
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/edit-distance
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestMinDistance(t *testing.T) {
+	fmt.Println(MinDistance("horse", "ros"))
 }
 
-func Trap2(height []int) int {
-	l, r, lm, rm, res := 0, len(height)-1, 0, 0, 0
-	for l < r {
-		if height[l] < height[r] {
-			if lm < height[l] {
-				lm = height[l]
-			} else {
-				res += lm - height[l]
-			}
-			l++
-		} else {
-			if rm < height[r] {
-				rm = height[r]
-			} else {
-				res += rm - height[r]
-			}
-			r--
-		}
-	}
-	return res
+func MinDistance(word1 string, word2 string) int {
+	return 0
 }
