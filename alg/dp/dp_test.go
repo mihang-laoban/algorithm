@@ -11,11 +11,91 @@ func init() {
 	Max(1, 2)
 }
 
+/*给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币组合数。假设每一种面额的硬币有无限个。
+
+示例 1:
+输入: amount = 5, coins = [1, 2, 5]
+输出: 4
+解释: 有四种方式可以凑成总金额:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+
+示例 2:
+输入: amount = 3, coins = [2]
+输出: 0
+解释: 只用面额2的硬币不能凑成总金额3。
+示例 3:
+
+输入: amount = 10, coins = [10]
+输出: 1
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/coin-change-2
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestCoinChange2(t *testing.T) {
+	fmt.Println(change(5, []int{1, 2, 5}))
+}
+
+func change(amount int, coins []int) int {
+	memo := make([]int, amount+1)
+	memo[0] = 1
+	for _, coin := range coins {
+		for i := coin; i < amount+1; i++ {
+			memo[i] += memo[i-coin]
+		}
+	}
+	return memo[amount]
+}
+
 // Q1
 func TestExchangeMinCount(t *testing.T) {
 	fmt.Println(Exchange([]int{3, 5}, 11))
 	fmt.Println(CoinChange([]int{3, 5}, 11))
 	fmt.Println(CoinChangeDFS([]int{3, 5}, 11))
+	fmt.Println(cc([]int{3, 5}, 11))
+}
+
+func cc(nums []int, total int) int {
+	return -1
+}
+
+/*给你一个字符串 s，找到 s 中最长的回文子串。
+
+示例 1：
+输入：s = "babad"
+输出："bab"
+解释："aba" 同样是符合题意的答案。
+
+示例 2：
+输入：s = "cbbd"
+输出："bb"
+
+示例 3：
+输入：s = "a"
+输出："a"
+
+示例 4：
+输入：s = "ac"
+输出："a"
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-palindromic-substring
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestLongestPalindrome(t *testing.T) {
+	fmt.Println(LongestPalindrome("babad"))
+}
+
+func LongestPalindrome(s string) string {
+	size := len(s)
+	memo := make([][]int, size)
+	for i := 0; i < size; i++ {
+		memo[i] = make([]int, size)
+	}
+	return ""
 }
 
 /*示例：

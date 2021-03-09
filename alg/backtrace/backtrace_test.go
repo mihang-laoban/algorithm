@@ -119,6 +119,7 @@ func Phone(str string) interface{} {
 func TestNQueue(t *testing.T) {
 	//res := SolveNQueens(4)
 	res := SolveNQueen(4)
+	//res := SolveNQueen(4)
 	//res := SolveNQueens2(4)
 
 	for _, v := range res {
