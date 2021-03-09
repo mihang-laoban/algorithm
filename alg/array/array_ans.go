@@ -127,8 +127,8 @@ func quickMul(x float64, i int) float64 {
 	if i == 0 {
 		return 1
 	}
-	y := quickMul(x, i/2)
-	if i%2 == 0 {
+	y := quickMul(x, i>>1)
+	if i&1 == 0 {
 		return y * y
 	}
 	return y * y * x
@@ -146,14 +146,14 @@ func quickMulNew(x float64, N int) float64 {
 	// 贡献的初始值为 x
 	// 在对 total 进行二进制拆分的同时计算答案
 	for N > 0 {
-		if N%2 == 1 {
+		if N&1 == 1 {
 			// 如果 total 二进制表示的最低位为 1，那么需要计入贡献
 			ans *= x
 		}
 		// 将贡献不断地平方
 		x *= x
 		// 舍弃 total 二进制表示的最低位，这样我们每次只要判断最低位即可
-		N /= 2
+		N >>= 1
 	}
 	return ans
 }
@@ -165,7 +165,7 @@ func MySqrt(x int) int {
 	// 如果左边大于右边
 	for l <= r {
 		// 查找中位数
-		mid := (r + l) / 2
+		mid := (r + l) >> 1
 		// 如果中位数的平方小于目标，则更新结果，然后向上查找
 		if mid*mid > x {
 			r = mid - 1
@@ -191,7 +191,7 @@ func BinarySearch(target int, nums []int) interface{} {
 	}
 	l, r := 0, size-1
 	for l <= r {
-		mid := (l + r) / 2
+		mid := (l + r) >> 1
 		if nums[mid] == target {
 			return mid
 		} else if nums[mid] > target {
@@ -206,7 +206,7 @@ func BinarySearch(target int, nums []int) interface{} {
 func SearchRotatedArray(target int, nums []int) int {
 	low, high := 0, len(nums)-1
 	for low <= high {
-		mid := (high + low) / 2
+		mid := (high + low) >> 1
 		if nums[mid] == target {
 			return mid
 		}

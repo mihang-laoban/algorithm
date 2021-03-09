@@ -3,7 +3,7 @@ package stack
 func IsValid(s string) bool {
 	n := len(s)
 	// 不是成对出现肯定不匹配
-	if n%2 == 1 {
+	if n&1 == 1 {
 		return false
 	}
 	// 记录括号对

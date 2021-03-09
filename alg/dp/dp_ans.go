@@ -107,14 +107,14 @@ func PackImproved(weights []int, values []int, totalWeight int, totalCount int) 
 
 	for i := 1; i < totalCount+1; i++ {
 		for j := 1; j < totalWeight+1; j++ {
-			dp[i%2][j] = dp[(i-1)%2][j]
+			dp[i&1][j] = dp[(i-1)&1][j]
 			if j-weights[i] >= 0 {
-				dp[i%2][j] = Max(dp[i%2][j], dp[i%2][j-weights[i]]+values[i]) // 可重复放入
-				//dp[i%2][j] = Max(dp[(i-1)%2][j], dp[(i-1)%2][j-weights[i]] + values[i]) // 只可放入一次
+				dp[i&1][j] = Max(dp[i&1][j], dp[i&1][j-weights[i]]+values[i]) // 可重复放入
+				//dp[i&1][j] = Max(dp[(i-1)&1][j], dp[(i-1)&1][j-weights[i]] + values[i]) // 只可放入一次
 			}
 		}
 	}
-	fmt.Println(dp[totalCount%2][totalWeight])
+	fmt.Println(dp[totalCount&1][totalWeight])
 }
 
 func LargestSubArr(str string) int {
