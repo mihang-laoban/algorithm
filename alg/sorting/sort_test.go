@@ -132,7 +132,12 @@ func Merge1(nums []int) []int {
 }
 
 func Merge(nums []int) []int {
-	return nums
+	size := len(nums)
+	if size < 2 {
+		return nums
+	}
+	mid := size >> 1
+	return s(Merge(nums[:mid]), Merge(nums[mid:]))
 }
 
 func s(l, r []int) (res []int) {

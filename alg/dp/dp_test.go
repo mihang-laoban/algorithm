@@ -110,12 +110,26 @@ func TestPackage(t *testing.T) {
 	weights, values := []int{3, 2, 1}, []int{5, 2, 3}
 	totalWeight, totalCount := 5, 3
 
+	fmt.Println(pk(weights, values, totalWeight, totalCount))
 	Pack(weights, values, totalWeight, totalCount)
 	PackImproved(weights, values, totalWeight, totalCount)
 }
 
-func pk(weights []int, values []int, totalWeight int, totalCount int) {
-
+func pk(weights []int, values []int, totalWeight int, totalCount int) int {
+	weights = append([]int{0}, weights...)
+	values = append([]int{0}, values...)
+	memo := make([][]int, totalCount+1)
+	for i := 0; i < totalCount+1; i++ {
+		memo[i] = make([]int, totalWeight+1)
+	}
+	for i := 1; i < totalCount+1; i++ {
+		for j := 1; j < totalWeight+1; j++ {
+			if j-weights[i] >= 0 {
+				memo[i][j] = Max(memo[i][j], memo[i][j-weights[i]]+values[i])
+			}
+		}
+	}
+	return memo[totalCount][totalWeight]
 }
 
 // Q3
@@ -134,7 +148,7 @@ func lg(str string) int {
 
 // Q4
 func TestFindLargestArrSum(t *testing.T) {
-	fmt.Println(MaxSubArray([]int{-2, 1, -3, 4, -1, 3, -5, 1, 2}))
+	fmt.Println(MaxSubArray0([]int{-2, 1, -3, 4, -1, 3, -5, 1, 2}))
 	fdLg([]int{-2, 1, -3, 4, -1, 3, -5, 1, 2})
 }
 

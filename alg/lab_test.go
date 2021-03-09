@@ -1,11 +1,14 @@
 package alg
 
 import (
+	"bytes"
 	"context"
 	linkedList2 "dp/alg/linkedList"
 	. "dp/ds/linkedList"
 	"fmt"
 	"github.com/pkg/errors"
+	"strconv"
+	"strings"
 	"testing"
 	"time"
 	"unsafe"
@@ -162,4 +165,54 @@ func TestSize(t *testing.T) {
 		i32 int32
 		i16 int16
 	}{}))
+}
+
+// fmt.Sprintf
+func BenchmarkStringSprintf(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		var str string
+		for j := 0; j < 10; j++ {
+			str = fmt.Sprintf("%s%d", str, j)
+		}
+	}
+	b.StopTimer()
+}
+
+// add
+func BenchmarkStringAdd(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		var str string
+		for j := 0; j < 10; j++ {
+			str = str + string(j)
+		}
+	}
+	b.StopTimer()
+}
+
+// bytes.Buffer
+func BenchmarkStringBuffer(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		var buffer bytes.Buffer
+		for j := 0; j < 10; j++ {
+			buffer.WriteString(strconv.Itoa(j))
+		}
+		_ = buffer.String()
+	}
+	b.StopTimer()
+}
+
+// strings.Builder
+func BenchmarkStringBuilder(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		var builder strings.Builder
+		for j := 0; j < 10; j++ {
+			builder.WriteString(strconv.Itoa(j))
+		}
+		_ = builder.String()
+	}
+	b.StopTimer()
 }

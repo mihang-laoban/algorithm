@@ -117,7 +117,8 @@ func Phone(str string) interface{} {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestNQueue(t *testing.T) {
-	res := SolveNQueens(4)
+	//res := SolveNQueens(4)
+	res := SolveNQueen(4)
 	//res := SolveNQueen(4)
 	//res := SolveNQueens2(4)
 
@@ -131,7 +132,53 @@ func TestNQueue(t *testing.T) {
 
 func SolveNQueen(queenNum int) [][]string {
 	res := [][]string{}
+	queens := make([]int, queenNum)
+	col, main, sub := map[int]bool{}, map[int]bool{}, map[int]bool{}
+	for i := 0; i < queenNum; i++ {
+		queens[i] = -1
+	}
+	var bt func(int)
+	bt = func(row int) {
+		if row == queenNum {
+			one := ge(queens)
+			res = append(res, one)
+		}
+		for i := 0; i < queenNum; i++ {
+			if col[i] {
+				continue
+			}
+			mIn := row + i
+			if main[mIn] {
+				continue
+			}
+			sIn := row - i
+			if sub[sIn] {
+				continue
+			}
+			queens[row] = i
+			col[i], main[mIn], sub[sIn] = true, true, true
+			bt(row + 1)
+			queens[row] = -1
+			delete(col, i)
+			delete(main, mIn)
+			delete(sub, sIn)
+		}
+	}
+	bt(0)
 	return res
+}
+
+func ge(queens []int) (res []string) {
+	size := len(queens)
+	for i := 0; i < size; i++ {
+		row := make([]byte, size)
+		for j := 0; j < size; j++ {
+			row[j] = '.'
+		}
+		row[queens[i]] = 'Q'
+		res = append(res, string(row))
+	}
+	return
 }
 
 /*给定一个非负整数数组，你最初位于数组的第一个位置。

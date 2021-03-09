@@ -79,7 +79,7 @@ func TestMinWindow(t *testing.T) {
 }
 
 func MinWindow2(s string, t string) string {
-	return s
+	return ""
 }
 
 func MinWindow(s string, t string) string {

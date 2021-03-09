@@ -80,7 +80,6 @@ func Pack(weights []int, values []int, totalWeight int, totalCount int) {
 	for i := 0; i < totalWeight+1; i++ {
 		dp[0][i] = 0
 	}
-
 	for i := 1; i < totalCount+1; i++ {
 		for j := 1; j < totalWeight+1; j++ {
 			dp[i][j] = dp[i-1][j]
@@ -141,7 +140,7 @@ func LargestSubArr(str string) int {
 	return res
 }
 
-func MaxSubArray(nums []int) int {
+func MaxSubArray0(nums []int) int {
 	cur, res := 0, nums[0]
 	for i := 0; i < len(nums); i++ {
 		tmp := Max(nums[i], nums[i]+cur)
