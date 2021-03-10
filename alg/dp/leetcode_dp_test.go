@@ -3,6 +3,7 @@ package dp
 import (
 	. "dp/tools"
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -147,4 +148,28 @@ func MinDistance(word1 string, word2 string) int {
 		}
 	}
 	return dp[s1][s2]
+}
+
+type A struct {
+	a string
+	//b chan string
+	//c map[string]string
+	//d B
+	//e *B
+	//f []int
+}
+
+type B struct {
+	a string
+	//b chan string
+	//c map[string]string
+	//d B
+	//e *B
+	//f []int
+}
+
+func TestCompare(t *testing.T) {
+	a := A{a: "1"}
+	b := B{a: "1"}
+	fmt.Println(reflect.DeepEqual(a, b))
 }
