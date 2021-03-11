@@ -6,7 +6,7 @@ import (
 )
 
 var x = []int{6, 4, 2, 5, 9, 3, 10, 7, 6, 8, 1}
-var length = len(x)
+var size = len(x)
 
 type Sorting interface {
 	Insert()
@@ -33,8 +33,8 @@ func TestBucket(t *testing.T)   { LoopPrint(Bucket(x)) }
 func TestRadix(t *testing.T)    { LoopPrint(Radix(x)) }
 
 func Bubble(nums []int) []int {
-	for i := 0; i < length; i++ {
-		for j := 0; j < length; j++ {
+	for i := 0; i < size; i++ {
+		for j := 0; j < size; j++ {
 			if nums[i] < nums[j] {
 				nums[i], nums[j] = nums[j], nums[i]
 			}
@@ -44,9 +44,9 @@ func Bubble(nums []int) []int {
 }
 
 func Select(nums []int) []int {
-	for i := 0; i < length-1; i++ {
+	for i := 0; i < size-1; i++ {
 		min := i
-		for j := i + 1; j < length; j++ {
+		for j := i + 1; j < size; j++ {
 			if nums[min] > nums[j] {
 				min = j
 			}
@@ -56,8 +56,8 @@ func Select(nums []int) []int {
 	return nums
 }
 
-func Insert(nums []int) []int {
-	for i := 1; i < length; i++ {
+func Insert1(nums []int) []int {
+	for i := 1; i < size; i++ {
 		for j := i; j > 0; j-- {
 			if nums[j] < nums[j-1] {
 				nums[j], nums[j-1] = nums[j-1], nums[j]
@@ -69,10 +69,14 @@ func Insert(nums []int) []int {
 	return nums
 }
 
+func Insert(nums []int) []int {
+	return nums
+}
+
 func Shell(nums []int) []int {
-	for gap := length >> 1; gap > 0; gap >>= 1 {
+	for gap := size >> 1; gap > 0; gap >>= 1 {
 		//从第gap个元素，逐个对其所在组进行直接插入排序操作
-		for i := gap; i < length; i++ {
+		for i := gap; i < size; i++ {
 			j := i
 			for j-gap >= 0 && nums[j] < nums[j-gap] {
 				nums[j], nums[j-gap] = nums[j-gap], nums[j]
@@ -132,12 +136,7 @@ func Merge1(nums []int) []int {
 }
 
 func Merge(nums []int) []int {
-	size := len(nums)
-	if size < 2 {
-		return nums
-	}
-	mid := size >> 1
-	return s(Merge(nums[:mid]), Merge(nums[mid:]))
+	return nums
 }
 
 func s(l, r []int) (res []int) {
