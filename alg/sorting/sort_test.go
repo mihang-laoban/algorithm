@@ -57,12 +57,12 @@ func Select(nums []int) []int {
 }
 
 func Insert(nums []int) []int {
-	for i := 1; i < length; i++ { //把第一个元素作为有序序列
-		j := i
-		if nums[i] < nums[i-1] {
-			for j > 0 && nums[j] < nums[j-1] {
+	for i := 1; i < length; i++ {
+		for j := i; j > 0; j-- {
+			if nums[j] < nums[j-1] {
 				nums[j], nums[j-1] = nums[j-1], nums[j]
-				j--
+			} else {
+				break
 			}
 		}
 	}
@@ -88,7 +88,7 @@ func Quick1(nums []int) []int {
 }
 
 func Quick(nums []int) []int {
-	return nums
+	return []int{}
 }
 
 func q(nums []int, start, end int) []int {
