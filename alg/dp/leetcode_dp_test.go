@@ -1,9 +1,9 @@
 package dp
 
 import (
+	. "dp/ds/tree"
 	. "dp/tools"
 	"fmt"
-	"reflect"
 	"testing"
 )
 
@@ -123,53 +123,103 @@ exection -> execution (插入 'u')
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestMinDistance(t *testing.T) {
-	fmt.Println(2 & 1)
 	fmt.Println(MinDistance("horse", "ros"))
+	fmt.Println(minDistance("horse", "ros"))
 }
 
-func MinDistance(word1 string, word2 string) int {
-	s1, s2 := len(word1), len(word2)
-	dp := make([][]int, s1+1)
-	for i := 0; i < s1+1; i++ {
-		dp[i] = make([]int, s2+1)
+func minDistance(word1, word2 string) int {
+	return 0
+}
+
+/*给定一个整数 n，生成所有由 1 ... n 为节点所组成的 二叉搜索树 。
+
+示例：
+
+输入：3
+输出：
+[
+  [1,null,3,2],
+  [3,2,null,1],
+  [3,1,null,null,2],
+  [2,1,3],
+  [1,null,2,null,3]
+]
+解释：
+以上的输出对应以下 5 种不同结构的二叉搜索树：
+
+1         3     3      2      1
+ \       /     /      / \      \
+  3     2     1      1   3      2
+ /     /       \                 \
+2     1         2                 3
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/unique-binary-search-trees-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+func TestLengthOfLIS(t *testing.T) {
+	trees := GenerateTrees(3)
+	for _, tree := range trees {
+		fmt.Println(TreeToArray(tree))
 	}
-	for i := 0; i < s1+1; i++ {
-		dp[i][0] = i
+}
+
+func GenerateTrees(n int) []*TreeNode {
+	if n == 0 {
+		return nil
 	}
-	for i := 0; i < s2+1; i++ {
-		dp[0][i] = i
-	}
-	for i := 1; i < s1+1; i++ {
-		for j := 1; j < s2+1; j++ {
-			dp[i][j] = Min(dp[i-1][j-1], Min(dp[i-1][j], dp[i][j-1])) + 1
-			if word1[i-1] == word2[j-1] {
-				dp[i][j] = Min(dp[i][j], dp[i-1][j-1])
+	var helper func(int, int) []*TreeNode
+	helper = func(start, end int) []*TreeNode {
+		if start > end {
+			return []*TreeNode{nil}
+		}
+		allTrees := []*TreeNode{}
+		// 枚举可行根节点
+		for i := start; i <= end; i++ {
+			// 获得所有可行的左子树集合
+			leftTrees := helper(start, i-1)
+			// 获得所有可行的右子树集合
+			rightTrees := helper(i+1, end)
+			// 从左子树集合中选出一棵左子树，从右子树集合中选出一棵右子树，拼接到根节点上
+			for _, left := range leftTrees {
+				for _, right := range rightTrees {
+					currTree := &TreeNode{i, nil, nil}
+					currTree.Left = left
+					currTree.Right = right
+					allTrees = append(allTrees, currTree)
+				}
 			}
 		}
+		return allTrees
 	}
-	return dp[s1][s2]
+
+	return helper(1, n)
 }
 
-type A struct {
-	a string
-	//b chan string
-	//c map[string]string
-	//d B
-	//e *B
-	//f []int
+/*给定一个整数 n，求以 1 ... n 为节点组成的二叉搜索树有多少种？
+
+示例:
+
+输入: 3
+输出: 5
+解释:
+给定 n = 3, 一共有 5 种不同结构的二叉搜索树:
+
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/unique-binary-search-trees
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestNumTrees(t *testing.T) {
+	fmt.Println(NumTrees(3))
 }
 
-type B struct {
-	a string
-	//b chan string
-	//c map[string]string
-	//d B
-	//e *B
-	//f []int
-}
-
-func TestCompare(t *testing.T) {
-	a := A{a: "1"}
-	b := B{a: "1"}
-	fmt.Println(reflect.DeepEqual(a, b))
+func NumTrees(n int) int {
+	dp := make([]int, n+1)
+	dp[0], dp[1] = 1, 1
+	for i := 2; i < n+1; i++ {
+		for j := 1; j < i+1; j++ {
+			dp[i] += dp[j-1] * dp[i-j]
+		}
+	}
+	return dp[n]
 }
