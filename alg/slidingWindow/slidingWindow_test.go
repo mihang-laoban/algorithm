@@ -92,14 +92,13 @@ func MinWindow(s string, t string) string {
 		need[t[i]]++
 	}
 	// 右边界到达S字符串的末尾为止
-	for r < len(s) {
-		c := s[r]
+	for r < sSize {
 		// 如果S字符串中的字符在T字符串中存在，则计数器标记找到了一个字符
-		if need[c] > 0 {
+		if need[s[r]] > 0 {
 			count--
 		}
 		// 标记S字符串中存在的字符，负数为不需要的字符
-		need[c]--
+		need[s[r]]--
 		// 如果所有的字符全部找到
 		if count == 0 {
 			// 右指针与左指针之间还存在空隙，并且当前左指针指向的字符串已经被标记为多余字符，则移动左边界

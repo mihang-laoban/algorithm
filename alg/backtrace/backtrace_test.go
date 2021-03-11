@@ -131,54 +131,55 @@ func TestNQueue(t *testing.T) {
 }
 
 func SolveNQueen(queenNum int) [][]string {
-	res := [][]string{}
 	queens := make([]int, queenNum)
-	col, main, sub := map[int]bool{}, map[int]bool{}, map[int]bool{}
+	res := [][]string{}
 	for i := 0; i < queenNum; i++ {
 		queens[i] = -1
 	}
+	col, main, sub := map[int]bool{}, map[int]bool{}, map[int]bool{}
 	var bt func(int)
 	bt = func(row int) {
 		if row == queenNum {
-			one := ge(queens)
-			res = append(res, one)
+			cur := ge(queens)
+			res = append(res, cur)
 		}
 		for i := 0; i < queenNum; i++ {
 			if col[i] {
 				continue
 			}
-			mIn := row + i
-			if main[mIn] {
+			mIN := row + i
+			if main[mIN] {
 				continue
 			}
-			sIn := row - i
-			if sub[sIn] {
+			sIN := row - i
+			if sub[sIN] {
 				continue
 			}
 			queens[row] = i
-			col[i], main[mIn], sub[sIn] = true, true, true
+			col[i], main[mIN], sub[sIN] = true, true, true
 			bt(row + 1)
 			queens[row] = -1
 			delete(col, i)
-			delete(main, mIn)
-			delete(sub, sIn)
+			delete(main, mIN)
+			delete(sub, sIN)
 		}
 	}
 	bt(0)
 	return res
 }
 
-func ge(queens []int) (res []string) {
-	size := len(queens)
+func ge(q []int) []string {
+	res := []string{}
+	size := len(q)
 	for i := 0; i < size; i++ {
 		row := make([]byte, size)
 		for j := 0; j < size; j++ {
 			row[j] = '.'
 		}
-		row[queens[i]] = 'Q'
+		row[q[i]] = 'Q'
 		res = append(res, string(row))
 	}
-	return
+	return res
 }
 
 /*给定一个非负整数数组，你最初位于数组的第一个位置。

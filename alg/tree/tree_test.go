@@ -283,14 +283,6 @@ func TestIsBalancedBottom(t *testing.T) {
 	fmt.Println(balance(root) >= 0)
 }
 
-func TestTreeAndArray(t *testing.T) {
-	arr := []interface{}{5, 1, 4, nil, nil, 3, 6}
-	fmt.Println(arr)
-	root := ArrayToTree(arr)
-	res := TreeToArray(root)
-	fmt.Println(res)
-}
-
 /*给定一个二叉树，判断其是否是一个有效的二叉搜索树。
 
 假设一个二叉搜索树具有如下特征：
