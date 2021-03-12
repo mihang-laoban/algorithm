@@ -592,6 +592,30 @@ func LevelOrderBottom(root *TreeNode) [][]int {
 	return res
 }
 
+func LevelOrder(root *TreeNode) (res [][]int) {
+	if root == nil {
+		return nil
+	}
+	stack := []*TreeNode{root}
+	for len(stack) > 0 {
+		tmp := []int{}
+		size := len(stack)
+		for i := 0; i < size; i++ {
+			cur := stack[0]
+			stack = stack[1:]
+			tmp = append(tmp, cur.Val)
+			if cur.Left != nil {
+				stack = append(stack, cur.Left)
+			}
+			if cur.Right != nil {
+				stack = append(stack, cur.Right)
+			}
+		}
+		res = append(res, tmp)
+	}
+	return
+}
+
 func recoverT(root *TreeNode) {
 	stack := []*TreeNode{}
 	var x, y, pre *TreeNode
