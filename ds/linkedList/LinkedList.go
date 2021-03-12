@@ -130,16 +130,13 @@ func IsCircular(head *ListNode) bool {
 	if head == nil || head.Next == nil {
 		return false
 	}
-	slow, fast := head, head
-	for {
+	slow, fast := head, head.Next
+	for fast != slow {
 		if fast == nil || fast.Next == nil {
 			return false
 		}
 		slow = slow.Next
 		fast = fast.Next.Next
-		if fast == slow {
-			break
-		}
 	}
 	return true
 }

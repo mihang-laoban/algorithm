@@ -10,7 +10,12 @@ import (
 func TestIsCircle(t *testing.T) {
 	node := GetCircleLink()
 	fmt.Println(IsCircular(node))
-	TestLinkedList()
+	fmt.Println(hasCycle(node))
+	//TestLinkedList()
+}
+
+func hasCycle(head *ListNode) bool {
+	return false
 }
 
 /*
