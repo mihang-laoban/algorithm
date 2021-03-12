@@ -156,7 +156,7 @@ num1 和num2 都不包含任何前导零
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestAddStrings(t *testing.T) {
-	fmt.Println(AddStrings("512", "357"))
+	fmt.Println(AddStrings("515", "357"))
 
 }
 
@@ -171,8 +171,8 @@ func AddStrings(num1 string, num2 string) string {
 			y = int(num2[j] - '0')
 		}
 		result := x + y + add
-		ans = strconv.Itoa(result%10) + ans
 		add = result / 10
+		ans = strconv.Itoa(result%10) + ans
 	}
 	return ans
 }
