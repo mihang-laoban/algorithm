@@ -2,6 +2,7 @@ package newCoder
 
 import (
 	. "dp/ds"
+	"dp/ds/tree"
 	"fmt"
 	"strconv"
 	"testing"
@@ -157,22 +158,174 @@ num1 和num2 都不包含任何前导零
 
 func TestAddStrings(t *testing.T) {
 	fmt.Println(AddStrings("515", "357"))
-
 }
 
-func AddStrings(num1 string, num2 string) string {
-	ans, add := "", 0
-	for i, j := len(num1)-1, len(num2)-1; i >= 0 || j >= 0 || add != 0; i, j = i-1, j-1 {
+func AddStrings(s string, t string) string {
+	ans, count := "", 0
+	for i, j := len(s)-1, len(t)-1; i >= 0 || j >= 0 || count != 0; i, j = i-1, j-1 {
 		var x, y int
 		if i >= 0 {
-			x = int(num1[i] - '0')
+			x = int(s[i] - '0')
 		}
 		if j >= 0 {
-			y = int(num2[j] - '0')
+			y = int(t[j] - '0')
 		}
-		result := x + y + add
-		add = result / 10
+		result := x + y + count
+		count = result / 10
 		ans = strconv.Itoa(result%10) + ans
 	}
 	return ans
+}
+
+/*给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+
+百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+
+例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]
+
+示例 1:
+
+输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+输出: 6
+解释: 节点 2 和节点 8 的最近公共祖先是 6。
+示例 2:
+
+输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+输出: 2
+解释: 节点 2 和节点 4 的最近公共祖先是 2, 因为根据定义最近公共祖先节点可以为节点本身。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestLowestCommonAncestor(t *testing.T) {
+	root := tree.ArrayToTree([]interface{}{6, 2, 8, 0, 4, 7, 9, nil, nil, 3, 5})
+	fmt.Println(LowestCommonAncestor(root, root.Left, root.Right).Val)
+}
+
+func LowestCommonAncestor(root, p, q *tree.TreeNode) *tree.TreeNode {
+	ans := root
+	for {
+		if p.Val < ans.Val && q.Val < ans.Val {
+			ans = ans.Right
+		} else if p.Val > ans.Val && q.Val > ans.Val {
+			ans = ans.Left
+		} else {
+			return ans
+		}
+	}
+}
+
+/*给定一棵二叉树以及这棵树上的两个节点 o1 和 o2，请找到 o1 和 o2 的最近公共祖先节点。
+示例1
+输入
+[3,5,1,6,2,0,8,#,#,7,4],6,4
+返回值
+5
+    3
+   / \
+  5   1
+ / \ / \
+6  2 0  8
+  / \
+ 7   4
+*/
+
+func TestLowestCommonAncestor2(t *testing.T) {
+	root := tree.ArrayToTree([]interface{}{3, 5, 1, 6, 2, 0, 8, nil, nil, 7, 4})
+	fmt.Println(LowestCommonAncestor2(root, 6, 4))
+}
+
+func LowestCommonAncestor2(root *tree.TreeNode, c1, c2 int) int {
+	return findLowestCommonAncestor2(root, c1, c2).Val
+}
+
+func findLowestCommonAncestor2(root *tree.TreeNode, c1, c2 int) *tree.TreeNode {
+	if root == nil || root.Val == c1 || root.Val == c2 {
+		return root
+	}
+	l := findLowestCommonAncestor2(root.Left, c1, c2)
+	r := findLowestCommonAncestor2(root.Right, c1, c2)
+	if l == nil {
+		return r
+	}
+	if r == nil {
+		return l
+	}
+	return root
+}
+
+/*给定两个字符串str1和str2,输出两个字符串的最长公共子串
+题目保证str1和str2的最长公共子串存在且唯一。
+输入
+"1AB2345CD","12345EF"
+返回值
+"2345"
+*/
+
+func TestLCS(t *testing.T) {
+	fmt.Println(LCS("1AB2345CD", "12345EF"))
+	fmt.Println(LCS2("1AB2345CD", "12345EF"))
+}
+
+func LCS2(str1 string, str2 string) string {
+	return ""
+}
+
+func LCS(str1 string, str2 string) string {
+	size1, size2 := len(str1), len(str2)
+	dp := make([][]int, size1+1)
+	for i := 0; i < size1+1; i++ {
+		dp[i] = make([]int, size2+1)
+	}
+	maxLen, str2Index := 0, 0
+	for i := 1; i <= size1; i++ {
+		for j := 1; j <= size2; j++ {
+			if str1[i-1] == str2[j-1] {
+				dp[i][j] = dp[i-1][j-1] + 1
+				if maxLen < dp[i][j] {
+					maxLen = dp[i][j]
+					str2Index = j
+				}
+			} else {
+				dp[i][j] = 0
+			}
+		}
+	}
+	if maxLen == 0 {
+		return "-1"
+	} else {
+		return str2[str2Index-maxLen : str2Index]
+	}
+}
+
+//给定一个整形数组arr，已知其中所有的值都是非负的，将这个数组看作一个容器，请返回容器能装多少水。
+//[3,1,2,5,2,4]
+//5
+
+func TestMaxWater(t *testing.T) {
+	fmt.Println(MaxWater([]int{3, 1, 2, 5, 2, 4}))
+}
+
+func MaxWater(height []int) int {
+	l, r := 0, len(height)-1
+	lMax, rMax, res := 0, 0, 0
+	for l < r {
+		if height[l] < height[r] {
+			if lMax < height[l] {
+				lMax = height[l]
+			} else {
+				res += lMax - height[l]
+			}
+			l++
+		} else {
+			if rMax < height[r] {
+				rMax = height[r]
+			} else {
+				res += rMax - height[r]
+			}
+			r--
+		}
+	}
+	return res
 }
