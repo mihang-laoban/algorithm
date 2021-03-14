@@ -1480,10 +1480,27 @@ func TestRightSideView(t *testing.T) {
 
 func TestBuildTree(t *testing.T) {
 	root := BuildTree([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7})
+	root1 := BuildTree1([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7})
 	fmt.Println(TreeToArray(root))
+	fmt.Println(TreeToArray(root1))
 }
 
-func BuildTree(preorder []int, inorder []int) *TreeNode {
+func BuildTree1(pre, in []int) *TreeNode {
+	if len(pre) == 0 || len(in) == 0 || len(pre) != len(in) {
+		return nil
+	}
+	root := &TreeNode{Val: pre[0]}
+	for i := 0; i < len(in); i++ {
+		if pre[0] == in[i] {
+			root.Left = BuildTree1(pre[1:i+1], in[:i])
+			root.Right = BuildTree1(pre[i+1:], in[i+1:])
+			break
+		}
+	}
+	return root
+}
+
+func BuildTree(preorder, inorder []int) *TreeNode {
 	if len(preorder) == 0 || len(preorder) == 0 || len(preorder) != len(inorder) {
 		return nil
 	}

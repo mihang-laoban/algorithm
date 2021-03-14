@@ -509,36 +509,137 @@ func TestAddTwoNumbers(t *testing.T) {
 	fmt.Println(linkedList.LinkedListToArray(AddTwoNumbers(head1, head2)))
 }
 
-func AddTwoNumbers(head1 *linkedList.ListNode, head2 *linkedList.ListNode) *linkedList.ListNode {
-	nums1, nums2 := []int{}, []int{}
-	for head1 != nil {
-		nums1 = append(nums1, head1.Val)
-		head1 = head1.Next
-	}
-	for head2 != nil {
-		nums2 = append(nums2, head2.Val)
-		head2 = head2.Next
-	}
-	var add int
-	var target *linkedList.ListNode
-	for len(nums1) > 0 || len(nums2) > 0 || add > 0 {
-		var a, b int
-		if len(nums1) > 0 {
-			a = nums1[len(nums1)-1]
-			nums1 = nums1[:len(nums1)-1]
-		}
-		if len(nums2) > 0 {
-			b = nums2[len(nums2)-1]
-			nums2 = nums2[:len(nums2)-1]
-		}
-		res := a + b + add
-		add = res / 10
-		rest := res % 10
-		target = &linkedList.ListNode{Val: rest, Next: target}
-	}
-	return target
+/*给定数组arr，设长度为n，输出arr的最长递增子序列。（如果有多个答案，请输出其中字典序最小的）
+
+输入
+[2,1,5,3,6,4,8,9,7]
+返回值
+[1,3,4,8,9]
+
+示例2
+输入
+[1,2,8,6,4]
+返回值
+[1,2,4]
+说明
+其最长递增子序列有3个，（1，2，8）、（1，2，6）、（1，2，4）其中第三个字典序最小，故答案为（1，2，4）*/
+
+func TestLIS(t *testing.T) {
+	fmt.Println(LIS([]int{2, 1, 5, 3, 6, 4, 8, 9, 7}))
+	fmt.Println(LIS([]int{1, 2, 8, 6, 4}))
 }
 
-func Test(t *testing.T) {
+func LIS(arr []int) []int {
+	if len(arr) == 0 {
+		return nil
+	}
+	maxLen := make([]int, len(arr))
+	maxLen[0] = 1
+	res := []int{arr[0]}
+	for i := 1; i < len(arr); i++ {
+		// 如果当前元素比结果集里面最后一个元素大，则当前元素也加入结果集
+		if arr[i] > res[len(res)-1] {
+			res = append(res, arr[i])
+			maxLen[i] = len(res) // 记录当前的最大长度
+		} else {
+			//
+			l, r := 0, len(res)-1
+			for l < r {
+				mid := l + (r-l)>>1
+				if res[mid] < arr[i] {
+					l = mid + 1
+				} else {
+					r = mid
+				}
+			}
+			res[l] = arr[i]
+			maxLen[i] = l + 1
+		}
+	}
+	for i, j := len(maxLen)-1, len(res); j > 0; i-- {
+		if maxLen[i] == j {
+			j--
+			res[j] = arr[i]
+		}
+	}
+	return res
+}
 
+/*对于一个字符串，请设计一个高效算法，计算其中最长回文子串的长度。
+给定字符串A以及它的长度n，请返回最长回文子串的长度。
+
+示例1
+输入
+"abc1234321ab",12
+
+返回值
+7
+*/
+
+func TestGetLongestPalindrome(t *testing.T) {
+	fmt.Println(GetLongestPalindrome("abc1234321ab", 12))
+}
+
+func GetLongestPalindrome(str string, size int) int {
+	res := 1
+	dp := make([][]bool, size)
+	for i := 0; i < size; i++ {
+		dp[i] = make([]bool, size)
+		dp[i][i] = true
+	}
+	for r := 1; r < size; r++ {
+		for l := r - 1; l >= 0; l-- {
+			if r-l < 2 {
+				dp[l][r] = str[r] == str[l]
+				res = tools.Max(res, r-l+1)
+				continue
+			}
+			dp[l][r] = dp[l+1][r-1] && str[r] == str[l]
+			if dp[l][r] {
+				res = tools.Max(res, r-l+1)
+			}
+		}
+	}
+	return res
+}
+
+/*题目描述
+给定一个单链表，请设定一个函数，将链表的奇数位节点和偶数位节点分别放在一起，重排后输出。
+注意是节点的编号而非节点的数值。
+
+示例1
+输入
+{1,2,3,4,5,6}
+返回值
+{1,3,5,2,4,6}
+
+示例2
+输入
+{1,4,6,3,7}
+返回值
+{1,6,7,4,3}
+说明
+奇数节点有1,6,7，偶数节点有4,3。重排后为1,6,7,4,3
+*/
+
+func TestOddEvenList(t *testing.T) {
+	head := linkedList.ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6})
+	cur := OddEvenList(head)
+	fmt.Println(linkedList.LinkedListToArray(cur))
+}
+
+func OddEvenList(head *linkedList.ListNode) *linkedList.ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	first, second := head, head.Next
+	odd, even := head, head.Next
+	for second != nil && second.Next != nil {
+		first.Next = first.Next.Next
+		first = first.Next
+		second.Next = second.Next.Next
+		second = second.Next
+	}
+	first.Next = even
+	return odd
 }
