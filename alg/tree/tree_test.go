@@ -1487,7 +1487,7 @@ func BuildTree(preorder []int, inorder []int) *TreeNode {
 	if len(preorder) == 0 || len(preorder) == 0 || len(preorder) != len(inorder) {
 		return nil
 	}
-	root := &TreeNode{preorder[0], nil, nil}
+	root := &TreeNode{Val: preorder[0]}
 	for i := 0; i < len(inorder); i++ {
 		if preorder[0] == inorder[i] {
 			root.Left = BuildTree(preorder[1:i+1], inorder[:i])
