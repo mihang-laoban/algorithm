@@ -53,39 +53,3 @@ func ClimbStairs(n int) int {
 	}
 	return second
 }
-
-func LRU_NEW_CODER(operators [][]int, k int) []int {
-	// write code here
-	res := make([]int, 0, len(operators))
-	key := make([]int, k)
-	value := make([]int, k)
-	for _, v := range operators {
-		if v[0] == 1 {
-			// 插入
-
-		} else if v[0] == 2 {
-			// 获取
-			index := -1
-			for i := 0; i < len(key); i++ {
-				if v[1] == key[i] {
-					index = i
-					break
-				}
-			}
-
-			if index == -1 {
-				res = append(res, -1)
-			} else {
-				res = append(res, value[index])
-
-				if index < k-1 {
-					// 获取的 key 非最近最常使用
-					key = append(key[:index], append(key[index+1:], key[index])...)
-					value = append(value[:index], append(value[index+1:], value[index])...)
-				}
-			}
-		}
-	}
-
-	return res
-}

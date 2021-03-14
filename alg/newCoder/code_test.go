@@ -8,11 +8,37 @@ import (
 	"testing"
 )
 
+/*题目描述
+设计LRU缓存结构，该结构在构造时确定大小，假设大小为K，并有如下两个功能
+set(key, value)：将记录(key, value)插入该结构
+get(key)：返回key对应的value值
+[要求]
+set和get方法的时间复杂度为O(1)
+某个key的set或get操作一旦发生，认为这个key的记录成了最常使用的。
+当缓存的大小超过K时，移除最不经常使用的记录，即set或get最久远的。
+若opt=1，接下来两个整数x, y，表示set(x, y)
+若opt=2，接下来一个整数x，表示get(x)，若x未出现过或已被移除，则返回-1
+对于每个操作2，输出一个答案
+
+第一次操作后：最常使用的记录为("1", 1)
+第二次操作后：最常使用的记录为("2", 2)，("1", 1)变为最不常用的
+第三次操作后：最常使用的记录为("3", 2)，("1", 1)还是最不常用的
+第四次操作后：最常用的记录为("1", 1)，("2", 2)变为最不常用的
+第五次操作后：大小超过了3，所以移除此时最不常使用的记录("2", 2)，加入记录("4", 4)，并且为最常使用的记录，然后("3", 2)变为最不常使用的记录
+*/
 func TestLRU_coder(t *testing.T) {
+	/* [1, -1]
+	set(1, 1) [1:1]
+	set(2, 2) [2:2, 1:1]
+	set(3, 2) [3:2, 2:2, 1:1]
+	get(1)    [1:1, 3:2, 2:2] -> 1
+	set(4, 4) [4:4, 1:1, 3:2]
+	get(2)    [4:4, 1:1, 3:2] -> -1
+	*/
 	fmt.Println(LRU([][]int{[]int{1, 1, 1}, []int{1, 2, 2}, []int{1, 3, 2}, []int{2, 1}, []int{1, 4, 4}, []int{2, 2}}, 3))
-	fmt.Println(LRU_NEW_CODER([][]int{[]int{1, 1, 1}, []int{1, 2, 2}, []int{1, 3, 2}, []int{2, 1}, []int{1, 4, 4}, []int{2, 2}}, 3))
 }
 
+// k是缓存大小
 func LRU(operators [][]int, k int) []int {
 	res := []int{}
 	lru := LRUConstructor(k)
@@ -269,7 +295,29 @@ func TestLCS(t *testing.T) {
 }
 
 func LCS2(str1 string, str2 string) string {
-	return ""
+	s1, s2 := len(str1), len(str2)
+	dp := make([][]int, s1+1)
+	maxIn, maxSize := 0, 0
+	for i := 0; i < s1+1; i++ {
+		dp[i] = make([]int, s2+1)
+	}
+	for i := 1; i < s1+1; i++ {
+		for j := 1; j < s2+1; j++ {
+			if str1[i-1] == str2[j-1] {
+				dp[i][j] = dp[i-1][j-1] + 1
+				if maxSize < dp[i][j] {
+					maxSize = dp[i][j]
+					maxIn = j
+				}
+			} else {
+				dp[i][j] = 0
+			}
+		}
+	}
+	if maxSize == 0 {
+		return "-1"
+	}
+	return str2[maxIn-maxSize : maxIn]
 }
 
 func LCS(str1 string, str2 string) string {
