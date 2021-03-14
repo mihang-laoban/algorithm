@@ -1,7 +1,9 @@
 package newCoder
 
 import (
+	linkedList2 "dp/alg/linkedList"
 	. "dp/ds"
+	"dp/ds/linkedList"
 	"dp/ds/tree"
 	"dp/tools"
 	"fmt"
@@ -383,27 +385,27 @@ func TestLCS(t *testing.T) {
 func LCS2(str1 string, str2 string) string {
 	s1, s2 := len(str1), len(str2)
 	dp := make([][]int, s1+1)
-	maxIn, maxSize := 0, 0
 	for i := 0; i < s1+1; i++ {
 		dp[i] = make([]int, s2+1)
 	}
+	index, size := 0, 0
 	for i := 1; i < s1+1; i++ {
 		for j := 1; j < s2+1; j++ {
 			if str1[i-1] == str2[j-1] {
 				dp[i][j] = dp[i-1][j-1] + 1
-				if maxSize < dp[i][j] {
-					maxSize = dp[i][j]
-					maxIn = j
+				if size < dp[i][j] {
+					size = dp[i][j]
+					index = j
 				}
 			} else {
 				dp[i][j] = 0
 			}
 		}
 	}
-	if maxSize == 0 {
+	if size == 0 {
 		return "-1"
 	}
-	return str2[maxIn-maxSize : maxIn]
+	return str2[index-size : index]
 }
 
 func LCS(str1 string, str2 string) string {
@@ -487,4 +489,52 @@ func MaxLength(arr []int) int {
 		maxLen = tools.Max(maxLen, i-cur+1)
 	}
 	return maxLen
+}
+
+/*
+给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。
+你可以假设除了数字 0 之外，这两个数字都不会以零开头。
+
+进阶：
+如果输入链表不能修改该如何处理？换句话说，你不能对列表中的节点进行翻转。
+
+示例：
+输入：(7 -> 2 -> 4 -> 2) + (5 -> 6 -> 4)
+输出：7 -> 8 -> 0 -> 6
+*/
+func TestAddTwoNumbers(t *testing.T) {
+	head1 := linkedList.ArrayToLinkedList([]int{7, 2, 4, 2})
+	head2 := linkedList.ArrayToLinkedList([]int{5, 6, 4})
+	fmt.Println(linkedList.LinkedListToArray(linkedList2.AddTwoNumbers(head1, head2)))
+	fmt.Println(linkedList.LinkedListToArray(AddTwoNumbers(head1, head2)))
+}
+
+func AddTwoNumbers(head1 *linkedList.ListNode, head2 *linkedList.ListNode) *linkedList.ListNode {
+	nums1, nums2 := []int{}, []int{}
+	for head1 != nil {
+		nums1 = append(nums1, head1.Val)
+		head1 = head1.Next
+	}
+	for head2 != nil {
+		nums2 = append(nums2, head2.Val)
+		head2 = head2.Next
+	}
+	var add int
+	var target *linkedList.ListNode
+	for len(nums1) > 0 || len(nums2) > 0 || add > 0 {
+		var a, b int
+		if len(nums1) > 0 {
+			a = nums1[len(nums1)-1]
+			nums1 = nums1[:len(nums1)-1]
+		}
+		if len(nums2) > 0 {
+			b = nums2[len(nums2)-1]
+			nums2 = nums2[:len(nums2)-1]
+		}
+		res := a + b + add
+		add = res / 10
+		rest := res % 10
+		target = &linkedList.ListNode{Val: rest, Next: target}
+	}
+	return target
 }

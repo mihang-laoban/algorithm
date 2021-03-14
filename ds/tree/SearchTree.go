@@ -437,3 +437,34 @@ func Prune(data []interface{}) []interface{} {
 	}
 	return data
 }
+
+func ZigzagLevelOrder(root *TreeNode) (ans [][]int) {
+	if root == nil {
+		return
+	}
+	queue := []*TreeNode{root}
+	for i := 0; len(queue) > 0; i++ {
+		level := []int{}
+		q := queue
+		queue = nil
+		for _, node := range q {
+			level = append(level, node.Val)
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+		}
+		if i&1 == 1 {
+			l, r := 0, len(level)-1
+			for l < r {
+				level[l], level[r] = level[r], level[l]
+				l++
+				r--
+			}
+		}
+		ans = append(ans, level)
+	}
+	return
+}

@@ -1431,33 +1431,68 @@ func TestZigzagLevelOrder(t *testing.T) {
 	fmt.Println(arr)
 }
 
-func ZigzagLevelOrder(root *TreeNode) (ans [][]int) {
-	if root == nil {
-		return
+/*给定一棵二叉树，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+
+示例:
+
+输入: [1,2,3,3,5,nil,4,nil,8]
+输出: [1, 3, 4]
+解释:
+
+    1       <---
+   / \
+  2   3     <---
+ / \   \
+3   5   4   <---
+ \
+  8			<---
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/binary-tree-right-side-view
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestRightSideView(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 3, 3, 5, nil, 4, nil, 8})
+	fmt.Println(RightSideViewBFS(root))
+	fmt.Println(RightSideViewDFSRecur(root))
+}
+
+func RightSideViewDFSRecur(root *TreeNode) []int {
+	res := []int{}
+	var dfs func(*TreeNode, int)
+	dfs = func(root *TreeNode, depth int) {
+		if root == nil {
+			return
+		}
+		if depth == len(res) {
+			res = append(res, root.Val)
+		}
+		depth++
+		dfs(root.Right, depth)
+		dfs(root.Left, depth)
 	}
+	dfs(root, 0)
+	return res
+}
+
+func RightSideViewBFS(root *TreeNode) []int {
 	queue := []*TreeNode{root}
-	for i := 0; len(queue) > 0; i++ {
-		level := []int{}
-		q := queue
-		queue = nil
-		for _, node := range q {
-			level = append(level, node.Val)
-			if node.Left != nil {
-				queue = append(queue, node.Left)
+	res := []int{}
+	for len(queue) > 0 {
+		size := len(queue)
+		for i := 0; i < size; i++ {
+			cur := queue[0]
+			queue = queue[1:]
+			if i == size-1 {
+				res = append(res, cur.Val)
 			}
-			if node.Right != nil {
-				queue = append(queue, node.Right)
+			if cur.Left != nil {
+				queue = append(queue, cur.Left)
 			}
-		}
-		if i&1 == 1 {
-			l, r := 0, len(level)-1
-			for l < r {
-				level[l], level[r] = level[r], level[l]
-				l++
-				r--
+			if cur.Right != nil {
+				queue = append(queue, cur.Right)
 			}
 		}
-		ans = append(ans, level)
 	}
-	return
+	return res
 }
