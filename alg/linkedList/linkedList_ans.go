@@ -517,8 +517,8 @@ func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 		l2 = l2.Next
 	}
 	var ans *ListNode
-	var a, b, carry int
-	for len(s1) > 0 || len(s2) > 0 || carry != 0 {
+	var a, b, add int
+	for len(s1) > 0 || len(s2) > 0 || add != 0 {
 		if len(s1) == 0 {
 			a = 0
 		} else {
@@ -531,8 +531,8 @@ func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 			b = s2[len(s2)-1]
 			s2 = s2[:len(s2)-1]
 		}
-		cur := a + b + carry
-		carry = cur / 10
+		cur := a + b + add
+		add = cur / 10
 		cur %= 10
 		ans = &ListNode{Next: ans, Val: cur}
 	}

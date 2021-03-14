@@ -14,8 +14,8 @@ type DLinkedNode struct {
 func LRUConstructor(capacity int) LRUCache {
 	l := LRUCache{
 		cache:    map[int]*DLinkedNode{},
-		head:     &DLinkedNode{Key: 0, value: 0},
-		tail:     &DLinkedNode{Key: 0, value: 0},
+		head:     &DLinkedNode{},
+		tail:     &DLinkedNode{},
 		capacity: capacity,
 	}
 	l.head.next = l.tail
@@ -24,16 +24,18 @@ func LRUConstructor(capacity int) LRUCache {
 }
 
 func (this *LRUCache) Get(key int) int {
-	if _, ok := this.cache[key]; !ok {
-		return -1
+	if cur, ok := this.cache[key]; ok {
+		this.MoveToHead(cur)
+		return cur.value
 	}
-	cur := this.cache[key]
-	this.MoveToHead(cur)
-	return cur.value
+	return -1
 }
 
 func (this *LRUCache) Set(key int, value int) {
-	if _, ok := this.cache[key]; !ok {
+	if cur, ok := this.cache[key]; ok {
+		cur.value = value
+		this.MoveToHead(cur)
+	} else {
 		node := &DLinkedNode{Key: key, value: value}
 		this.cache[key] = node
 		this.AddToHead(node)
@@ -43,10 +45,6 @@ func (this *LRUCache) Set(key int, value int) {
 			delete(this.cache, removed.Key)
 			this.size--
 		}
-	} else {
-		cur := this.cache[key]
-		cur.value = value
-		this.MoveToHead(cur)
 	}
 }
 

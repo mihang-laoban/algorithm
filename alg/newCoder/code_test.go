@@ -3,6 +3,7 @@ package newCoder
 import (
 	. "dp/ds"
 	"dp/ds/tree"
+	"dp/tools"
 	"fmt"
 	"strconv"
 	"testing"
@@ -36,6 +37,91 @@ func TestLRU_coder(t *testing.T) {
 	get(2)    [4:4, 1:1, 3:2] -> -1
 	*/
 	fmt.Println(LRU([][]int{[]int{1, 1, 1}, []int{1, 2, 2}, []int{1, 3, 2}, []int{2, 1}, []int{1, 4, 4}, []int{2, 2}}, 3))
+	fmt.Println(LRU1([][]int{[]int{1, 1, 1}, []int{1, 2, 2}, []int{1, 3, 2}, []int{2, 1}, []int{1, 4, 4}, []int{2, 2}}, 3))
+}
+
+type node struct {
+	k, v      int
+	pre, next *node
+}
+
+type lru struct {
+	head, tail     *node
+	size, capacity int
+	cache          map[int]*node
+}
+
+func construct(k int) lru {
+	this := lru{
+		head:     &node{},
+		tail:     &node{},
+		cache:    map[int]*node{},
+		capacity: k,
+	}
+	this.head.next = this.tail
+	this.tail.pre = this.head
+	return this
+}
+
+func (this *lru) set(k, v int) {
+	if cur, ok := this.cache[k]; ok {
+		cur.v = v
+		this.moveToHead(cur)
+	} else {
+		node := &node{k: k, v: v}
+		this.addToHead(node)
+		this.cache[k] = node
+		this.size++
+		if this.size > this.capacity {
+			tail := this.removeTail()
+			delete(this.cache, tail.k)
+			this.size--
+		}
+	}
+}
+
+func (this *lru) get(k int) int {
+	if cur, ok := this.cache[k]; ok {
+		this.moveToHead(cur)
+		return cur.v
+	}
+	return -1
+}
+
+func (this *lru) moveToHead(cur *node) {
+	this.remove(cur)
+	this.addToHead(cur)
+}
+
+func (this *lru) addToHead(cur *node) {
+	cur.pre = this.head
+	cur.next = this.head.next
+	this.head.next.pre = cur
+	this.head.next = cur
+}
+
+func (this *lru) remove(cur *node) {
+	cur.pre.next = cur.next
+	cur.next.pre = cur.pre
+}
+
+func (this *lru) removeTail() *node {
+	cur := this.tail.pre
+	this.remove(cur)
+	return cur
+}
+
+func LRU1(operators [][]int, k int) []int {
+	res := []int{}
+	lru := construct(k)
+	for _, v := range operators {
+		if v[0] == 1 {
+			lru.set(v[1], v[2])
+		} else {
+			res = append(res, lru.get(v[1]))
+		}
+	}
+	return res
 }
 
 // k是缓存大小
@@ -376,4 +462,29 @@ func MaxWater(height []int) int {
 		}
 	}
 	return res
+}
+
+/*给定一个数组arr，返回arr的最长无的重复子串的长度(无重复指的是所有数字都不相同)。
+[2,3,4,5]
+4
+[2,2,3,4,3]
+3
+*/
+
+func TestMaxLength(t *testing.T) {
+	fmt.Println(MaxLength([]int{2, 3, 4, 5}))
+	fmt.Println(MaxLength([]int{2, 2, 3, 4, 3}))
+}
+
+func MaxLength(arr []int) int {
+	recorder := map[int]int{}
+	cur, maxLen := 0, 0
+	for i, v := range arr {
+		if _, ok := recorder[v]; ok {
+			cur = tools.Max(cur, recorder[v]+1)
+		}
+		recorder[v] = i
+		maxLen = tools.Max(maxLen, i-cur+1)
+	}
+	return maxLen
 }
