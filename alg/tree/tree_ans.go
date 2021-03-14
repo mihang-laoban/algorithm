@@ -1498,6 +1498,7 @@ func (this *Codec) SerializeBFS(root *TreeNode) string {
 	}
 	return strings.Join(res, ",")
 }
+
 func (this *Codec) DeserializeBFS(data string) *TreeNode {
 	if data == "nil" {
 		return nil
@@ -1523,4 +1524,44 @@ func (this *Codec) DeserializeBFS(data string) *TreeNode {
 		index += 2
 	}
 	return root
+}
+
+func RightSideViewDFSRecur(root *TreeNode) []int {
+	res := []int{}
+	var dfs func(*TreeNode, int)
+	dfs = func(root *TreeNode, depth int) {
+		if root == nil {
+			return
+		}
+		if depth == len(res) {
+			res = append(res, root.Val)
+		}
+		depth++
+		dfs(root.Right, depth)
+		dfs(root.Left, depth)
+	}
+	dfs(root, 0)
+	return res
+}
+
+func RightSideViewBFS(root *TreeNode) []int {
+	queue := []*TreeNode{root}
+	res := []int{}
+	for len(queue) > 0 {
+		size := len(queue)
+		for i := 0; i < size; i++ {
+			cur := queue[0]
+			queue = queue[1:]
+			if i == size-1 {
+				res = append(res, cur.Val)
+			}
+			if cur.Left != nil {
+				queue = append(queue, cur.Left)
+			}
+			if cur.Right != nil {
+				queue = append(queue, cur.Right)
+			}
+		}
+	}
+	return res
 }

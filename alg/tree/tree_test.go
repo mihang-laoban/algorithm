@@ -1457,42 +1457,43 @@ func TestRightSideView(t *testing.T) {
 	fmt.Println(RightSideViewDFSRecur(root))
 }
 
-func RightSideViewDFSRecur(root *TreeNode) []int {
-	res := []int{}
-	var dfs func(*TreeNode, int)
-	dfs = func(root *TreeNode, depth int) {
-		if root == nil {
-			return
-		}
-		if depth == len(res) {
-			res = append(res, root.Val)
-		}
-		depth++
-		dfs(root.Right, depth)
-		dfs(root.Left, depth)
-	}
-	dfs(root, 0)
-	return res
+/*根据一棵树的前序遍历与中序遍历构造二叉树。
+
+注意:
+你可以假设树中没有重复的元素。
+
+例如，给出
+
+前序遍历 preorder = [3,9,20,15,7]
+中序遍历 inorder = [9,3,15,20,7]
+返回如下的二叉树：
+
+  3
+ / \
+9   20
+   /  \
+  15   7
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestBuildTree(t *testing.T) {
+	root := BuildTree([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7})
+	fmt.Println(TreeToArray(root))
 }
 
-func RightSideViewBFS(root *TreeNode) []int {
-	queue := []*TreeNode{root}
-	res := []int{}
-	for len(queue) > 0 {
-		size := len(queue)
-		for i := 0; i < size; i++ {
-			cur := queue[0]
-			queue = queue[1:]
-			if i == size-1 {
-				res = append(res, cur.Val)
-			}
-			if cur.Left != nil {
-				queue = append(queue, cur.Left)
-			}
-			if cur.Right != nil {
-				queue = append(queue, cur.Right)
-			}
+func BuildTree(preorder []int, inorder []int) *TreeNode {
+	if len(preorder) == 0 || len(preorder) == 0 || len(preorder) != len(inorder) {
+		return nil
+	}
+	root := &TreeNode{preorder[0], nil, nil}
+	for i := 0; i < len(inorder); i++ {
+		if preorder[0] == inorder[i] {
+			root.Left = BuildTree(preorder[1:i+1], inorder[:i])
+			root.Right = BuildTree(preorder[i+1:], inorder[i+1:])
+			break
 		}
 	}
-	return res
+	return root
 }

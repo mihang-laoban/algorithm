@@ -538,3 +538,7 @@ func AddTwoNumbers(head1 *linkedList.ListNode, head2 *linkedList.ListNode) *link
 	}
 	return target
 }
+
+func Test(t *testing.T) {
+
+}
