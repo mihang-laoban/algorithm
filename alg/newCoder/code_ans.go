@@ -1,6 +1,9 @@
 package newCoder
 
-import "dp/ds/linkedList"
+import (
+	"dp/ds/linkedList"
+	"dp/tools"
+)
 
 func search(nums []int, target int) int {
 	l, r := 0, len(nums)-1
@@ -84,4 +87,64 @@ func AddTwoNumbers(head1 *linkedList.ListNode, head2 *linkedList.ListNode) *link
 		target = &linkedList.ListNode{Val: rest, Next: target}
 	}
 	return target
+}
+
+func MinPathSum(matrix [][]int) int {
+	col, row := len(matrix), len(matrix[0])
+	dp := make([][]int, col)
+	for i := 0; i < col; i++ {
+		dp[i] = make([]int, row)
+	}
+	dp[0][0] = matrix[0][0]
+	for i := 1; i < col; i++ {
+		dp[i][0] = dp[i-1][0] + matrix[i][0]
+	}
+	for i := 1; i < row; i++ {
+		dp[0][i] = dp[0][i-1] + matrix[0][i]
+	}
+	for i := 1; i < col; i++ {
+		for j := 1; j < row; j++ {
+			dp[i][j] = tools.Min(dp[i-1][j], dp[i][j-1]) + matrix[i][j]
+		}
+	}
+	return dp[col-1][row-1]
+}
+
+func OddEvenList(head *linkedList.ListNode) *linkedList.ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	first, second := head, head.Next
+	odd, even := head, head.Next
+	for second != nil && second.Next != nil {
+		first.Next = first.Next.Next
+		first = first.Next
+		second.Next = second.Next.Next
+		second = second.Next
+	}
+	first.Next = even
+	return odd
+}
+
+func GetLongestPalindrome(str string, size int) int {
+	res := 1
+	dp := make([][]bool, size)
+	for i := 0; i < size; i++ {
+		dp[i] = make([]bool, size)
+		dp[i][i] = true
+	}
+	for r := 1; r < size; r++ {
+		for l := r - 1; l >= 0; l-- {
+			if r-l < 2 {
+				dp[l][r] = str[r] == str[l]
+				res = tools.Max(res, r-l+1)
+				continue
+			}
+			dp[l][r] = dp[l+1][r-1] && str[r] == str[l]
+			if dp[l][r] {
+				res = tools.Max(res, r-l+1)
+			}
+		}
+	}
+	return res
 }

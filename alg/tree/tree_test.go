@@ -1514,3 +1514,175 @@ func BuildTree(preorder, inorder []int) *TreeNode {
 	}
 	return root
 }
+
+/*
+
+题目描述
+输入一个整数，输出该数32位二进制表示中1的个数。其中负数用补码表示。
+示例1
+输入
+10
+返回值
+2
+
+*/
+
+func TestNumberOf1(t *testing.T) {
+	// 1100
+	// 1011
+	fmt.Println(NumberOf1(10))
+}
+
+func NumberOf1(n int) int {
+	res := 0
+	for n != 0 {
+		n = n & int((int32(n) - 1))
+		res++
+	}
+	return res
+}
+
+/*
+题目描述
+已知int一个有序矩阵mat，同时给定矩阵的大小n和m以及需要查找的元素x，且矩阵的行和列都是从小到大有序的。设计查找算法返回所查找元素的二元数组，代表该元素的行号和列号(均从零开始)。保证元素互异。
+
+示例1
+输入
+[[1,2,3],[4,5,6]],2,3,6
+
+[
+	[1,2,3],
+	[4,5,6],
+]
+
+返回值
+[1,2]
+
+*/
+
+func TestFindElement(t *testing.T) {
+	fmt.Println(FindElement([][]int{[]int{1, 2, 3}, []int{4, 5, 6}}, 2, 3, 6))
+}
+
+func FindElement(mat [][]int, n int, m int, x int) []int {
+	i, j := 0, m-1
+	for i < n && j >= 0 {
+		if mat[i][j] == x {
+			return []int{i, j}
+		} else if mat[i][j] > x {
+			j--
+		} else {
+			i++
+		}
+	}
+	return []int{-1, -1}
+}
+
+/*有一个NxN整数矩阵，请编写一个算法，将矩阵顺时针旋转90度。
+给定一个NxN的矩阵，和矩阵的阶数N,请返回旋转后的NxN矩阵,保证N小于等于300。
+
+示例1
+输入
+[
+	[1,2,3],
+	[4,5,6],
+	[7,8,9],
+],
+
+3
+
+返回值
+[
+	[7,4,1],
+	[8,5,2],
+	[9,6,3],
+]
+*/
+
+func TestRotateMatrix(t *testing.T) {
+	fmt.Println(RotateMatrix([][]int{[]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8, 9}}, 3))
+}
+
+func RotateMatrix(mat [][]int, n int) [][]int {
+	res := [][]int{}
+	for i := 0; i < n; i++ {
+		tmp := []int{}
+		for j := n - 1; j >= 0; j-- {
+			tmp = append(tmp, mat[j][i])
+		}
+		res = append(res, tmp)
+	}
+	return res
+}
+
+/*
+题目描述
+给定一个由0和1组成的2维矩阵，返回该矩阵中最大的由1组成的正方形的面积
+示例1
+输入
+[
+	[1,0,1,0,0],
+	[1,0,1,1,1],
+	[1,1,1,1,1],
+	[1,0,0,1,0],
+]
+返回值
+4
+*/
+
+func TestMaxSquare(t *testing.T) {
+	fmt.Println(MaxSquare([][]byte{[]byte{'1', '0', '1', '0', '0'}, []byte{'1', '0', '1', '1', '1'}, []byte{'1', '1', '1', '1', '1'}, []byte{'1', '0', '0', '1', '0'}}))
+	fmt.Println(MaxSquare1([][]byte{[]byte{'1', '0', '1', '0', '0'}, []byte{'1', '0', '1', '1', '1'}, []byte{'1', '1', '1', '1', '1'}, []byte{'1', '0', '0', '1', '0'}}))
+}
+
+func MaxSquare1(matrix [][]byte) interface{} {
+	m, n := len(matrix), len(matrix[0])
+	if m < 2 {
+		return m
+	}
+	dp := make([][]int, m)
+	for i := 0; i < m; i++ {
+		dp[i] = make([]int, n)
+	}
+	max := 0
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if matrix[i][j] == '0' {
+				continue
+			}
+			if i == 0 || j == 0 {
+				dp[i][j] = 1
+			} else {
+				dp[i][j] = Min(Min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]) + 1
+			}
+			max = Max(max, dp[i][j])
+		}
+	}
+	return max * max
+}
+
+func MaxSquare(matrix [][]byte) int {
+	m, n := len(matrix), len(matrix[0])
+	if m < 2 {
+		return m
+	}
+	dp := make([][]int, m)
+	for i := 0; i < m; i++ {
+		dp[i] = make([]int, n)
+	}
+	max := 0
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if matrix[i][j] == '0' {
+				continue
+			}
+			if i == 0 || j == 0 {
+				dp[i][j] = 1
+			} else {
+				dp[i][j] = Min(Min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]) + 1
+			}
+			max = Max(dp[i][j], max)
+		}
+	}
+	return max * max
+}

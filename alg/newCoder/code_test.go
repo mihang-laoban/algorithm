@@ -525,8 +525,42 @@ func TestAddTwoNumbers(t *testing.T) {
 其最长递增子序列有3个，（1，2，8）、（1，2，6）、（1，2，4）其中第三个字典序最小，故答案为（1，2，4）*/
 
 func TestLIS(t *testing.T) {
-	fmt.Println(LIS([]int{2, 1, 5, 3, 6, 4, 8, 9, 7}))
-	fmt.Println(LIS([]int{1, 2, 8, 6, 4}))
+	fmt.Println(LIS1([]int{2, 1, 5, 3, 6, 4, 8, 9, 7}))
+	fmt.Println(LIS1([]int{1, 2, 8, 6, 4}))
+}
+
+func LIS1(arr []int) []int {
+	if len(arr) == 0 {
+		return nil
+	}
+	maxSize := make([]int, len(arr))
+	maxSize[0] = 1
+	res := []int{arr[0]}
+	for i := 1; i < len(arr); i++ {
+		if arr[i] > res[len(res)-1] {
+			res = append(res, arr[i])
+			maxSize[i] = len(res)
+		} else {
+			l, r := 0, len(res)-1
+			for l < r {
+				mid := l + (r-l)>>1
+				if res[mid] < arr[i] {
+					l = mid + 1
+				} else {
+					r = mid
+				}
+			}
+			res[l] = arr[i]
+			maxSize[i] = l + 1
+		}
+	}
+	for i, j := len(maxSize)-1, len(res)-1; j > 0; i-- {
+		if maxSize[i] == j {
+			j--
+			res[j] = arr[i]
+		}
+	}
+	return res
 }
 
 func LIS(arr []int) []int {
@@ -542,7 +576,6 @@ func LIS(arr []int) []int {
 			res = append(res, arr[i])
 			maxLen[i] = len(res) // 记录当前的最大长度
 		} else {
-			//
 			l, r := 0, len(res)-1
 			for l < r {
 				mid := l + (r-l)>>1
@@ -580,29 +613,6 @@ func TestGetLongestPalindrome(t *testing.T) {
 	fmt.Println(GetLongestPalindrome("abc1234321ab", 12))
 }
 
-func GetLongestPalindrome(str string, size int) int {
-	res := 1
-	dp := make([][]bool, size)
-	for i := 0; i < size; i++ {
-		dp[i] = make([]bool, size)
-		dp[i][i] = true
-	}
-	for r := 1; r < size; r++ {
-		for l := r - 1; l >= 0; l-- {
-			if r-l < 2 {
-				dp[l][r] = str[r] == str[l]
-				res = tools.Max(res, r-l+1)
-				continue
-			}
-			dp[l][r] = dp[l+1][r-1] && str[r] == str[l]
-			if dp[l][r] {
-				res = tools.Max(res, r-l+1)
-			}
-		}
-	}
-	return res
-}
-
 /*题目描述
 给定一个单链表，请设定一个函数，将链表的奇数位节点和偶数位节点分别放在一起，重排后输出。
 注意是节点的编号而非节点的数值。
@@ -628,18 +638,98 @@ func TestOddEvenList(t *testing.T) {
 	fmt.Println(linkedList.LinkedListToArray(cur))
 }
 
-func OddEvenList(head *linkedList.ListNode) *linkedList.ListNode {
-	if head == nil || head.Next == nil {
-		return head
+/*
+题目描述
+给定一个 n * m 的矩阵 a，从左上角开始每次只能向右或者向下走，最后到达右下角的位置，路径上所有的数字累加起来就是路径和，输出所有的路径中最小的路径和。
+示例1
+输入
+[
+	[1,3,5,9],
+	[8,1,3,4],
+	[5,0,6,1],
+	[8,8,4,0],
+]
+返回值
+12
+*/
+
+func TestMinPathSum(t *testing.T) {
+	fmt.Println(MinPathSum([][]int{[]int{1, 3, 5, 9}, []int{8, 1, 3, 4}, []int{5, 0, 6, 1}, []int{8, 8, 4, 0}}))
+}
+
+/*
+题目描述
+给你一个非空模板串S，一个文本串T，问S在T中出现了多少次
+
+示例1
+输入
+"ababab","abababab"
+返回值
+2
+
+示例2
+输入
+"abab","abacabab"
+返回值
+1
+
+*/
+
+func TestKmp(t *testing.T) {
+	fmt.Println(Kmp("ababab", "abababab"))
+	fmt.Println(Kmp("abab", "abacabab"))
+}
+
+func Kmp(S string, T string) int {
+	count, sSize, tSize := 0, len(S), len(T)
+	if len(S) > len(T) {
+		return 0
 	}
-	first, second := head, head.Next
-	odd, even := head, head.Next
-	for second != nil && second.Next != nil {
-		first.Next = first.Next.Next
-		first = first.Next
-		second.Next = second.Next.Next
-		second = second.Next
+	for i := 0; i < tSize-sSize+1; i++ {
+		j := 0
+		for ; j < sSize; j++ {
+			if S[j] != T[i+j] {
+				break
+			}
+		}
+		if j == sSize {
+			count++
+		}
 	}
-	first.Next = even
-	return odd
+	return count
+}
+
+/*
+
+一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法（先后次序不同算不同的结果）。
+示例1
+输入
+1
+返回值
+1
+
+示例2
+输入
+4
+返回值
+5
+
+*/
+
+func TestJumpFloor(t *testing.T) {
+	fmt.Println(JumpFloor(4))
+}
+
+func JumpFloor(number int) int {
+	// write code here
+	if number < 3 {
+		return number
+	}
+	a, b := 1, 2
+	for i := 3; i <= number+1; i++ {
+		c := a + b
+		a = b
+		b = c
+	}
+	return b
 }
