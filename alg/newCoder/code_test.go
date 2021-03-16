@@ -733,3 +733,91 @@ func JumpFloor(number int) int {
 	}
 	return b
 }
+
+/*给定一棵二叉搜索树，请找出其中的第k小的TreeNode结点。
+示例1
+输入
+{5,3,7,2,4,6,8},3
+
+    5
+   / \
+  3   7
+ / \ / \
+2  4 6  8
+
+返回值
+{4}
+说明
+按结点数值大小顺序第三小结点的值为4*/
+
+func TestKthNode(t *testing.T) {
+	root := tree.ArrayToTree([]interface{}{8, 6, 10, 5, 7, 9, 11})
+	res := KthNode(root, 0)
+	if res == nil {
+		fmt.Println(res)
+		return
+	}
+	fmt.Println(res.Val)
+}
+
+func KthNode(pRoot *tree.TreeNode, k int) *tree.TreeNode {
+	// write code here
+	stack := []*tree.TreeNode{}
+	for pRoot != nil || len(stack) > 0 {
+		for pRoot != nil {
+			stack = append(stack, pRoot)
+			pRoot = pRoot.Left
+		}
+		pRoot = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if k-1 == 0 {
+			return pRoot
+		}
+		k--
+		pRoot = pRoot.Right
+	}
+	return nil
+}
+
+/*给定一个m x n大小的矩阵（m行，n列），按螺旋的顺序返回矩阵中的所有元素。
+示例1
+输入
+[
+	[1,2,3],
+	[4,5,6],
+	[7,8,9],
+]
+返回值
+[1,2,3,6,9,8,7,4,5]*/
+
+func TestSpiralOrder(t *testing.T) {
+	fmt.Println(SpiralOrder([][]int{[]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8, 9}}))
+}
+
+func SpiralOrder(matrix [][]int) []int {
+	res := []int{}
+	if len(matrix) == 0 || len(matrix[0]) == 0 {
+		return res
+	}
+	minH, minW := 0, 0
+	maxH, maxW := len(matrix)-1, len(matrix[0])-1
+	for minH <= maxH && minW <= maxW {
+		for i := minW; i <= maxW; i++ {
+			res = append(res, matrix[minH][i])
+		}
+		for i := minH + 1; i <= maxH; i++ {
+			res = append(res, matrix[i][maxW])
+		}
+		for i := maxW - 1; i >= minW && maxH > minH; i-- {
+			res = append(res, matrix[maxH][i])
+		}
+		for i := maxH - 1; i > minH && maxW > minW; i-- {
+			res = append(res, matrix[i][minW])
+		}
+		minW++
+		maxW--
+		minH++
+		maxH--
+	}
+	return res
+}
