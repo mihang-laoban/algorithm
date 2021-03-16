@@ -147,3 +147,15 @@ func ReverseStr(str string) string {
 	}
 	return string(arr)
 }
+
+func TimeStr2Unix(str string) int64 {
+	res, err := time.ParseInLocation(TIME_TEMPLATE, str, time.Local)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return res.Unix()
+}
+
+func Unix2TimeStr(unix int64) string {
+	return time.Unix(unix, 0).Format(TIME_TEMPLATE)
+}

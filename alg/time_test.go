@@ -7,9 +7,12 @@ import (
 	"time"
 )
 
-func Test(t *testing.T) {
-	tools.Timer(timeSample, "x")
-	//timeSample()
+func TestTime(t *testing.T) {
+	// unix to string
+	res := tools.Unix2TimeStr(time.Now().Unix())
+	fmt.Println(res)
+	// string to unix
+	fmt.Println(tools.TimeStr2Unix(res))
 }
 
 func timeSample() {
