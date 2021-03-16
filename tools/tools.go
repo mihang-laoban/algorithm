@@ -4,6 +4,7 @@ import (
 	"fmt"
 	. "reflect"
 	"strconv"
+	"time"
 )
 
 func Min(a, b int) int {
@@ -128,4 +129,21 @@ func ReverseArr1(nums []int) {
 		l++
 		r--
 	}
+}
+
+func Timer(test func(), desc string) {
+	start := time.Now().UnixNano()
+	test()
+	end := time.Now().UnixNano()
+	fmt.Printf("\n[%s] takes: %d\n", desc, end-start)
+}
+
+func ReverseStr(str string) string {
+	arr := []rune(str)
+	for i, j := 0, len(arr)-1; i < j; {
+		arr[i], arr[j] = arr[j], arr[i]
+		i++
+		j--
+	}
+	return string(arr)
 }
