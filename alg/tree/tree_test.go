@@ -1479,210 +1479,71 @@ func TestRightSideView(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestBuildTree(t *testing.T) {
-	root := BuildTree([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7})
+	root := BuildTreePreIn([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7})
 	root1 := BuildTree1([]int{3, 9, 20, 15, 7}, []int{9, 3, 15, 20, 7})
 	fmt.Println(TreeToArray(root))
 	fmt.Println(TreeToArray(root1))
 }
 
 func BuildTree1(pre, in []int) *TreeNode {
-	if len(pre) == 0 || len(in) == 0 || len(pre) != len(in) {
-		return nil
-	}
-	root := &TreeNode{Val: pre[0]}
-	for i := 0; i < len(in); i++ {
-		if pre[0] == in[i] {
-			root.Left = BuildTree1(pre[1:i+1], in[:i])
-			root.Right = BuildTree1(pre[i+1:], in[i+1:])
-			break
-		}
-	}
-	return root
-}
-
-func BuildTree(preorder, inorder []int) *TreeNode {
-	if len(preorder) == 0 || len(preorder) == 0 || len(preorder) != len(inorder) {
-		return nil
-	}
-	root := &TreeNode{Val: preorder[0]}
-	for i := 0; i < len(inorder); i++ {
-		if preorder[0] == inorder[i] {
-			root.Left = BuildTree(preorder[1:i+1], inorder[:i])
-			root.Right = BuildTree(preorder[i+1:], inorder[i+1:])
-			break
-		}
-	}
-	return root
+	return nil
 }
 
 /*
+根据一棵树的中序遍历与后序遍历构造二叉树。
 
-题目描述
-输入一个整数，输出该数32位二进制表示中1的个数。其中负数用补码表示。
-示例1
-输入
-10
-返回值
-2
+注意:
+你可以假设树中没有重复的元素。
 
+例如，给出
+
+中序遍历 inorder = [9,3,15,20,7]
+后序遍历 postorder = [9,15,7,20,3]
+返回如下的二叉树：
+
+  3
+ / \
+9  20
+  /  \
+ 15   7
+
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-func TestNumberOf1(t *testing.T) {
-	// 1100
-	// 1011
-	fmt.Println(NumberOf1(10))
+// todo
+func TestBuildTreeInPost(t *testing.T) {
+	inOrder := []int{9, 3, 15, 20, 7}
+	postOrder := []int{9, 15, 7, 20, 3}
+	root := BuildTreeInPost(inOrder, postOrder)
+	fmt.Println(TreeToArray(root))
 }
 
-func NumberOf1(n int) int {
-	res := 0
-	for n != 0 {
-		n = n & int((int32(n) - 1))
-		res++
+func BuildTreeInPost(inOrder []int, postOrder []int) *TreeNode {
+	idxMap := map[int]int{}
+	for k, v := range inOrder {
+		idxMap[v] = k
 	}
-	return res
-}
-
-/*
-题目描述
-已知int一个有序矩阵mat，同时给定矩阵的大小n和m以及需要查找的元素x，且矩阵的行和列都是从小到大有序的。设计查找算法返回所查找元素的二元数组，代表该元素的行号和列号(均从零开始)。保证元素互异。
-
-示例1
-输入
-[[1,2,3],[4,5,6]],2,3,6
-
-[
-	[1,2,3],
-	[4,5,6],
-]
-
-返回值
-[1,2]
-
-*/
-
-func TestFindElement(t *testing.T) {
-	fmt.Println(FindElement([][]int{[]int{1, 2, 3}, []int{4, 5, 6}}, 2, 3, 6))
-}
-
-func FindElement(mat [][]int, n int, m int, x int) []int {
-	i, j := 0, m-1
-	for i < n && j >= 0 {
-		if mat[i][j] == x {
-			return []int{i, j}
-		} else if mat[i][j] > x {
-			j--
-		} else {
-			i++
+	var build func(int, int) *TreeNode
+	build = func(inorderLeft, inorderRight int) *TreeNode {
+		// 无剩余节点
+		if inorderLeft > inorderRight {
+			return nil
 		}
+
+		// 后序遍历的末尾元素即为当前子树的根节点
+		cur := postOrder[len(postOrder)-1]
+		postOrder = postOrder[:len(postOrder)-1]
+		root := &TreeNode{Val: cur}
+
+		// 根据 cur 在中序遍历的位置，将中序遍历划分成左右两颗子树
+		// 由于我们每次都从后序遍历的末尾取元素，所以要先遍历右子树再遍历左子树
+		inRootIndex := idxMap[cur]
+		root.Right = build(inRootIndex+1, inorderRight)
+		root.Left = build(inorderLeft, inRootIndex-1)
+		return root
 	}
-	return []int{-1, -1}
-}
-
-/*有一个NxN整数矩阵，请编写一个算法，将矩阵顺时针旋转90度。
-给定一个NxN的矩阵，和矩阵的阶数N,请返回旋转后的NxN矩阵,保证N小于等于300。
-
-示例1
-输入
-[
-	[1,2,3],
-	[4,5,6],
-	[7,8,9],
-],
-
-3
-
-返回值
-[
-	[7,4,1],
-	[8,5,2],
-	[9,6,3],
-]
-*/
-
-func TestRotateMatrix(t *testing.T) {
-	fmt.Println(RotateMatrix([][]int{[]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8, 9}}, 3))
-}
-
-func RotateMatrix(mat [][]int, n int) [][]int {
-	res := [][]int{}
-	for i := 0; i < n; i++ {
-		tmp := []int{}
-		for j := n - 1; j >= 0; j-- {
-			tmp = append(tmp, mat[j][i])
-		}
-		res = append(res, tmp)
-	}
-	return res
-}
-
-/*
-题目描述
-给定一个由0和1组成的2维矩阵，返回该矩阵中最大的由1组成的正方形的面积
-示例1
-输入
-[
-	[1,0,1,0,0],
-	[1,0,1,1,1],
-	[1,1,1,1,1],
-	[1,0,0,1,0],
-]
-返回值
-4
-*/
-
-func TestMaxSquare(t *testing.T) {
-	fmt.Println(MaxSquare([][]byte{[]byte{'1', '0', '1', '0', '0'}, []byte{'1', '0', '1', '1', '1'}, []byte{'1', '1', '1', '1', '1'}, []byte{'1', '0', '0', '1', '0'}}))
-	fmt.Println(MaxSquare1([][]byte{[]byte{'1', '0', '1', '0', '0'}, []byte{'1', '0', '1', '1', '1'}, []byte{'1', '1', '1', '1', '1'}, []byte{'1', '0', '0', '1', '0'}}))
-}
-
-func MaxSquare1(matrix [][]byte) interface{} {
-	m, n := len(matrix), len(matrix[0])
-	if m < 2 {
-		return m
-	}
-	dp := make([][]int, m)
-	for i := 0; i < m; i++ {
-		dp[i] = make([]int, n)
-	}
-	max := 0
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if matrix[i][j] == '0' {
-				continue
-			}
-			if i == 0 || j == 0 {
-				dp[i][j] = 1
-			} else {
-				dp[i][j] = Min(Min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]) + 1
-			}
-			max = Max(max, dp[i][j])
-		}
-	}
-	return max * max
-}
-
-func MaxSquare(matrix [][]byte) int {
-	m, n := len(matrix), len(matrix[0])
-	if m < 2 {
-		return m
-	}
-	dp := make([][]int, m)
-	for i := 0; i < m; i++ {
-		dp[i] = make([]int, n)
-	}
-	max := 0
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if matrix[i][j] == '0' {
-				continue
-			}
-			if i == 0 || j == 0 {
-				dp[i][j] = 1
-			} else {
-				dp[i][j] = Min(Min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]) + 1
-			}
-			max = Max(dp[i][j], max)
-		}
-	}
-	return max * max
+	return build(0, len(inOrder)-1)
 }

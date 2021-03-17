@@ -641,6 +641,21 @@ func recoverT(root *TreeNode) {
 	x.Val, y.Val = y.Val, x.Val
 }
 
+func BuildTreePreIn(preorder, inorder []int) *TreeNode {
+	if len(preorder) == 0 || len(preorder) == 0 || len(preorder) != len(inorder) {
+		return nil
+	}
+	root := &TreeNode{Val: preorder[0]}
+	for i := 0; i < len(inorder); i++ {
+		if preorder[0] == inorder[i] {
+			root.Left = BuildTreePreIn(preorder[1:i+1], inorder[:i])
+			root.Right = BuildTreePreIn(preorder[i+1:], inorder[i+1:])
+			break
+		}
+	}
+	return root
+}
+
 func IslandBFS(grid [][]string) int {
 	count := 0
 	for i := 0; i < len(grid); i++ {
