@@ -7,6 +7,8 @@ import (
 	. "dp/ds/linkedList"
 	"fmt"
 	"github.com/pkg/errors"
+	"io"
+	"sort"
 	"strconv"
 	"strings"
 	"testing"
@@ -215,4 +217,13 @@ func BenchmarkStringBuilder(b *testing.B) {
 		_ = builder.String()
 	}
 	b.StopTimer()
+}
+
+func TestSortString(t *testing.T) {
+	str := []string{"z", "c", "d", "aasds"}
+	sort.Strings(str)
+	fmt.Println(str)
+	fmt.Println(str)
+	fmt.Println(str)
+	fmt.Println(io.EOF)
 }
