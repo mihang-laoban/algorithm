@@ -318,8 +318,8 @@ func TestClimbMinCost(t *testing.T) {
 解释： 有两种方法可以爬到楼顶。
 1.  1 阶 + 1 阶
 2.  2 阶
-示例 2：
 
+示例 2：
 输入： 3
 输出： 3
 解释： 有三种方法可以爬到楼顶。
@@ -328,8 +328,9 @@ func TestClimbMinCost(t *testing.T) {
 3.  2 阶 + 1 阶*/
 
 func TestClimb(t *testing.T) {
-	fmt.Println(ClimbRecur(3 + 1))
-	fmt.Println(Climb(3))
+	fmt.Println(ClimbRecur(6))
+	fmt.Println(ClimbTailRecur(6))
+	fmt.Println(Climb(6))
 }
 
 /*数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
