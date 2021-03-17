@@ -216,3 +216,8 @@ func BenchmarkStringBuilder(b *testing.B) {
 	}
 	b.StopTimer()
 }
+
+func TestRemoveDuplicate(t *testing.T) {
+	str := "asbb j   pq[we"
+	fmt.Println(str)
+}
