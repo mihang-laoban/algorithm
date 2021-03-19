@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"io"
-	"sort"
 	"strconv"
 	"strings"
 	"testing"
@@ -224,3 +223,17 @@ func TestRemoveDuplicate(t *testing.T) {
 	fmt.Println(str)
 	fmt.Println(io.EOF)
 }
+
+//func TestGO(t *testing.T) {
+//	catCh := make(chan struct{}, 1)
+//	dogCh := make(chan struct{}, 1)
+//	fishCh := make(chan struct{}, 1)
+//	count := 0
+//
+//}
+//
+//func dog(dog chan struct{}, catCh chan struct{}, fishCh chan struct{}, count int)  {
+//	select {
+//		<-dog
+//	}
+//}
