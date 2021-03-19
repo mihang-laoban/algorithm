@@ -793,6 +793,12 @@ func KthNode(pRoot *tree.TreeNode, k int) *tree.TreeNode {
 // todo
 func TestSpiralOrder(t *testing.T) {
 	fmt.Println(SpiralOrder([][]int{[]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8, 9}}))
+	fmt.Println(SpiralOrder1([][]int{[]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8, 9}}))
+	fmt.Println(SpiralOrder1([][]int{[]int{2, 3}}))
+}
+
+func SpiralOrder1(matrix [][]int) []int {
+	return []int{}
 }
 
 func SpiralOrder(matrix [][]int) []int {
@@ -972,4 +978,29 @@ func MaxSquare(matrix [][]byte) int {
 		}
 	}
 	return max * max
+}
+
+func TestIntersect(t *testing.T) {
+	fmt.Println(intersect([]int{2, 3, 4, 1}, []int{3, 4}))
+	fmt.Println(intersect([]int{2, 3, 4, 1, 5, 7, 0, 2}, []int{7, 3, 4}))
+}
+
+func intersect(a, b []int) []int {
+	recorder := map[int]int{}
+	for _, v := range a {
+		if recorder[v] == 1 {
+			continue
+		}
+		recorder[v]++
+	}
+	for _, v := range b {
+		recorder[v]++
+	}
+	res := []int{}
+	for key, value := range recorder {
+		if value > 1 {
+			res = append(res, key)
+		}
+	}
+	return res
 }

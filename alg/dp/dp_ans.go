@@ -435,8 +435,7 @@ func FibDp(n int) {
 }
 
 func FibSingle(n int) {
-	pre := 1
-	cur := 1
+	pre, cur := 1, 1
 	for i := 3; i <= n; i++ {
 		sum := pre + cur
 		pre = cur
@@ -446,18 +445,26 @@ func FibSingle(n int) {
 }
 
 func ClimbRecur(n int) int {
-	if n == 1 {
-		return 1
-	}
-	if n == 0 {
-		return 0
+	if n < 2 {
+		return n
 	}
 	return ClimbRecur(n-1) + ClimbRecur(n-2)
 }
 
+func ClimbTailRecur(n int) int {
+	return TailRecur(n, 1, 1)
+}
+
+func TailRecur(n, a, b int) int {
+	if n < 2 {
+		return a
+	}
+	return TailRecur(n-1, b, a+b)
+}
+
 func Climb(n int) int {
-	a, b := 0, 1
-	for i := 0; i < n+1; i++ {
+	a, b := 1, 1
+	for i := 3; i < n+1; i++ {
 		a, b = a+b, a
 	}
 	return a
