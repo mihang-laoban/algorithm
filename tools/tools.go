@@ -159,3 +159,26 @@ func TimeStr2Unix(str string) int64 {
 func Unix2TimeStr(unix int64) string {
 	return time.Unix(unix, 0).Format(TIME_TEMPLATE)
 }
+
+func Int2bit(n int) (res string) {
+	for ; n > 0; n >>= 1 {
+		cur := n % 2
+		res = strconv.Itoa(cur) + res
+	}
+	return
+}
+
+func Bit2Int(n string) (res int) {
+	recorder := []rune{}
+	for _, value := range n {
+		recorder = append(recorder, value-'0')
+	}
+	for len(recorder) > 0 {
+		size := len(recorder) - 1
+		cur := recorder[0]
+		recorder = recorder[1:]
+		cur <<= uint(size)
+		res += int(cur)
+	}
+	return
+}

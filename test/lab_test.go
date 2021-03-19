@@ -1,10 +1,15 @@
 package test
 
 import (
+	"dp/tools"
 	"encoding/json"
 	"fmt"
+	"reflect"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
+	"unsafe"
 )
 
 type Param map[string]interface{}
@@ -78,26 +83,101 @@ func TestFind(t *testing.T) {
 	time.Sleep(5 * time.Second)
 }
 
-func TestFib(t *testing.T) {
-	var fib func(n int) int
-	fib = func(n int) int {
-		if n < 2 {
-			return n
-		}
-		return fib(n-1) + fib(n-2)
-	}
-
-	fmt.Println(fib(6))
+type Animal struct {
 }
 
-func TestF(t *testing.T) {
-	n := 6
+func (m *Animal) Eat() {
+	fmt.Println("eat")
+}
 
-	a, b := 1, 1
-	for i := 3; i < n+1; i++ {
-		c := a + b
-		a = b
-		b = c
+func TestCallByReflect(t *testing.T) {
+	animal := Animal{}
+	value := reflect.TypeOf(&animal)
+	f, _ := value.MethodByName("Eat")
+	fmt.Println(f)
+}
+
+var count int64 = 2
+
+func fish(wg *sync.WaitGroup, counter int64, fishCh, catCh chan struct{}) {
+	for {
+		if counter > count {
+			wg.Done()
+			return
+		}
+		<-fishCh
+		fmt.Println("fish")
+		atomic.AddInt64(&counter, 1)
+		catCh <- struct{}{}
 	}
-	fmt.Println(b)
+}
+
+func cat(wg *sync.WaitGroup, counter int64, catCh, dogCh chan struct{}) {
+	for {
+		if counter > count {
+			wg.Done()
+			return
+		}
+		<-catCh
+		fmt.Println("cat")
+		atomic.AddInt64(&counter, 1)
+		dogCh <- struct{}{}
+	}
+}
+
+func dog(wg *sync.WaitGroup, counter int64, dogCh, catCh chan struct{}) {
+	for {
+		if counter > count {
+			wg.Done()
+			return
+		}
+		<-dogCh
+		fmt.Println("dog")
+		atomic.AddInt64(&counter, 1)
+		catCh <- struct{}{}
+	}
+}
+
+func TestGo(t *testing.T) {
+	var (
+		wg          sync.WaitGroup
+		dogCounter  int64
+		fishCounter int64
+		catCounter  int64
+	)
+	dogCh := make(chan struct{}, 1)
+	fishCh := make(chan struct{}, 1)
+	catCh := make(chan struct{}, 1)
+	wg.Add(3)
+	go dog(&wg, dogCounter, dogCh, fishCh)
+	go fish(&wg, fishCounter, fishCh, catCh)
+	go cat(&wg, catCounter, catCh, dogCh)
+	dogCh <- struct{}{}
+	wg.Wait()
+}
+
+func TestSize(t *testing.T) {
+	//fmt.Println(unsafe.Sizeof())
+	var n1 int8 = 127
+	var n2 int16 = 10
+	var n3 int32 = 10
+	var n4 int64 = 10
+	var n5 int = 10
+	var n6 float32 = 10
+	var n7 float64 = 10
+	var n8 bool = true
+	var n9 byte = 10
+	var n10 rune = 10
+	fmt.Printf("%T: %d\n", n1, unsafe.Sizeof(n1))
+	fmt.Printf("%T: %d\n", n2, unsafe.Sizeof(n2))
+	fmt.Printf("%T: %d\n", n3, unsafe.Sizeof(n3))
+	fmt.Printf("%T: %d\n", n4, unsafe.Sizeof(n4))
+	fmt.Printf("%T: %d\n", n5, unsafe.Sizeof(n5))
+	fmt.Printf("%T: %d\n", n6, unsafe.Sizeof(n6))
+	fmt.Printf("%T: %d\n", n7, unsafe.Sizeof(n7))
+	fmt.Printf("%T: %d\n", n8, unsafe.Sizeof(n8))
+	fmt.Printf("%T: %d\n", n9, unsafe.Sizeof(n9))
+	fmt.Printf("%T: %d\n", n10, unsafe.Sizeof(n10))
+
+	fmt.Println(tools.Bit2Int(tools.Int2bit(3)))
 }
