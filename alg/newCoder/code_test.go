@@ -726,7 +726,6 @@ func atoi(str string) int {
 	res, isPositive := 0, true
 	if str[0] == '+' {
 		str = str[1:]
-		isPositive = true
 	} else if str[0] == '-' {
 		str = str[1:]
 		isPositive = false
