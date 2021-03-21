@@ -903,11 +903,51 @@ func JoinMaximum(nums []int) string {
 "3+2*3*4-1"
 返回值
 26
+
+3+3*4/2-1 = 8
 */
 func TestDiffWaysToCompute(t *testing.T) {
 	//fmt.Println(Calculator("(2*(3-4))*5"))
 	fmt.Println(Calculator("3+2*3*4-1"))
-	//fmt.Println(Calculator1("3+3*4/2-1"))
+	fmt.Println(Calculator1("3+3*4/2-1"))
+}
+
+func Calculator1(s string) int {
+	res := []int{}
+	var sign byte = '+'
+	num := 0
+	for len(s) > 0 {
+		ch := s[0]
+		s = s[1:]
+
+		if '0' <= ch && ch <= '9' {
+			num = num*10 + int(ch-'0')
+			if len(s) != 0 {
+				continue
+			}
+		}
+
+		switch sign {
+		case '+':
+			res = append(res, num)
+		case '-':
+			res = append(res, -num)
+		case '*':
+			pre := res[len(res)-1]
+			res = res[:len(res)-1]
+			res = append(res, pre*num)
+		case '/':
+			pre := res[len(res)-1]
+			res = res[:len(res)-1]
+			res = append(res, pre/num)
+		}
+		sign, num = ch, 0
+	}
+	ans := 0
+	for _, val := range res {
+		ans += val
+	}
+	return ans
 }
 
 func Calculator(s string) int {
