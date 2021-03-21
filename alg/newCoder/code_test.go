@@ -6,6 +6,8 @@ import (
 	"dp/ds/linkedList"
 	"dp/ds/tree"
 	"fmt"
+	"sort"
+	"strconv"
 	"testing"
 )
 
@@ -645,6 +647,35 @@ func TestIntersect(t *testing.T) {
 
 /*
 题目描述
+实现函数 int sqrt(int x).
+计算并返回x的平方根（向下取整）
+示例1
+输入
+2
+返回值
+1
+*/
+
+func TestSqrt(t *testing.T) {
+	fmt.Println(sqrt(8))
+}
+
+func sqrt(x int) int {
+	if x == 0 || x == 1 {
+		return x
+	}
+	s := x >> 1
+	for s*s > x {
+		s >>= 1
+	}
+	for s*s <= x {
+		s++
+	}
+	return s - 1
+}
+
+/*
+题目描述
 给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}； 针对数组{2,3,4,2,6,2,5,1}的滑动窗口有以下6个： {[2,3,4],2,6,2,5,1}， {2,[3,4,2],6,2,5,1}， {2,3,[4,2,6],2,5,1}， {2,3,4,[2,6,2],5,1}， {2,3,4,2,[6,2,5],1}， {2,3,4,2,6,[2,5,1]}。
 窗口大于数组长度的时候，返回空
 
@@ -814,4 +845,127 @@ func Merge(l1, l2 *linkedList.ListNode) *linkedList.ListNode {
 		cur.Next = l2
 	}
 	return head
+}
+
+/*
+最大数
+题目描述
+给定一个数组由一些非负整数组成，现需要将他们进行排列并拼接，使得最后的结果最大，返回值需要是string类型 否则可能会溢出
+示例1
+输入
+[30,1]
+返回值
+"301"
+*/
+
+func TestJoinMaximum(t *testing.T) {
+	fmt.Println(JoinMaximum([]int{30, 8, 23}))
+}
+
+func JoinMaximum(nums []int) string {
+	memo := []string{}
+	for _, v := range nums {
+		memo = append(memo, strconv.Itoa(v))
+	}
+	sort.Slice(memo, func(i, j int) bool {
+		num1, _ := strconv.Atoi(memo[i] + memo[j])
+		num2, _ := strconv.Atoi(memo[j] + memo[i])
+		return num1 > num2
+	})
+	res := ""
+	for _, v := range memo {
+		res += v
+	}
+
+	if res[0] == '0' {
+		return "0"
+	}
+	return res
+}
+
+/*题目描述
+请写一个整数计算器，支持加减乘三种运算和括号。
+
+示例1
+输入
+"1+2"
+返回值
+3
+
+示例2
+输入
+"(2*(3-4))*5"
+返回值
+-10
+
+示例3
+输入
+"3+2*3*4-1"
+返回值
+26
+*/
+func TestDiffWaysToCompute(t *testing.T) {
+	fmt.Println(Calculator("(2*(3-4))*5"))
+	fmt.Println(Calculator("3+2*3*4-1"))
+}
+
+func Calculator(s string) int {
+	stk := []int{}
+	var sign byte = '+'
+	num := 0
+	for len(s) > 0 {
+		ch := s[0]
+		s = s[1:]
+		// 如果是空格 且未结束
+		if ch == ' ' && len(s) != 0 {
+			continue
+		}
+		// 如果是左括号 将括号内的数取出来
+		if ch == '(' {
+			i, count := 0, 1
+			for count > 0 {
+				if s[i] == '(' {
+					count++
+				}
+				if s[i] == ')' {
+					count--
+				}
+				i++
+			}
+			num = Calculator(s[0 : i-1])
+			s = s[i:]
+			if len(s) != 0 {
+				continue
+			}
+		}
+		// 如果是数字
+		if ch >= '0' && ch <= '9' {
+			num = 10*num + int(ch-'0')
+			if len(s) != 0 {
+				continue
+			}
+		}
+
+		switch sign {
+		case '+':
+			stk = append(stk, num)
+		case '-':
+			stk = append(stk, -num)
+		case '*':
+			pre := stk[len(stk)-1]
+			stk = stk[:len(stk)-1]
+			stk = append(stk, pre*num)
+		case '/':
+			pre := stk[len(stk)-1]
+			stk = stk[:len(stk)-1]
+			stk = append(stk, pre/num)
+		}
+		sign, num = ch, 0
+	}
+
+	ans := 0
+	for _, v := range stk {
+		ans += v
+	}
+	return ans
 }
