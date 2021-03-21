@@ -121,6 +121,7 @@ func TestNQueue(t *testing.T) {
 	res := SolveNQueen(4)
 	//res := SolveNQueen(4)
 	//res := SolveNQueens2(4)
+	fmt.Println(Nqueen(4))
 
 	for _, v := range res {
 		for _, s := range v {
@@ -130,6 +131,46 @@ func TestNQueue(t *testing.T) {
 	}
 }
 
+func Nqueen(n int) int {
+	if n == 1 {
+		return 1
+	}
+	queens := make([]int, n)
+	for i := 0; i < n; i++ {
+		queens[i] = -1
+	}
+	res := 0
+	col, main, sub := map[int]bool{}, map[int]bool{}, map[int]bool{}
+	var bt func(int)
+	bt = func(row int) {
+		if row == n {
+			res++
+		}
+		for i := 0; i < n; i++ {
+			if col[i] {
+				continue
+			}
+			mi := row + i
+			if main[mi] {
+				continue
+			}
+			si := row - i
+			if sub[si] {
+				continue
+			}
+			queens[row] = i
+			col[i], main[mi], sub[si] = true, true, true
+			bt(row + 1)
+			queens[row] = -1
+			delete(col, i)
+			delete(main, mi)
+			delete(sub, si)
+		}
+	}
+	bt(0)
+	return res
+}
+
 func SolveNQueen(queenNum int) [][]string {
 	res := [][]string{}
 	queens := make([]int, queenNum)
@@ -137,12 +178,13 @@ func SolveNQueen(queenNum int) [][]string {
 		queens[i] = -1
 	}
 	main, sub, col := map[int]bool{}, map[int]bool{}, map[int]bool{}
-
+	x := 0
 	var backtrack func(int, int)
 	backtrack = func(queueNum, row int) {
 		if row == queueNum {
+			x++
 			board := generateBoard(queens, queueNum)
-			solutions = append(solutions, board)
+			res = append(res, board)
 			return
 		}
 		for i := 0; i < queueNum; i++ {
@@ -176,6 +218,8 @@ func SolveNQueen(queenNum int) [][]string {
 	}
 
 	backtrack(queenNum, 0)
+
+	fmt.Println(x)
 	return res
 }
 

@@ -910,6 +910,7 @@ func TestDiffWaysToCompute(t *testing.T) {
 	//fmt.Println(Calculator("(2*(3-4))*5"))
 	fmt.Println(Calculator("3+2*3*4-1"))
 	fmt.Println(Calculator1("(2*(3-4))*5"))
+	fmt.Println(Calculator1("(2*(3-4))*5"))
 }
 
 func Calculator1(s string) int {
