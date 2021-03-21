@@ -723,7 +723,7 @@ func atoi(str string) int {
 		return 0
 	}
 
-	num, isPositive := 0, true
+	res, isPositive := 0, true
 	if str[0] == '+' {
 		str = str[1:]
 		isPositive = true
@@ -736,17 +736,17 @@ func atoi(str string) int {
 		if str[i] < '0' || str[i] > '9' {
 			break
 		}
-		num = num*10 + (int(str[i] - '0'))
+		res = res*10 + (int(str[i] - '0'))
 	}
 
 	if isPositive {
-		if num > math.MaxInt32 {
+		if res > math.MaxInt32 {
 			return math.MaxInt32
 		}
-		return num
+		return res
 	}
-	if -num < math.MinInt32 {
+	if -res < math.MinInt32 {
 		return math.MinInt32
 	}
-	return -num
+	return -res
 }
