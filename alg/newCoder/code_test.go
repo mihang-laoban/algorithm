@@ -714,7 +714,7 @@ func Merge(l1, l2 *linkedList.ListNode) *linkedList.ListNode {
 }
 
 func TestAtoi(t *testing.T) {
-	fmt.Println(atoi("    11333713950"))
+	fmt.Println(atoi("123"))
 }
 
 func atoi(str string) int {
@@ -735,7 +735,7 @@ func atoi(str string) int {
 		if str[i] < '0' || str[i] > '9' {
 			break
 		}
-		res = res*10 + (int(str[i] - '0'))
+		res = res*10 + int(str[i]-'0')
 	}
 
 	if isPositive {
