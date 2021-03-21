@@ -905,20 +905,24 @@ func JoinMaximum(nums []int) string {
 26
 */
 func TestDiffWaysToCompute(t *testing.T) {
-	fmt.Println(Calculator("(2*(3-4))*5"))
+	//fmt.Println(Calculator("(2*(3-4))*5"))
 	fmt.Println(Calculator("3+2*3*4-1"))
+	//fmt.Println(Calculator1("3+3*4/2-1"))
 }
 
 func Calculator(s string) int {
 	stack := []int{}
 	var sign byte = '+'
 	num := 0
+	// 如果字符串中还有元素
 	for len(s) > 0 {
+		// 取出第一个元素
 		ch := s[0]
 		s = s[1:]
 		// 如果是左括号 将括号内的数取出来
 		if ch == '(' {
 			i, count := 0, 1
+			// 计算括号终止位置
 			for count > 0 {
 				if s[i] == '(' {
 					count++
@@ -928,20 +932,21 @@ func Calculator(s string) int {
 				}
 				i++
 			}
+			// 计算括号内运算
 			num = Calculator(s[0 : i-1])
 			s = s[i:]
 			if len(s) != 0 {
 				continue
 			}
 		}
-		// 如果是数字
+		// 如果是数字, 计算结果
 		if '0' <= ch && ch <= '9' {
 			num = 10*num + int(ch-'0')
+			// 如果字符串为空，则当前数字为最后一个数字
 			if len(s) != 0 {
 				continue
 			}
 		}
-
 		switch sign {
 		case '+':
 			stack = append(stack, num)
@@ -956,6 +961,7 @@ func Calculator(s string) int {
 			stack = stack[:len(stack)-1]
 			stack = append(stack, pre/num)
 		}
+		// 记录符号下一轮计算使用
 		sign, num = ch, 0
 	}
 
