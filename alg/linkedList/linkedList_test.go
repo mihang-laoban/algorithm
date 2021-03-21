@@ -252,7 +252,7 @@ func TestSortList(t *testing.T) {
 	fmt.Println(LinkedListToArray(SortListMerge(head1)))
 
 	head2 := ArrayToLinkedList([]int{4, 2, 1, 3, 5})
-	fmt.Println(LinkedListToArray(SortListMerge(head2)))
+	fmt.Println(LinkedListToArray(SortListMergeR(head2)))
 }
 
 /*给定一个头结点为 head 的非空单链表，返回链表的中间结点。

@@ -362,7 +362,8 @@ func SortListMerge(head *ListNode) *ListNode {
 
 	dummy := &ListNode{Next: head}
 	for subLength := 1; subLength < length; subLength <<= 1 {
-		pre, cur := dummy, dummy.Next
+		pre, cur := dummy, dummy.Next // cur用于记录链表被拆分的位置
+		// 如果链表没有被拆分完
 		for cur != nil {
 			l1 := cur
 			for i := 1; i < subLength && cur.Next != nil; i++ {
@@ -392,6 +393,21 @@ func SortListMerge(head *ListNode) *ListNode {
 		}
 	}
 	return dummy.Next
+}
+
+func SortListMergeR(head *ListNode) *ListNode {
+	pre := head
+	if head == nil || head.Next == nil {
+		return head
+	}
+	slow, fast := head, head.Next
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	cur := slow.Next
+	slow.Next = nil
+	return MergeLinkedListL(SortListMergeR(pre), SortListMergeR(cur))
 }
 
 // 快速排序
