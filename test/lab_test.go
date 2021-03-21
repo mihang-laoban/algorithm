@@ -180,4 +180,6 @@ func TestSize(t *testing.T) {
 	fmt.Printf("%T: %d\n", n10, unsafe.Sizeof(n10))
 
 	fmt.Println(tools.Bit2Int(tools.Int2bit(3)))
+	fmt.Println(tools.Int2bit(256))
+	fmt.Println(256 * 256)
 }

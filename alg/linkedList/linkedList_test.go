@@ -90,6 +90,57 @@ index 是一个正整数，它的值小于或等于链表的长度。
 func Test(t *testing.T) {
 	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
 	fmt.Println(LinkedListToArray(ReverseKGroup(head, 3)))
+
+	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	cur := head2
+	count := 0
+	for cur != nil {
+		cur = cur.Next
+		count++
+	}
+	fmt.Println(LinkedListToArray(reverseKGroup(head2, 3, count)))
+}
+
+func reverseKGroup(head *ListNode, k, count int) *ListNode {
+	if head == nil {
+		return head
+	}
+	//rest := count % k
+	//origin := k
+	dummy := &ListNode{Next: head}
+	pre, cur := dummy, dummy
+	for cur != nil {
+		//if rest != -1 {
+		//	k = rest
+		//	rest = -1
+		//} else {
+		//	k = origin
+		//}
+		for i := 0; i < k && cur != nil; i++ {
+			cur = cur.Next
+		}
+		if cur == nil {
+			break
+		}
+		first, second := pre.Next, cur.Next
+		cur.Next = nil
+		pre.Next = reverse(first)
+		first.Next = second
+		pre, cur = first, first
+	}
+	return dummy.Next
+}
+
+func reverse(head *ListNode) *ListNode {
+	cur := head
+	var pre *ListNode
+	for cur != nil {
+		tmp := cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = tmp
+	}
+	return pre
 }
 
 /*反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。

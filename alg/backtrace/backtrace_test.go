@@ -131,53 +131,63 @@ func TestNQueue(t *testing.T) {
 }
 
 func SolveNQueen(queenNum int) [][]string {
-	queens := make([]int, queenNum)
 	res := [][]string{}
+	queens := make([]int, queenNum)
 	for i := 0; i < queenNum; i++ {
 		queens[i] = -1
 	}
-	col, main, sub := map[int]bool{}, map[int]bool{}, map[int]bool{}
-	var bt func(int)
-	bt = func(row int) {
-		if row == queenNum {
-			cur := ge(queens)
-			res = append(res, cur)
+	main, sub, col := map[int]bool{}, map[int]bool{}, map[int]bool{}
+
+	var backtrack func(int, int)
+	backtrack = func(queueNum, row int) {
+		if row == queueNum {
+			board := generateBoard(queens, queueNum)
+			solutions = append(solutions, board)
+			return
 		}
-		for i := 0; i < queenNum; i++ {
+		for i := 0; i < queueNum; i++ {
+			// 如果当前列已被占用，则看下一个位置
 			if col[i] {
 				continue
 			}
-			mIN := row + i
-			if main[mIN] {
+			// 如果主对角线被占用，则看下一个位置
+			mainIndex := row - i
+			if main[mainIndex] {
 				continue
 			}
-			sIN := row - i
-			if sub[sIN] {
+			// 如果副对角线被占用，则看下一个位置
+			subIndex := row + i
+			if sub[subIndex] {
 				continue
 			}
+
+			// 记录当前皇后的行下表
 			queens[row] = i
-			col[i], main[mIN], sub[sIN] = true, true, true
-			bt(row + 1)
+			// 当前位置皇后不存在冲突，占用当前位置，继续看下一行
+			col[i], main[mainIndex], sub[subIndex] = true, true, true
+			backtrack(queueNum, row+1)
+
+			// 恢复状态
 			queens[row] = -1
 			delete(col, i)
-			delete(main, mIN)
-			delete(sub, sIN)
+			delete(main, mainIndex)
+			delete(sub, subIndex)
 		}
 	}
-	bt(0)
+
+	backtrack(queenNum, 0)
 	return res
 }
 
-func ge(q []int) []string {
+func ge(queens []int, queenNum int) []string {
 	res := []string{}
-	size := len(q)
-	for i := 0; i < size; i++ {
-		row := make([]byte, size)
-		for j := 0; j < size; j++ {
-			row[j] = '.'
+	for i := 0; i < queenNum; i++ {
+		cur := make([]byte, queenNum)
+		for j := 0; j < queenNum; j++ {
+			cur[j] = '.'
 		}
-		row[q[i]] = 'Q'
-		res = append(res, string(row))
+		queens[i] = 'Q'
+		res = append(res, string(cur))
 	}
 	return res
 }

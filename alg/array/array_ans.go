@@ -20,11 +20,11 @@ func TwoSum(nums []int, target int) (res []int) {
 func threesome(nums []int) (res [][]int) {
 	n := len(nums)
 	sort.Ints(nums)
-	third := n - 1
 	for first := 0; first < n; first++ {
 		if first > 0 && nums[first] == nums[first-1] {
 			continue
 		}
+		third := n - 1
 		target := -nums[first]
 		for second := first + 1; second < n; second++ {
 			if second > first+1 && nums[second] == nums[second-1] {
