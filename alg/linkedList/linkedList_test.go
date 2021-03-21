@@ -160,8 +160,27 @@ func TestReverseLinkedList(t *testing.T) {
 	//fmt.Println(LinkedListToArray(ReverseListR(head)))
 	//fmt.Println(LinkedListToArray(ReverseKListR(head, 3)))
 	//fmt.Println(LinkedListToArray(ReverseListBetweenR(head, 2, 4)))
-	fmt.Println(LinkedListToArray(ReverseListBetweenL(head, 2, 4)))
+	//fmt.Println(LinkedListToArray(ReverseListBetweenL(head, 2, 4)))
+	fmt.Println(LinkedListToArray(reverseBetween(head, 2, 4)))
 	//fmt.Println(LinkedListToArray(ReverseListBetweenL2(head, 2, 4)))
+}
+
+func reverseBetween(head *ListNode, m int, n int) *ListNode {
+	dummy := &ListNode{Next: head}
+	gap := n - m
+	cur := dummy
+	for i := 0; i < m-1; i++ {
+		cur = cur.Next
+	}
+	first := cur
+	for i := 0; i < gap; i++ {
+		cur = cur.Next
+	}
+	second := cur.Next
+	second.Next = nil
+	first.Next = reverse(first.Next)
+	first.Next = second.Next
+	return dummy.Next
 }
 
 /*
