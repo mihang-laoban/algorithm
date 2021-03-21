@@ -6,8 +6,6 @@ import (
 	"dp/ds/linkedList"
 	"dp/ds/tree"
 	"fmt"
-	"math"
-	"strings"
 	"testing"
 )
 
@@ -662,6 +660,111 @@ func TestMaxInWindows(t *testing.T) {
 }
 
 /*
+实现函数 atoi 。函数的功能为将字符串转化为整数
+提示：仔细思考所有可能的输入情况。这个问题没有给出输入的限制，你需要自己考虑所有可能的情况。
+*/
+func TestAtoi(t *testing.T) {
+	fmt.Println(Atoi("-123"))
+}
+
+/*给你 k 枚相同的鸡蛋，并可以使用一栋从第 1 层到第 n 层共有 n 层楼的建筑。
+已知存在楼层 f ，满足 0 <= f <= n ，任何从 高于 f 的楼层落下的鸡蛋都会碎，从 f 楼层或比它低的楼层落下的鸡蛋都不会破。
+每次操作，你可以取一枚没有碎的鸡蛋并把它从任一楼层 x 扔下（满足 1 <= x <= n）。如果鸡蛋碎了，你就不能再次使用它。如果某枚鸡蛋扔下后没有摔碎，则可以在之后的操作中 重复使用 这枚鸡蛋。
+请你计算并返回要确定 f 确切的值 的 最小操作次数 是多少？
+
+示例 1：
+输入：k = 1, n = 2
+输出：2
+解释：
+鸡蛋从 1 楼掉落。如果它碎了，肯定能得出 f = 0 。
+否则，鸡蛋从 2 楼掉落。如果它碎了，肯定能得出 f = 1 。
+如果它没碎，那么肯定能得出 f = 2 。
+因此，在最坏的情况下我们需要移动 2 次以确定 f 是多少。
+
+示例 2：
+输入：k = 2, n = 6
+输出：3
+
+示例 3：
+输入：k = 3, n = 14
+输出：4
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/super-egg-drop
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestSuperEggDrop(t *testing.T) {
+	fmt.Println(SuperEggDrop(3, 14))
+	fmt.Println(superEggDrop(3, 14))
+}
+
+func SuperEggDrop(k int, n int) int {
+	dp, step := make([]int, k+1), 0
+	for ; dp[k] < n; step++ {
+		for i := k; i > 0; i-- {
+			dp[i] = 1 + dp[i] + dp[i-1]
+		}
+	}
+	return step
+}
+
+func superEggDrop(k int, n int) int {
+	// 第k枚鸡蛋，在第n层至少需要多少层数
+	dp := make([][]int, k+1)
+	for i := 0; i < k+1; i++ {
+		dp[i] = make([]int, n+1)
+	}
+	m := 0
+	for dp[k][m] < n {
+		m++
+		for j := 1; j <= k; j++ {
+			dp[j][m] = dp[j][m-1] + dp[j-1][m-1] + 1
+		}
+	}
+	return m
+}
+
+/*
+
+题目描述
+给定一个十进制数M，以及需要转换的进制数N。将十进制数M转化为N进制数
+示例1
+输入
+7,2
+返回值
+"111"
+
+*/
+
+func TestTen2N(t *testing.T) {
+	fmt.Println(Ten2N(17, 12))
+	fmt.Println(Hello(17, 12))
+}
+
+func Hello(M int, N int) string {
+	return ""
+}
+
+func Ten2N(M int, N int) string {
+	res, sign := "", ""
+	if M < 0 {
+		sign = "-"
+		M = -M
+	}
+	for M > 0 {
+		ac := M % N
+		M = M / N
+		if ac > 9 {
+			res = string(ac-10+'A') + res
+		} else {
+			res = string(ac+'0') + res
+		}
+	}
+	return sign + res
+}
+
+/*
 题目描述
 给定一个无序单链表，实现单链表的排序(按升序排序)。
 示例1
@@ -711,41 +814,4 @@ func Merge(l1, l2 *linkedList.ListNode) *linkedList.ListNode {
 		cur.Next = l2
 	}
 	return head
-}
-
-func TestAtoi(t *testing.T) {
-	fmt.Println(atoi("123"))
-}
-
-func atoi(str string) int {
-	str = strings.TrimSpace(str)
-	if len(str) == 0 {
-		return 0
-	}
-
-	res, isPositive := 0, true
-	if str[0] == '+' {
-		str = str[1:]
-	} else if str[0] == '-' {
-		str = str[1:]
-		isPositive = false
-	}
-
-	for i := 0; i < len(str); i++ {
-		if str[i] < '0' || str[i] > '9' {
-			break
-		}
-		res = res*10 + int(str[i]-'0')
-	}
-
-	if isPositive {
-		if res > math.MaxInt32 {
-			return math.MaxInt32
-		}
-		return res
-	}
-	if -res < math.MinInt32 {
-		return math.MinInt32
-	}
-	return -res
 }

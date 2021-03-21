@@ -6,6 +6,7 @@ import (
 	"dp/tools"
 	"math"
 	"strconv"
+	"strings"
 )
 
 func search(nums []int, target int) int {
@@ -426,6 +427,39 @@ func SpiralOrder(matrix [][]int) []int {
 		maxH--
 	}
 	return res
+}
+
+func Atoi(str string) int {
+	str = strings.TrimSpace(str)
+	if len(str) == 0 {
+		return 0
+	}
+
+	res, isPositive := 0, true
+	if str[0] == '+' {
+		str = str[1:]
+	} else if str[0] == '-' {
+		str = str[1:]
+		isPositive = false
+	}
+
+	for i := 0; i < len(str); i++ {
+		if str[i] < '0' || str[i] > '9' {
+			break
+		}
+		res = res*10 + int(str[i]-'0')
+	}
+
+	if isPositive {
+		if res > math.MaxInt32 {
+			return math.MaxInt32
+		}
+		return res
+	}
+	if -res < math.MinInt32 {
+		return math.MinInt32
+	}
+	return -res
 }
 
 func NumberOf1(n int) int {
