@@ -910,16 +910,12 @@ func TestDiffWaysToCompute(t *testing.T) {
 }
 
 func Calculator(s string) int {
-	stk := []int{}
+	stack := []int{}
 	var sign byte = '+'
 	num := 0
 	for len(s) > 0 {
 		ch := s[0]
 		s = s[1:]
-		// 如果是空格 且未结束
-		if ch == ' ' && len(s) != 0 {
-			continue
-		}
 		// 如果是左括号 将括号内的数取出来
 		if ch == '(' {
 			i, count := 0, 1
@@ -939,7 +935,7 @@ func Calculator(s string) int {
 			}
 		}
 		// 如果是数字
-		if ch >= '0' && ch <= '9' {
+		if '0' <= ch && ch <= '9' {
 			num = 10*num + int(ch-'0')
 			if len(s) != 0 {
 				continue
@@ -948,23 +944,23 @@ func Calculator(s string) int {
 
 		switch sign {
 		case '+':
-			stk = append(stk, num)
+			stack = append(stack, num)
 		case '-':
-			stk = append(stk, -num)
+			stack = append(stack, -num)
 		case '*':
-			pre := stk[len(stk)-1]
-			stk = stk[:len(stk)-1]
-			stk = append(stk, pre*num)
+			pre := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			stack = append(stack, pre*num)
 		case '/':
-			pre := stk[len(stk)-1]
-			stk = stk[:len(stk)-1]
-			stk = append(stk, pre/num)
+			pre := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			stack = append(stack, pre/num)
 		}
 		sign, num = ch, 0
 	}
 
 	ans := 0
-	for _, v := range stk {
+	for _, v := range stack {
 		ans += v
 	}
 	return ans

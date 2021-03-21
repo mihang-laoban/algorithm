@@ -396,18 +396,17 @@ func SortListMerge(head *ListNode) *ListNode {
 }
 
 func SortListMergeR(head *ListNode) *ListNode {
-	pre := head
 	if head == nil || head.Next == nil {
 		return head
 	}
-	slow, fast := head, head.Next
-	for fast != nil && fast.Next != nil {
+	slow, fast := head, head
+	for fast.Next != nil && fast.Next.Next != nil {
 		slow = slow.Next
 		fast = fast.Next.Next
 	}
 	cur := slow.Next
 	slow.Next = nil
-	return MergeLinkedListL(SortListMergeR(pre), SortListMergeR(cur))
+	return MergeLinkedListL(SortListMergeR(head), SortListMergeR(cur))
 }
 
 // 快速排序
