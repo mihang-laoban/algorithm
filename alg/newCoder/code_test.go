@@ -1,10 +1,12 @@
 package newCoder
 
 import (
+	"container/heap"
 	linkedList2 "dp/alg/linkedList"
 	. "dp/ds"
 	"dp/ds/linkedList"
 	"dp/ds/tree"
+	"dp/tools"
 	"fmt"
 	"math"
 	"sort"
@@ -1011,6 +1013,115 @@ func MaxProfit(prices []int) int {
 		}
 		if res < value-minPrice {
 			res = value - minPrice
+		}
+	}
+	return res
+}
+
+type keyValue struct {
+	Ch    string
+	Count int
+}
+
+type KeyHeap []keyValue
+
+func (h KeyHeap) Len() int {
+	return len(h)
+}
+
+func (h KeyHeap) Less(i, j int) bool {
+	if h[i].Count == h[j].Count {
+		return h[i].Ch < h[j].Ch
+	}
+	return h[i].Count > h[j].Count
+}
+
+func (h KeyHeap) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
+}
+
+func (h *KeyHeap) Push(x interface{}) {
+	*h = append(*h, x.(keyValue))
+}
+
+func (h *KeyHeap) Pop() interface{} {
+	old := *h
+	x := old[len(old)-1]
+	*h = old[0 : len(old)-1]
+	return x
+}
+
+/**
+ * return topK string
+ * @param strings string字符串一维数组 strings
+ * @param k int整型 the k
+ * @return string字符串二维数组
+ */
+func TopKStrings(strings []string, k int) (res [][]string) {
+	// write code here
+	h := &KeyHeap{}
+	heap.Init(h)
+
+	var hashMap = make(map[string]int)
+	for _, ch := range strings {
+		hashMap[ch]++
+	}
+	for key, value := range hashMap {
+		heap.Push(h, keyValue{
+			Ch:    key,
+			Count: value,
+		})
+	}
+	for i := 0; i < k; i++ {
+		item := heap.Pop(h).(keyValue)
+		res = append(res, []string{
+			item.Ch, strconv.Itoa(item.Count),
+		})
+	}
+	return
+}
+
+func TestTopKStrings(t *testing.T) {
+	fmt.Println(TopKStrings([]string{"1", "2", "3", "4"}, 2))
+}
+
+/*实现一个特殊功能的栈，在实现栈的基本功能的基础上，再实现返回栈中最小元素的操作。
+示例1
+输入
+[[1,3],[1,2],[1,1],[3],[2],[3]]
+返回值
+[1,2]*/
+
+func TestGetMinStack(t *testing.T) {
+	fmt.Println(GetMinStack([][]int{[]int{1, 3}, []int{1, 2}, []int{1, 1}, []int{3}, []int{2}, []int{3}}))
+}
+
+type Stack struct {
+	q1 []int
+	q2 []int
+}
+
+func ConstructStack() *Stack {
+	return &Stack{q1: []int{}, q2: []int{}}
+}
+
+func GetMinStack(op [][]int) []int {
+	s := ConstructStack()
+	res := []int{}
+	for i := 0; i < len(op); i++ {
+		if op[i][0] == 1 {
+			if len(s.q1) == 0 {
+				s.q1 = append(s.q1, op[i][1])
+				s.q2 = append(s.q2, op[i][1])
+			} else {
+				s.q1 = append(s.q1, op[i][1])
+				s.q2 = append(s.q2, tools.Min(op[i][1], s.q2[len(s.q2)-1]))
+			}
+		} else if op[i][0] == 2 {
+			s.q1 = s.q1[:len(s.q1)-1]
+			s.q2 = s.q2[:len(s.q2)-1]
+		} else {
+			res = append(res, s.q2[len(s.q2)-1])
 		}
 	}
 	return res
