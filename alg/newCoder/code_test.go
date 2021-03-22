@@ -5,8 +5,8 @@ import (
 	. "dp/ds"
 	"dp/ds/linkedList"
 	"dp/ds/tree"
-	"dp/tools"
 	"fmt"
+	"sort"
 	"strconv"
 	"testing"
 )
@@ -274,23 +274,6 @@ func TestAddStrings(t *testing.T) {
 	fmt.Println(AddStrings("515", "357"))
 }
 
-func AddStrings(s string, t string) string {
-	ans, count := "", 0
-	for i, j := len(s)-1, len(t)-1; i >= 0 || j >= 0 || count != 0; i, j = i-1, j-1 {
-		var x, y int
-		if i >= 0 {
-			x = int(s[i] - '0')
-		}
-		if j >= 0 {
-			y = int(t[j] - '0')
-		}
-		result := x + y + count
-		count = result / 10
-		ans = strconv.Itoa(result%10) + ans
-	}
-	return ans
-}
-
 /*给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
 
 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
@@ -317,19 +300,6 @@ func TestLowestCommonAncestor(t *testing.T) {
 	fmt.Println(LowestCommonAncestor(root, root.Left, root.Right).Val)
 }
 
-func LowestCommonAncestor(root, p, q *tree.TreeNode) *tree.TreeNode {
-	ans := root
-	for {
-		if p.Val < ans.Val && q.Val < ans.Val {
-			ans = ans.Right
-		} else if p.Val > ans.Val && q.Val > ans.Val {
-			ans = ans.Left
-		} else {
-			return ans
-		}
-	}
-}
-
 /*给定一棵二叉树以及这棵树上的两个节点 o1 和 o2，请找到 o1 和 o2 的最近公共祖先节点。
 示例1
 输入
@@ -350,25 +320,6 @@ func TestLowestCommonAncestor2(t *testing.T) {
 	fmt.Println(LowestCommonAncestor2(root, 6, 4))
 }
 
-func LowestCommonAncestor2(root *tree.TreeNode, c1, c2 int) int {
-	return findLowestCommonAncestor2(root, c1, c2).Val
-}
-
-func findLowestCommonAncestor2(root *tree.TreeNode, c1, c2 int) *tree.TreeNode {
-	if root == nil || root.Val == c1 || root.Val == c2 {
-		return root
-	}
-	l := findLowestCommonAncestor2(root.Left, c1, c2)
-	r := findLowestCommonAncestor2(root.Right, c1, c2)
-	if l == nil {
-		return r
-	}
-	if r == nil {
-		return l
-	}
-	return root
-}
-
 /*给定两个字符串str1和str2,输出两个字符串的最长公共子串
 题目保证str1和str2的最长公共子串存在且唯一。
 输入
@@ -383,56 +334,7 @@ func TestLCS(t *testing.T) {
 }
 
 func LCS2(str1 string, str2 string) string {
-	s1, s2 := len(str1), len(str2)
-	dp := make([][]int, s1+1)
-	for i := 0; i < s1+1; i++ {
-		dp[i] = make([]int, s2+1)
-	}
-	index, size := 0, 0
-	for i := 1; i < s1+1; i++ {
-		for j := 1; j < s2+1; j++ {
-			if str1[i-1] == str2[j-1] {
-				dp[i][j] = dp[i-1][j-1] + 1
-				if size < dp[i][j] {
-					size = dp[i][j]
-					index = j
-				}
-			} else {
-				dp[i][j] = 0
-			}
-		}
-	}
-	if size == 0 {
-		return "-1"
-	}
-	return str2[index-size : index]
-}
-
-func LCS(str1 string, str2 string) string {
-	size1, size2 := len(str1), len(str2)
-	dp := make([][]int, size1+1)
-	for i := 0; i < size1+1; i++ {
-		dp[i] = make([]int, size2+1)
-	}
-	maxLen, str2Index := 0, 0
-	for i := 1; i <= size1; i++ {
-		for j := 1; j <= size2; j++ {
-			if str1[i-1] == str2[j-1] {
-				dp[i][j] = dp[i-1][j-1] + 1
-				if maxLen < dp[i][j] {
-					maxLen = dp[i][j]
-					str2Index = j
-				}
-			} else {
-				dp[i][j] = 0
-			}
-		}
-	}
-	if maxLen == 0 {
-		return "-1"
-	} else {
-		return str2[str2Index-maxLen : str2Index]
-	}
+	return ""
 }
 
 //给定一个整形数组arr，已知其中所有的值都是非负的，将这个数组看作一个容器，请返回容器能装多少水。
@@ -441,29 +343,6 @@ func LCS(str1 string, str2 string) string {
 
 func TestMaxWater(t *testing.T) {
 	fmt.Println(MaxWater([]int{3, 1, 2, 5, 2, 4}))
-}
-
-func MaxWater(height []int) int {
-	l, r := 0, len(height)-1
-	lMax, rMax, res := 0, 0, 0
-	for l < r {
-		if height[l] < height[r] {
-			if lMax < height[l] {
-				lMax = height[l]
-			} else {
-				res += lMax - height[l]
-			}
-			l++
-		} else {
-			if rMax < height[r] {
-				rMax = height[r]
-			} else {
-				res += rMax - height[r]
-			}
-			r--
-		}
-	}
-	return res
 }
 
 /*给定一个数组arr，返回arr的最长无的重复子串的长度(无重复指的是所有数字都不相同)。
@@ -476,19 +355,6 @@ func MaxWater(height []int) int {
 func TestMaxLength(t *testing.T) {
 	fmt.Println(MaxLength([]int{2, 3, 4, 5}))
 	fmt.Println(MaxLength([]int{2, 2, 3, 4, 3}))
-}
-
-func MaxLength(arr []int) int {
-	recorder := map[int]int{}
-	cur, maxLen := 0, 0
-	for i, v := range arr {
-		if _, ok := recorder[v]; ok {
-			cur = tools.Max(cur, recorder[v]+1)
-		}
-		recorder[v] = i
-		maxLen = tools.Max(maxLen, i-cur+1)
-	}
-	return maxLen
 }
 
 /*
@@ -526,76 +392,11 @@ func TestAddTwoNumbers(t *testing.T) {
 
 func TestLIS(t *testing.T) {
 	fmt.Println(LIS1([]int{2, 1, 5, 3, 6, 4, 8, 9, 7}))
-	fmt.Println(LIS1([]int{1, 2, 8, 6, 4}))
+	fmt.Println(LIS([]int{1, 2, 8, 6, 4}))
 }
 
 func LIS1(arr []int) []int {
-	if len(arr) == 0 {
-		return nil
-	}
-	maxSize := make([]int, len(arr))
-	maxSize[0] = 1
-	res := []int{arr[0]}
-	for i := 1; i < len(arr); i++ {
-		if arr[i] > res[len(res)-1] {
-			res = append(res, arr[i])
-			maxSize[i] = len(res)
-		} else {
-			l, r := 0, len(res)-1
-			for l < r {
-				mid := l + (r-l)>>1
-				if res[mid] < arr[i] {
-					l = mid + 1
-				} else {
-					r = mid
-				}
-			}
-			res[l] = arr[i]
-			maxSize[i] = l + 1
-		}
-	}
-	for i, j := len(maxSize)-1, len(res)-1; j > 0; i-- {
-		if maxSize[i] == j {
-			j--
-			res[j] = arr[i]
-		}
-	}
-	return res
-}
-
-func LIS(arr []int) []int {
-	if len(arr) == 0 {
-		return nil
-	}
-	maxLen := make([]int, len(arr))
-	maxLen[0] = 1
-	res := []int{arr[0]}
-	for i := 1; i < len(arr); i++ {
-		// 如果当前元素比结果集里面最后一个元素大，则当前元素也加入结果集
-		if arr[i] > res[len(res)-1] {
-			res = append(res, arr[i])
-			maxLen[i] = len(res) // 记录当前的最大长度
-		} else {
-			l, r := 0, len(res)-1
-			for l < r {
-				mid := l + (r-l)>>1
-				if res[mid] < arr[i] {
-					l = mid + 1
-				} else {
-					r = mid
-				}
-			}
-			res[l] = arr[i]
-			maxLen[i] = l + 1
-		}
-	}
-	for i, j := len(maxLen)-1, len(res); j > 0; i-- {
-		if maxLen[i] == j {
-			j--
-			res[j] = arr[i]
-		}
-	}
-	return res
+	return []int{}
 }
 
 /*对于一个字符串，请设计一个高效算法，计算其中最长回文子串的长度。
@@ -680,25 +481,6 @@ func TestKmp(t *testing.T) {
 	fmt.Println(Kmp("abab", "abacabab"))
 }
 
-func Kmp(S string, T string) int {
-	count, sSize, tSize := 0, len(S), len(T)
-	if len(S) > len(T) {
-		return 0
-	}
-	for i := 0; i < tSize-sSize+1; i++ {
-		j := 0
-		for ; j < sSize; j++ {
-			if S[j] != T[i+j] {
-				break
-			}
-		}
-		if j == sSize {
-			count++
-		}
-	}
-	return count
-}
-
 /*
 
 一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法（先后次序不同算不同的结果）。
@@ -718,20 +500,6 @@ func Kmp(S string, T string) int {
 
 func TestJumpFloor(t *testing.T) {
 	fmt.Println(JumpFloor(4))
-}
-
-func JumpFloor(number int) int {
-	// write code here
-	if number < 3 {
-		return number
-	}
-	a, b := 1, 2
-	for i := 3; i <= number+1; i++ {
-		c := a + b
-		a = b
-		b = c
-	}
-	return b
 }
 
 /*给定一棵二叉搜索树，请找出其中的第k小的TreeNode结点。
@@ -760,25 +528,6 @@ func TestKthNode(t *testing.T) {
 	fmt.Println(res.Val)
 }
 
-func KthNode(pRoot *tree.TreeNode, k int) *tree.TreeNode {
-	// write code here
-	stack := []*tree.TreeNode{}
-	for pRoot != nil || len(stack) > 0 {
-		for pRoot != nil {
-			stack = append(stack, pRoot)
-			pRoot = pRoot.Left
-		}
-		pRoot = stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		if k-1 == 0 {
-			return pRoot
-		}
-		k--
-		pRoot = pRoot.Right
-	}
-	return nil
-}
-
 /*给定一个m x n大小的矩阵（m行，n列），按螺旋的顺序返回矩阵中的所有元素。
 示例1
 输入
@@ -801,34 +550,6 @@ func SpiralOrder1(matrix [][]int) []int {
 	return []int{}
 }
 
-func SpiralOrder(matrix [][]int) []int {
-	res := []int{}
-	if len(matrix) == 0 || len(matrix[0]) == 0 {
-		return res
-	}
-	minH, minW := 0, 0
-	maxH, maxW := len(matrix)-1, len(matrix[0])-1
-	for minH <= maxH && minW <= maxW {
-		for i := minW; i <= maxW; i++ {
-			res = append(res, matrix[minH][i])
-		}
-		for i := minH + 1; i <= maxH; i++ {
-			res = append(res, matrix[i][maxW])
-		}
-		for i := maxW - 1; i >= minW && maxH > minH; i-- {
-			res = append(res, matrix[maxH][i])
-		}
-		for i := maxH - 1; i > minH && maxW > minW; i-- {
-			res = append(res, matrix[i][minW])
-		}
-		minW++
-		maxW--
-		minH++
-		maxH--
-	}
-	return res
-}
-
 /*
 
 题目描述
@@ -845,15 +566,6 @@ func TestNumberOf1(t *testing.T) {
 	// 1100
 	// 1011
 	fmt.Println(NumberOf1(10))
-}
-
-func NumberOf1(n int) int {
-	res := 0
-	for n != 0 {
-		n = n & int((int32(n) - 1))
-		res++
-	}
-	return res
 }
 
 /*
@@ -876,20 +588,6 @@ func NumberOf1(n int) int {
 
 func TestFindElement(t *testing.T) {
 	fmt.Println(FindElement([][]int{[]int{1, 2, 3}, []int{4, 5, 6}}, 2, 3, 6))
-}
-
-func FindElement(mat [][]int, n int, m int, x int) []int {
-	i, j := 0, m-1
-	for i < n && j >= 0 {
-		if mat[i][j] == x {
-			return []int{i, j}
-		} else if mat[i][j] > x {
-			j--
-		} else {
-			i++
-		}
-	}
-	return []int{-1, -1}
 }
 
 /*有一个NxN整数矩阵，请编写一个算法，将矩阵顺时针旋转90度。
@@ -917,18 +615,6 @@ func TestRotateMatrix(t *testing.T) {
 	fmt.Println(RotateMatrix([][]int{[]int{1, 2, 3}, []int{4, 5, 6}, []int{7, 8, 9}}, 3))
 }
 
-func RotateMatrix(mat [][]int, n int) [][]int {
-	res := [][]int{}
-	for i := 0; i < n; i++ {
-		tmp := []int{}
-		for j := n - 1; j >= 0; j-- {
-			tmp = append(tmp, mat[j][i])
-		}
-		res = append(res, tmp)
-	}
-	return res
-}
-
 /*
 题目描述
 给定一个由0和1组成的2维矩阵，返回该矩阵中最大的由1组成的正方形的面积
@@ -954,53 +640,341 @@ func MaxSquare1(matrix [][]byte) int {
 	return max * max
 }
 
-func MaxSquare(matrix [][]byte) int {
-	m, n := len(matrix), len(matrix[0])
-	if m < 2 {
-		return m
-	}
-	dp := make([][]int, m)
-	for i := 0; i < m; i++ {
-		dp[i] = make([]int, n)
-	}
-	max := 0
-	for i := 0; i < m; i++ {
-		for j := 0; j < n; j++ {
-			if matrix[i][j] == '0' {
-				continue
-			}
-			if i == 0 || j == 0 {
-				dp[i][j] = 1
-			} else {
-				dp[i][j] = tools.Min(tools.Min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]) + 1
-			}
-			max = tools.Max(dp[i][j], max)
-		}
-	}
-	return max * max
-}
-
 func TestIntersect(t *testing.T) {
-	fmt.Println(intersect([]int{2, 3, 4, 1}, []int{3, 4}))
-	fmt.Println(intersect([]int{2, 3, 4, 1, 5, 7, 0, 2}, []int{7, 3, 4}))
+	fmt.Println(Intersect([]int{2, 3, 4, 1}, []int{3, 4}))
+	fmt.Println(Intersect([]int{2, 3, 4, 1, 5, 7, 0, 2}, []int{7, 3, 4}))
 }
 
-func intersect(a, b []int) []int {
-	recorder := map[int]int{}
-	for _, v := range a {
-		if recorder[v] == 1 {
-			continue
-		}
-		recorder[v]++
+/*
+题目描述
+实现函数 int sqrt(int x).
+计算并返回x的平方根（向下取整）
+示例1
+输入
+2
+返回值
+1
+*/
+
+func TestSqrt(t *testing.T) {
+	fmt.Println(sqrt(8))
+}
+
+func sqrt(x int) int {
+	if x == 0 || x == 1 {
+		return x
 	}
-	for _, v := range b {
-		recorder[v]++
+	s := x >> 1
+	for s*s > x {
+		s >>= 1
 	}
-	res := []int{}
-	for key, value := range recorder {
-		if value > 1 {
-			res = append(res, key)
+	for s*s <= x {
+		s++
+	}
+	return s - 1
+}
+
+/*
+题目描述
+给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}； 针对数组{2,3,4,2,6,2,5,1}的滑动窗口有以下6个： {[2,3,4],2,6,2,5,1}， {2,[3,4,2],6,2,5,1}， {2,3,[4,2,6],2,5,1}， {2,3,4,[2,6,2],5,1}， {2,3,4,2,[6,2,5],1}， {2,3,4,2,6,[2,5,1]}。
+窗口大于数组长度的时候，返回空
+
+示例1
+输入
+[2,3,4,2,6,2,5,1],3
+返回值
+[4,4,6,6,6,5]
+*/
+
+func TestMaxInWindows(t *testing.T) {
+	fmt.Println(MaxInWindows([]int{2, 3, 4, 2, 6, 2, 5, 1}, 3))
+}
+
+/*
+实现函数 atoi 。函数的功能为将字符串转化为整数
+提示：仔细思考所有可能的输入情况。这个问题没有给出输入的限制，你需要自己考虑所有可能的情况。
+*/
+func TestAtoi(t *testing.T) {
+	fmt.Println(Atoi("-123"))
+}
+
+/*给你 k 枚相同的鸡蛋，并可以使用一栋从第 1 层到第 n 层共有 n 层楼的建筑。
+已知存在楼层 f ，满足 0 <= f <= n ，任何从 高于 f 的楼层落下的鸡蛋都会碎，从 f 楼层或比它低的楼层落下的鸡蛋都不会破。
+每次操作，你可以取一枚没有碎的鸡蛋并把它从任一楼层 x 扔下（满足 1 <= x <= n）。如果鸡蛋碎了，你就不能再次使用它。如果某枚鸡蛋扔下后没有摔碎，则可以在之后的操作中 重复使用 这枚鸡蛋。
+请你计算并返回要确定 f 确切的值 的 最小操作次数 是多少？
+
+示例 1：
+输入：k = 1, n = 2
+输出：2
+解释：
+鸡蛋从 1 楼掉落。如果它碎了，肯定能得出 f = 0 。
+否则，鸡蛋从 2 楼掉落。如果它碎了，肯定能得出 f = 1 。
+如果它没碎，那么肯定能得出 f = 2 。
+因此，在最坏的情况下我们需要移动 2 次以确定 f 是多少。
+
+示例 2：
+输入：k = 2, n = 6
+输出：3
+
+示例 3：
+输入：k = 3, n = 14
+输出：4
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/super-egg-drop
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestSuperEggDrop(t *testing.T) {
+	fmt.Println(SuperEggDrop(3, 14))
+	fmt.Println(superEggDrop(3, 14))
+}
+
+func SuperEggDrop(k int, n int) int {
+	dp, step := make([]int, k+1), 0
+	for ; dp[k] < n; step++ {
+		for i := k; i > 0; i-- {
+			dp[i] = 1 + dp[i] + dp[i-1]
 		}
+	}
+	return step
+}
+
+func superEggDrop(k int, n int) int {
+	// 第k枚鸡蛋，在第n层至少需要多少层数
+	dp := make([][]int, k+1)
+	for i := 0; i < k+1; i++ {
+		dp[i] = make([]int, n+1)
+	}
+	m := 0
+	for dp[k][m] < n {
+		m++
+		for j := 1; j <= k; j++ {
+			dp[j][m] = dp[j][m-1] + dp[j-1][m-1] + 1
+		}
+	}
+	return m
+}
+
+/*
+
+题目描述
+给定一个十进制数M，以及需要转换的进制数N。将十进制数M转化为N进制数
+示例1
+输入
+7,2
+返回值
+"111"
+
+*/
+
+func TestTen2N(t *testing.T) {
+	fmt.Println(Ten2N(17, 12))
+	fmt.Println(Hello(17, 12))
+}
+
+func Hello(M int, N int) string {
+	return ""
+}
+
+func Ten2N(M int, N int) string {
+	res, sign := "", ""
+	if M < 0 {
+		sign = "-"
+		M = -M
+	}
+	for M > 0 {
+		ac := M % N
+		M = M / N
+		if ac > 9 {
+			res = string(ac-10+'A') + res
+		} else {
+			res = string(ac+'0') + res
+		}
+	}
+	return sign + res
+}
+
+/*
+题目描述
+给定一个无序单链表，实现单链表的排序(按升序排序)。
+示例1
+输入
+复制
+[1,3,2,4,5]
+返回值
+复制
+{1,2,3,4,5}
+*/
+
+func TestSortInList(t *testing.T) {
+	head := linkedList.ArrayToLinkedList([]int{1, 3, 2, 4, 5})
+	res := linkedList.LinkedListToArray(SortInList(head))
+	fmt.Println(res)
+}
+
+func SortInList(head *linkedList.ListNode) *linkedList.ListNode {
+	fast, slow := head, head
+	for fast.Next != nil && fast.Next.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+	}
+	first, second := head, slow.Next
+	slow.Next = nil
+	res := Merge(SortInList(first), second)
+	return res
+}
+
+func Merge(l1, l2 *linkedList.ListNode) *linkedList.ListNode {
+	head := &linkedList.ListNode{}
+	cur := head
+	for l1 != nil && l2 != nil {
+		if l1.Val < l2.Val {
+			cur.Next = l1
+			l1 = l1.Next
+		} else {
+			cur.Next = l2
+			l2 = l2.Next
+		}
+		cur = cur.Next
+	}
+	if l1 != nil {
+		cur.Next = l1
+	}
+	if l2 != nil {
+		cur.Next = l2
+	}
+	return head
+}
+
+/*
+最大数
+题目描述
+给定一个数组由一些非负整数组成，现需要将他们进行排列并拼接，使得最后的结果最大，返回值需要是string类型 否则可能会溢出
+示例1
+输入
+[30,1]
+返回值
+"301"
+*/
+
+func TestJoinMaximum(t *testing.T) {
+	fmt.Println(JoinMaximum([]int{30, 8, 23}))
+}
+
+func JoinMaximum(nums []int) string {
+	memo := []string{}
+	for _, v := range nums {
+		memo = append(memo, strconv.Itoa(v))
+	}
+	sort.Slice(memo, func(i, j int) bool {
+		num1, _ := strconv.Atoi(memo[i] + memo[j])
+		num2, _ := strconv.Atoi(memo[j] + memo[i])
+		return num1 > num2
+	})
+	res := ""
+	for _, v := range memo {
+		res += v
+	}
+
+	if res[0] == '0' {
+		return "0"
 	}
 	return res
+}
+
+/*题目描述
+请写一个整数计算器，支持加减乘三种运算和括号。
+
+示例1
+输入
+"1+2"
+返回值
+3
+
+示例2
+输入
+"(2*(3-4))*5"
+返回值
+-10
+
+示例3
+输入
+"3+2*3*4-1"
+返回值
+26
+
+3+3*4/2-1 = 8
+*/
+func TestDiffWaysToCompute(t *testing.T) {
+	//fmt.Println(Calculator("(2*(3-4))*5"))
+	fmt.Println(Calculator("3+2*3*4-1"))
+	fmt.Println(Calculator1("(2*(3-4))*5"))
+	fmt.Println(Calculator1("(2*(3-4))*5"))
+}
+
+func Calculator1(s string) int {
+	return 0
+}
+
+func Calculator(s string) int {
+	stack := []int{}
+	var sign byte = '+'
+	num := 0
+	// 如果字符串中还有元素
+	for len(s) > 0 {
+		// 取出第一个元素
+		ch := s[0]
+		s = s[1:]
+		// 如果是左括号 将括号内的数取出来
+		if ch == '(' {
+			i, count := 0, 1
+			// 计算括号终止位置
+			for count > 0 {
+				if s[i] == '(' {
+					count++
+				}
+				if s[i] == ')' {
+					count--
+				}
+				i++
+			}
+			// 计算括号内运算
+			num = Calculator(s[0 : i-1])
+			s = s[i:]
+			if len(s) != 0 {
+				continue
+			}
+		}
+		// 如果是数字, 计算结果
+		if '0' <= ch && ch <= '9' {
+			num = 10*num + int(ch-'0')
+			// 如果字符串为空，则当前数字为最后一个数字
+			if len(s) != 0 {
+				continue
+			}
+		}
+		switch sign {
+		case '+':
+			stack = append(stack, num)
+		case '-':
+			stack = append(stack, -num)
+		case '*':
+			pre := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			stack = append(stack, pre*num)
+		case '/':
+			pre := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			stack = append(stack, pre/num)
+		}
+		// 记录符号下一轮计算使用
+		sign, num = ch, 0
+	}
+
+	ans := 0
+	for _, v := range stack {
+		ans += v
+	}
+	return ans
 }

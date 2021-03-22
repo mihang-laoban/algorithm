@@ -121,6 +121,7 @@ func TestNQueue(t *testing.T) {
 	res := SolveNQueen(4)
 	//res := SolveNQueen(4)
 	//res := SolveNQueens2(4)
+	fmt.Println(Nqueen(4))
 
 	for _, v := range res {
 		for _, s := range v {
@@ -130,54 +131,107 @@ func TestNQueue(t *testing.T) {
 	}
 }
 
-func SolveNQueen(queenNum int) [][]string {
-	queens := make([]int, queenNum)
-	res := [][]string{}
-	for i := 0; i < queenNum; i++ {
+func Nqueen(n int) int {
+	if n == 1 {
+		return 1
+	}
+	queens := make([]int, n)
+	for i := 0; i < n; i++ {
 		queens[i] = -1
 	}
+	res := 0
 	col, main, sub := map[int]bool{}, map[int]bool{}, map[int]bool{}
 	var bt func(int)
 	bt = func(row int) {
-		if row == queenNum {
-			cur := ge(queens)
-			res = append(res, cur)
+		if row == n {
+			res++
 		}
-		for i := 0; i < queenNum; i++ {
+		for i := 0; i < n; i++ {
 			if col[i] {
 				continue
 			}
-			mIN := row + i
-			if main[mIN] {
+			mi := row + i
+			if main[mi] {
 				continue
 			}
-			sIN := row - i
-			if sub[sIN] {
+			si := row - i
+			if sub[si] {
 				continue
 			}
 			queens[row] = i
-			col[i], main[mIN], sub[sIN] = true, true, true
+			col[i], main[mi], sub[si] = true, true, true
 			bt(row + 1)
 			queens[row] = -1
 			delete(col, i)
-			delete(main, mIN)
-			delete(sub, sIN)
+			delete(main, mi)
+			delete(sub, si)
 		}
 	}
 	bt(0)
 	return res
 }
 
-func ge(q []int) []string {
-	res := []string{}
-	size := len(q)
-	for i := 0; i < size; i++ {
-		row := make([]byte, size)
-		for j := 0; j < size; j++ {
-			row[j] = '.'
+func SolveNQueen(queenNum int) [][]string {
+	res := [][]string{}
+	queens := make([]int, queenNum)
+	for i := 0; i < queenNum; i++ {
+		queens[i] = -1
+	}
+	main, sub, col := map[int]bool{}, map[int]bool{}, map[int]bool{}
+	x := 0
+	var backtrack func(int, int)
+	backtrack = func(queueNum, row int) {
+		if row == queueNum {
+			x++
+			board := generateBoard(queens, queueNum)
+			res = append(res, board)
+			return
 		}
-		row[q[i]] = 'Q'
-		res = append(res, string(row))
+		for i := 0; i < queueNum; i++ {
+			// 如果当前列已被占用，则看下一个位置
+			if col[i] {
+				continue
+			}
+			// 如果主对角线被占用，则看下一个位置
+			mainIndex := row - i
+			if main[mainIndex] {
+				continue
+			}
+			// 如果副对角线被占用，则看下一个位置
+			subIndex := row + i
+			if sub[subIndex] {
+				continue
+			}
+
+			// 记录当前皇后的行下表
+			queens[row] = i
+			// 当前位置皇后不存在冲突，占用当前位置，继续看下一行
+			col[i], main[mainIndex], sub[subIndex] = true, true, true
+			backtrack(queueNum, row+1)
+
+			// 恢复状态
+			queens[row] = -1
+			delete(col, i)
+			delete(main, mainIndex)
+			delete(sub, subIndex)
+		}
+	}
+
+	backtrack(queenNum, 0)
+
+	fmt.Println(x)
+	return res
+}
+
+func ge(queens []int, queenNum int) []string {
+	res := []string{}
+	for i := 0; i < queenNum; i++ {
+		cur := make([]byte, queenNum)
+		for j := 0; j < queenNum; j++ {
+			cur[j] = '.'
+		}
+		queens[i] = 'Q'
+		res = append(res, string(cur))
 	}
 	return res
 }

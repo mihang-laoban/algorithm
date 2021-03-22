@@ -74,13 +74,13 @@ func SolveNQueens(queueNum int) [][]string {
 	columns, main, sub := map[int]bool{}, map[int]bool{}, map[int]bool{}
 
 	var backtrack func(int, int)
-	backtrack = func(queueNum, row int) {
-		if row == queueNum {
-			board := generateBoard(queens, queueNum)
+	backtrack = func(queenNum, row int) {
+		if row == queenNum {
+			board := generateBoard(queens, queenNum)
 			solutions = append(solutions, board)
 			return
 		}
-		for i := 0; i < queueNum; i++ {
+		for i := 0; i < queenNum; i++ {
 			// 如果当前列已被占用，则看下一个位置
 			if columns[i] {
 				continue
@@ -100,7 +100,7 @@ func SolveNQueens(queueNum int) [][]string {
 			queens[row] = i
 			// 当前位置皇后不存在冲突，占用当前位置，继续看下一行
 			columns[i], main[mainIndex], sub[subIndex] = true, true, true
-			backtrack(queueNum, row+1)
+			backtrack(queenNum, row+1)
 
 			// 恢复状态
 			queens[row] = -1

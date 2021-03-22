@@ -183,7 +183,6 @@ func TestSize(t *testing.T) {
 
 	fmt.Println((tools.Int2bit(int(n1))))
 	fmt.Println(tools.Bit2Int(tools.Int2bit(3)))
-	fmt.Println(tools.Bit2Int(tools.Int2bit(3)))
 }
 
 func TestRoom(t *testing.T) {
@@ -225,4 +224,6 @@ func TestH(t *testing.T) {
 	for k, v := range m {
 		fmt.Println(k, "=>", v.Name)
 	}
+	fmt.Println(tools.Int2bit(256))
+	fmt.Println(256 * 256)
 }

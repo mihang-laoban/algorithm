@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var x = []int{6, 4, 2, 5, 9, 3, 10, 7, 6, 8, 1}
+var x = []int{6, 4, 2, 5, 9, 3, 10, 7, 6, 8, 1, 0, -1, -3, -8, -6}
 
 type Sorting interface {
 	Insert()
@@ -37,7 +37,7 @@ func Insert(nums []int) []int {
 }
 
 func Quick(nums []int) []int {
-	return []int{}
+	return nums
 }
 
 func Merge(nums []int) []int {
@@ -45,7 +45,30 @@ func Merge(nums []int) []int {
 }
 
 func Heap(nums []int) []int {
+	size := len(nums)
+	for i := size >> 1; i >= 0; i-- {
+		h(nums, i, size)
+	}
+	for i := size - 1; i >= 0; i-- {
+		nums[i], nums[0] = nums[0], nums[i]
+		size--
+		h(nums, 0, size)
+	}
 	return nums
+}
+
+func h(nums []int, index int, size int) {
+	l, r, max := size<<1+1, size<<1+2, index
+	if l < size && nums[l] > nums[max] {
+		max = nums[l]
+	}
+	if r < size && nums[r] > nums[max] {
+		max = nums[r]
+	}
+	if max != index {
+		nums[index], nums[max] = nums[max], nums[index]
+		h(nums, max, size)
+	}
 }
 
 /*输入整数数组 arr ，找出其中最小的 k 个数。例如，输入4、5、1、6、2、7、3、8这8个数字，则最小的4个数字是1、2、3、4。
