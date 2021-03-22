@@ -809,24 +809,26 @@ func Ten2N(M int, N int) string {
 */
 
 func TestSortInList(t *testing.T) {
-	head := linkedList.ArrayToLinkedList([]int{1, 3, 2, 4, 5})
+	head := linkedList.ArrayToLinkedList([]int{1, 3, 2, 4, 5, 11, 0, -2, -1, 3})
 	res := linkedList.LinkedListToArray(SortInList(head))
 	fmt.Println(res)
 }
 
 func SortInList(head *linkedList.ListNode) *linkedList.ListNode {
-	fast, slow := head, head
-	for fast.Next != nil && fast.Next.Next != nil {
-		fast = fast.Next.Next
-		slow = slow.Next
+	if head == nil || head.Next == nil {
+		return head
 	}
-	first, second := head, slow.Next
+	slow, fast := head, head
+	for fast.Next != nil && fast.Next.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	cur := slow.Next
 	slow.Next = nil
-	res := Merge(SortInList(first), second)
-	return res
+	return merge(SortInList(head), SortInList(cur))
 }
 
-func Merge(l1, l2 *linkedList.ListNode) *linkedList.ListNode {
+func merge(l1, l2 *linkedList.ListNode) *linkedList.ListNode {
 	head := &linkedList.ListNode{}
 	cur := head
 	for l1 != nil && l2 != nil {
@@ -841,11 +843,10 @@ func Merge(l1, l2 *linkedList.ListNode) *linkedList.ListNode {
 	}
 	if l1 != nil {
 		cur.Next = l1
-	}
-	if l2 != nil {
+	} else if l2 != nil {
 		cur.Next = l2
 	}
-	return head
+	return head.Next
 }
 
 /*
