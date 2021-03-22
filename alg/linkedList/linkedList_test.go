@@ -162,11 +162,11 @@ func reverseBetween(head *ListNode, m int, n int) *ListNode {
 		pre = pre.Next
 		cur = cur.Next
 	}
-	first := cur.Next
 	for i := 0; cur != nil && i < n-m+1; i++ {
 		cur = cur.Next
 	}
-	second := cur.Next
+
+	first, second := pre.Next, cur.Next
 	cur.Next = nil
 
 	pre.Next = reverse(first)
