@@ -87,47 +87,37 @@ index 是一个正整数，它的值小于或等于链表的长度。
 链接：https://leetcode-cn.com/problems/reverse-nodes-in-k-group
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
-func Test(t *testing.T) {
+func TestReverseKGroup(t *testing.T) {
 	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
 	fmt.Println(LinkedListToArray(ReverseKGroup(head, 3)))
 
-	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7, 8})
+	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7})
 	cur := head2
 	count := 0
 	for cur != nil {
 		cur = cur.Next
 		count++
 	}
-	fmt.Println(LinkedListToArray(reverseKGroup(head2, 3, count)))
+	fmt.Println(LinkedListToArray(reverseKGroup(head2, 3, 5)))
 }
 
-func reverseKGroup(head *ListNode, k, count int) *ListNode {
-	if head == nil {
-		return head
-	}
-	//rest := count % k
-	//origin := k
+func reverseKGroup(head *ListNode, m, n int) *ListNode {
 	dummy := &ListNode{Next: head}
-	pre, cur := dummy, dummy
-	for cur != nil {
-		//if rest != -1 {
-		//	k = rest
-		//	rest = -1
-		//} else {
-		//	k = origin
-		//}
-		for i := 0; i < k && cur != nil; i++ {
-			cur = cur.Next
-		}
-		if cur == nil {
-			break
-		}
-		first, second := pre.Next, cur.Next
-		cur.Next = nil
-		pre.Next = reverse(first)
-		first.Next = second
-		pre, cur = first, first
+	start, end := dummy, dummy
+	for i := 0; end != nil && i < m-1; i++ {
+		start = start.Next
+		end = end.Next
 	}
+	first := end.Next
+	for i := 0; end != nil && i < n-m+1; i++ {
+		end = end.Next
+	}
+	second := end.Next
+	end.Next = nil
+
+	start.Next = reverse(first)
+	first.Next = second
+
 	return dummy.Next
 }
 
@@ -160,26 +150,28 @@ func TestReverseLinkedList(t *testing.T) {
 	//fmt.Println(LinkedListToArray(ReverseListR(head)))
 	//fmt.Println(LinkedListToArray(ReverseKListR(head, 3)))
 	//fmt.Println(LinkedListToArray(ReverseListBetweenR(head, 2, 4)))
-	//fmt.Println(LinkedListToArray(ReverseListBetweenL(head, 2, 4)))
-	fmt.Println(LinkedListToArray(reverseBetween(head, 2, 4)))
+	fmt.Println(LinkedListToArray(ReverseListBetweenL(head, 2, 4)))
+	fmt.Println(LinkedListToArray(reverseBetween(head, 2, 3)))
 	//fmt.Println(LinkedListToArray(ReverseListBetweenL2(head, 2, 4)))
 }
 
 func reverseBetween(head *ListNode, m int, n int) *ListNode {
 	dummy := &ListNode{Next: head}
-	gap := n - m
-	cur := dummy
-	for i := 0; i < m-1; i++ {
+	pre, cur := dummy, dummy
+	for i := 0; cur != nil && i < m-1; i++ {
+		pre = pre.Next
 		cur = cur.Next
 	}
-	first := cur
-	for i := 0; i < gap; i++ {
+	first := cur.Next
+	for i := 0; cur != nil && i < n-m+1; i++ {
 		cur = cur.Next
 	}
 	second := cur.Next
-	second.Next = nil
-	first.Next = reverse(first.Next)
-	first.Next = second.Next
+	cur.Next = nil
+
+	pre.Next = reverse(first)
+	first.Next = second
+
 	return dummy.Next
 }
 

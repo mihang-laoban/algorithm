@@ -161,27 +161,27 @@ func ReverseKGroup(head *ListNode, k int) *ListNode {
 	// 表头指向入参头节点
 	dummy := &ListNode{Next: head}
 	// 初始化起点和终点
-	start, end := dummy, dummy
+	pre, cur := dummy, dummy
 	// 以end节点是否到尾部来判定循环是否结束
-	for end.Next != nil {
+	for cur != nil {
 		// 遍历到第K个元素
-		for i := 0; i < k && end != nil; i++ {
-			end = end.Next
+		for i := 0; i < k && cur != nil; i++ {
+			cur = cur.Next
 		}
 		// 如果到达最后一组没有遍历完则不反转
-		if end == nil {
+		if cur == nil {
 			break
 		}
 		// 记录起点和下一个起点
-		first, second := start.Next, end.Next
+		first, second := pre.Next, cur.Next
 		// 断开链接，设置反转终点
-		end.Next = nil
+		cur.Next = nil
 		// 起点指向反转以后的第一个节点
-		start.Next = ReverseListR(first)
+		pre.Next = ReverseListR(first)
 		// 重新链接，此时的start已经上一组的终点
 		first.Next = second
 		// 重新设置起点
-		start, end = first, first
+		pre, cur = first, first
 	}
 	return dummy.Next
 }
