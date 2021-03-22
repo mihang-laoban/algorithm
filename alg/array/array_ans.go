@@ -245,7 +245,7 @@ func SearchRotatedArray(target int, nums []int) int {
 				low = mid + 1
 			}
 		} else {
-			if nums[mid] < target && target <= nums[high] {
+			if target <= nums[high] && nums[mid] < target {
 				low = mid + 1
 			} else {
 				high = mid - 1
