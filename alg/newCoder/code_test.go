@@ -1097,12 +1097,12 @@ func TestGetMinStack(t *testing.T) {
 }
 
 type Stack struct {
-	q1 []int
-	q2 []int
+	s1 []int
+	s2 []int
 }
 
 func ConstructStack() *Stack {
-	return &Stack{q1: []int{}, q2: []int{}}
+	return &Stack{s1: []int{}, s2: []int{}}
 }
 
 func GetMinStack(op [][]int) []int {
@@ -1110,18 +1110,18 @@ func GetMinStack(op [][]int) []int {
 	res := []int{}
 	for i := 0; i < len(op); i++ {
 		if op[i][0] == 1 {
-			if len(s.q1) == 0 {
-				s.q1 = append(s.q1, op[i][1])
-				s.q2 = append(s.q2, op[i][1])
+			if len(s.s1) == 0 {
+				s.s1 = append(s.s1, op[i][1])
+				s.s2 = append(s.s2, op[i][1])
 			} else {
-				s.q1 = append(s.q1, op[i][1])
-				s.q2 = append(s.q2, tools.Min(op[i][1], s.q2[len(s.q2)-1]))
+				s.s1 = append(s.s1, op[i][1])
+				s.s2 = append(s.s2, tools.Min(op[i][1], s.s2[len(s.s2)-1]))
 			}
 		} else if op[i][0] == 2 {
-			s.q1 = s.q1[:len(s.q1)-1]
-			s.q2 = s.q2[:len(s.q2)-1]
+			s.s1 = s.s1[:len(s.s1)-1]
+			s.s2 = s.s2[:len(s.s2)-1]
 		} else {
-			res = append(res, s.q2[len(s.q2)-1])
+			res = append(res, s.s2[len(s.s2)-1])
 		}
 	}
 	return res
