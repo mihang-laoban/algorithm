@@ -182,3 +182,34 @@ func Bit2Int(n string) (res int) {
 	}
 	return
 }
+
+func Room(n int) {
+	unit := 1024
+	//bit := n * 8
+	//fmt.Printf("%d bits\n", bit)
+	bytes := n
+	if bytes != 0 {
+		fmt.Printf("%d bytes\n", bytes)
+	}
+	kb := bytes / unit
+	if kb != 0 {
+		fmt.Printf("%d KB\n", kb)
+	}
+	mb := kb / unit
+	if mb != 0 {
+		fmt.Printf("%d MB\n", mb)
+	}
+	gb := mb / unit
+	if gb != 0 {
+		fmt.Printf("%d GB\n", gb)
+	}
+	tb := gb / unit
+	if tb != 0 {
+		fmt.Printf("%d TB\n", tb)
+	}
+	pb := tb / unit
+	if pb != 0 {
+		fmt.Printf("%d PB\n", pb)
+	}
+	fmt.Println()
+}

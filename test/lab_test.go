@@ -168,6 +168,7 @@ func TestSize(t *testing.T) {
 	var n8 bool = true
 	var n9 byte = 10
 	var n10 rune = 10
+	var n11 string = "bacasdf"
 	fmt.Printf("%T: %d\n", n1, unsafe.Sizeof(n1))
 	fmt.Printf("%T: %d\n", n2, unsafe.Sizeof(n2))
 	fmt.Printf("%T: %d\n", n3, unsafe.Sizeof(n3))
@@ -178,6 +179,50 @@ func TestSize(t *testing.T) {
 	fmt.Printf("%T: %d\n", n8, unsafe.Sizeof(n8))
 	fmt.Printf("%T: %d\n", n9, unsafe.Sizeof(n9))
 	fmt.Printf("%T: %d\n", n10, unsafe.Sizeof(n10))
+	fmt.Printf("%T: %d\n", n11, unsafe.Sizeof(n11))
 
+	fmt.Println((tools.Int2bit(int(n1))))
 	fmt.Println(tools.Bit2Int(tools.Int2bit(3)))
+	fmt.Println(tools.Bit2Int(tools.Int2bit(3)))
+}
+
+func TestRoom(t *testing.T) {
+	tools.Room(65536)
+	tools.Room(16777216)
+	tools.Room(4294967296)
+}
+
+type student1 struct {
+	Name string
+	Age  int
+}
+
+func TestH(t *testing.T) {
+	m := make(map[string]*student1)
+
+	//定义student数组
+	stus := []student1{
+		{Name: "zhou", Age: 24},
+		{Name: "li", Age: 23},
+		{Name: "wang", Age: 22},
+	}
+
+	//将数组依次添加到map中
+	for _, stu := range stus {
+		m[stu.Name] = &stu
+	}
+
+	//打印map
+	for k, v := range m {
+		fmt.Println(k, "=>", v.Name)
+	}
+
+	for i := 0; i < len(stus); i++ {
+		m[stus[i].Name] = &stus[i]
+	}
+
+	//打印map
+	for k, v := range m {
+		fmt.Println(k, "=>", v.Name)
+	}
 }
