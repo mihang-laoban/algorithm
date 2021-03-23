@@ -1126,3 +1126,41 @@ func GetMinStack(op [][]int) []int {
 	}
 	return res
 }
+
+/*题目描述
+有一个整数数组，请你根据快速排序的思路，找出数组中第K大的数。
+给定一个整数数组a,同时给定它的大小n和要找的K(K在1到n之间)，请返回第K大的数，保证答案存在。
+
+示例1
+输入
+[1,3,5,2,2],5,3
+返回值
+2
+*/
+func TestFindKth(t *testing.T) {
+	fmt.Println(FindKth([]int{1, 3, 5, 2, 2}, 5, 3))
+}
+
+func FindKth(a []int, n int, K int) int {
+	mid, i := a[0], 1
+	low, high := 0, n-1
+	for low < high {
+		if a[i] < mid {
+			a[i], a[high] = a[high], a[i]
+			high--
+		} else {
+			a[i], a[low] = a[low], a[i]
+			low++
+			i++
+		}
+	}
+	a[low] = mid
+
+	if K-1 == low {
+		return mid
+	}
+	if K-1 < low {
+		return FindKth(a[:low], low, K)
+	}
+	return FindKth(a[low+1:], n-1-low, K-1-low)
+}

@@ -334,8 +334,22 @@ func TestPow(t *testing.T) {
 	fmt.Println(MyPowNew(2.00, 10))
 }
 
-func MyPow1(f float64, i int) interface{} {
-	return nil
+func MyPow1(f float64, i int) float64 {
+	if i < 0 {
+		return 1 / q(f, -i)
+	}
+	return q(f, i)
+}
+
+func q(f float64, i int) float64 {
+	if i == 0 {
+		return 1
+	}
+	y := q(f, i>>1)
+	if i&1 == 0 {
+		return y * y
+	}
+	return y * y * f
 }
 
 /*
