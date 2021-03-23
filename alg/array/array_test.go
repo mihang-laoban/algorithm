@@ -348,8 +348,9 @@ func q(f float64, i int) float64 {
 	y := q(f, i>>1)
 	if i&1 == 0 {
 		return y * y
+	} else {
+		return y * y * f
 	}
-	return y * y * f
 }
 
 /*

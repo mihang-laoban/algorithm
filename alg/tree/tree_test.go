@@ -280,7 +280,8 @@ func Bfs(root *TreeNode) (res []int) {
 
 func TestIsBalancedBottom(t *testing.T) {
 	root := ArrayToTree([]interface{}{1, 2, 2, 3, nil, nil, 3, 4, nil, nil, 4})
-	fmt.Println(balance(root) >= 0)
+	fmt.Println(IsBalancedBottom(root))
+	fmt.Println(IsBalancedTop(root))
 }
 
 /*给定一个二叉树，判断其是否是一个有效的二叉搜索树。
@@ -1573,8 +1574,7 @@ func TestIsCompleteTree(t *testing.T) {
 }
 
 func IsCompleteTree(root *TreeNode) bool {
-	queue := []*TreeNode{root}
-	pre := root
+	pre, queue := root, []*TreeNode{root}
 	for len(queue) > 0 {
 		cur := queue[0]
 		queue = queue[1:]

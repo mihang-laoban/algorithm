@@ -94,7 +94,7 @@ func Merge1(nums []int) []int {
 		return nums
 	}
 	mid := length >> 1
-	return subMerge(Merge1(nums[0:mid]), Merge1(nums[mid:]))
+	return subMerge(Merge1(nums[:mid]), Merge1(nums[mid:]))
 }
 
 func subMerge(left, right []int) []int {

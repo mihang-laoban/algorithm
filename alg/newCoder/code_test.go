@@ -1164,3 +1164,81 @@ func FindKth(a []int, n int, K int) int {
 	}
 	return FindKth(a[low+1:], n-1-low, K-1-low)
 }
+
+/*给定一个二叉树和一个值 sum ，请找出所有的根节点到叶子节点的节点值之和等于\ sum sum 的路径，
+例如：
+给出如下的二叉树， sum=22
+
+    5
+   / \
+  4   8
+ / \   \
+1  11   9
+  /  \
+ 2    7
+
+返回
+[
+	[5,4,11,2],
+	[5,8,9]
+]
+
+*/
+
+func TestPathSum(t *testing.T) {
+	root := tree.ArrayToTree([]interface{}{5, 4, 8, 1, 11, nil, 9, nil, nil, 2, 7})
+	//root := tree.ArrayToTree([]interface{}{5, 4, 8, 11, nil, 13, 4, 7, 2, nil, nil, 5, 1})
+
+	//fmt.Println(PathSum(root, 22))
+	fmt.Println(pathSum(root, 22))
+}
+
+func pathSum(root *tree.TreeNode, targetSum int) [][]int {
+	res := [][]int{}
+
+	var dfs func(*tree.TreeNode, int, []int)
+	dfs = func(root *tree.TreeNode, sum int, stack []int) {
+		if root == nil {
+			return
+		}
+		stack = append(stack, root.Val)
+		if root.Left == nil && root.Right == nil && sum == root.Val {
+			r := make([]int, len(stack))
+			copy(r, stack)
+			res = append(res, stack)
+		}
+		dfs(root.Left, sum-root.Val, stack)
+		dfs(root.Right, sum-root.Val, stack)
+	}
+	dfs(root, targetSum, []int{})
+	return res
+}
+
+func pathSum1(root *tree.TreeNode, sum int) [][]int {
+	// write code here
+	ans := make([][]int, 0)
+	list := make([]int, 0)
+	var traverse func(*tree.TreeNode, int)
+	traverse = func(root *tree.TreeNode, target int) {
+		if root == nil {
+			return
+		}
+		list = append(list, root.Val)
+		target -= root.Val
+		if root.Left == nil && root.Right == nil {
+			//如果是叶子节点
+			if target == 0 {
+				tmp := make([]int, len(list))
+				copy(tmp, list)
+				ans = append(ans, tmp)
+			}
+		} else {
+			traverse(root.Left, target)
+			traverse(root.Right, target)
+		}
+		target += root.Val
+		list = list[:len(list)-1]
+	}
+	traverse(root, sum)
+	return ans
+}

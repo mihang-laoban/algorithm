@@ -83,14 +83,16 @@ func IsBalancedTop(root *TreeNode) bool {
 	if root == nil {
 		return true
 	}
-	return IsBalancedTop(root.Left) && IsBalancedTop(root.Right) && Abs(HeightTop(root.Left)-HeightTop(root.Right)) < 2
+	l := IsBalancedTop(root.Left)
+	r := IsBalancedTop(root.Right)
+	return l && r && Abs(HeightTop(root.Left)-HeightTop(root.Right)) < 2
 }
 
-func HeightTop(node *TreeNode) int {
-	if node == nil {
+func HeightTop(root *TreeNode) int {
+	if root == nil {
 		return 0
 	}
-	return Max(HeightTop(node.Right), HeightTop(node.Left)) + 1
+	return Max(HeightTop(root.Right), HeightTop(root.Left)) + 1
 }
 
 func PreOrderLabel(root *TreeNode) (res []int) {
@@ -908,17 +910,6 @@ func MergeTreesL(t1 *TreeNode, t2 *TreeNode) *TreeNode {
 		}
 	}
 	return t1
-}
-
-func balance(node *TreeNode) int {
-	if node == nil {
-		return 0
-	}
-	left, right := balance(node.Left), balance(node.Right)
-	if left == -1 || right == 1 || Abs(left-right) > 1 {
-		return -1
-	}
-	return Max(left, right) + 1
 }
 
 func BuildTreeToValidate() (root *TreeNode) {
