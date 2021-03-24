@@ -26,7 +26,7 @@ func TestSelect(t *testing.T)   { LoopPrint(Select(x)) }
 func TestInsert(t *testing.T)   { LoopPrint(Insert(x)) }
 func TestShell(t *testing.T)    { LoopPrint(Shell(x)) }
 func TestQuick(t *testing.T)    { LoopPrint(Quick(x)) }
-func TestMerge(t *testing.T)    { LoopPrint(Merge(x)) }
+func TestMerge(t *testing.T)    { LoopPrint(Merge1(x)) }
 func TestHeap(t *testing.T)     { LoopPrint(Heap(x)) }
 func TestCounting(t *testing.T) { LoopPrint(Counting(x)) }
 func TestBucket(t *testing.T)   { LoopPrint(Bucket(x)) }
