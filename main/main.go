@@ -16,6 +16,7 @@ func ReadLine() string {
 
 func Start() {
 	fmt.Println(ReadLine())
+	fmt.Println(ReadLine())
 }
 
 func main() {

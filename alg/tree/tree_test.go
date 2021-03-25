@@ -735,7 +735,7 @@ Tree 1                     Tree 2				Tree 3
 func TestMergeTrees(t *testing.T) {
 	root1 := ArrayToTree([]interface{}{1, 3, 2, 5})
 	root2 := ArrayToTree([]interface{}{2, 1, 3, 4, 7})
-	MergeTreesL(root1, root2)
+	MergeTreesR(root1, root2)
 	fmt.Println(TreeToArray(root1))
 	//fmt.Println(TreeToArray(MergeTreesL(root1, root2)))
 }
@@ -907,6 +907,7 @@ func TestFindSecondMinimumValue(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestMinDiffInBST(t *testing.T) {
+
 	//root := ArrayToTree([]interface{}{4, 2, 6, 1, 3, nil, nil})
 	root := ArrayToTree([]interface{}{90, 69, nil, 49, 89, nil, 52})
 	//root := ArrayToTree([]interface{}{1, 0, 48, nil, nil, 12, 49})
