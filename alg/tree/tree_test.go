@@ -1702,3 +1702,145 @@ func LongestUniValuePath(root *TreeNode) int {
 	arrowLength(root)
 	return res
 }
+
+/*给你二叉搜索树的根节点 root ，同时给定最小边界low 和最大边界 high。通过修剪二叉搜索树，使得所有节点的值在[low, high]中。修剪树不应该改变保留在树中的元素的相对结构（即，如果没有被移除，原有的父代子代关系都应当保留）。 可以证明，存在唯一的答案。
+所以结果应当返回修剪好的二叉搜索树的新的根节点。注意，根节点可能会根据给定的边界发生改变。
+
+示例 1：
+  1
+ / \
+0   2
+输入：root = [1,0,2], low = 1, high = 2
+输出：[1,null,2]
+
+示例 2：
+  3
+ / \
+0   4
+ \
+  2
+ /
+1
+
+输入：root = [3,0,4,null,2,null,null,1], low = 1, high = 3
+输出：[3,2,null,1]
+
+示例 3：
+输入：root = [1], low = 1, high = 2
+输出：[1]
+
+示例 4：
+输入：root = [1,null,2], low = 1, high = 3
+输出：[1,null,2]
+
+示例 5：
+输入：root = [1,null,2], low = 2, high = 4
+输出：[2]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/trim-a-binary-search-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestTrimBST(t *testing.T) {
+	root := ArrayToTree([]interface{}{3, 0, 4, nil, 2, nil, nil, 1})
+	fmt.Println(TreeToArray(TrimBST(root, 1, 3)))
+}
+
+func TrimBST(root *TreeNode, low int, high int) *TreeNode {
+	if root == nil {
+		return root
+	}
+	if root.Val > high {
+		return TrimBST(root.Left, low, high)
+	}
+	if root.Val < low {
+		return TrimBST(root.Right, low, high)
+	}
+	root.Left = TrimBST(root.Left, low, high)
+	root.Right = TrimBST(root.Right, low, high)
+	return root
+}
+
+/*根据一棵树的中序遍历与后序遍历构造二叉树。
+
+注意:
+你可以假设树中没有重复的元素。
+
+例如，给出
+
+中序遍历 inorder = [9,3,15,20,7]
+后序遍历 postorder = [9,15,7,20,3]
+返回如下的二叉树：
+
+  3
+ / \
+9  20
+  /  \
+ 15   7
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+//func TestBuildTreeInPost(t *testing.T) {
+//
+//}
+//
+//func BuildTree(inorder []int, postorder []int) *TreeNode {
+//
+//}
+
+/*给你一棵二叉搜索树（BST）、它的根结点 root 以及目标值 V。
+请将该树按要求拆分为两个子树：其中一个子树结点的值都必须小于等于给定的目标值 V；另一个子树结点的值都必须大于目标值 V；树中并非一定要存在值为 V 的结点。
+除此之外，树中大部分结构都需要保留，也就是说原始树中父节点 P 的任意子节点 C，假如拆分后它们仍在同一个子树中，那么结点 P 应仍为 C 的父结点。
+你需要返回拆分后两个子树的根结点 TreeNode，顺序随意。
+
+示例：
+输入：root = [4,2,6,1,3,5,7], V = 2
+输出：[[2,1],[4,3,6,null,null,5,7]]
+解释：
+注意根结点 output[0] 和 output[1] 都是 TreeNode 对象，不是数组。
+
+给定的树 [4,2,6,1,3,5,7] 可化为如下示意图：
+
+    4
+   / \
+  2   6
+ / \ / \
+1  3 5  7
+
+输出的示意图如下：
+
+  4
+ / \
+3   6       和    2
+   / \           /
+  5   7         1
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/split-bst
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestSplitBST(t *testing.T) {
+	root := ArrayToTree([]interface{}{4, 2, 6, 1, 3, 5, 7})
+	roots := SplitBST(root, 2)
+	for _, value := range roots {
+		fmt.Println(TreeToArray(value))
+	}
+}
+
+func SplitBST(root *TreeNode, v int) []*TreeNode {
+	if root == nil {
+		return []*TreeNode{nil, nil}
+	} else if root.Val <= v {
+		bns := SplitBST(root.Right, v)
+		root.Right = bns[0]
+		bns[0] = root
+		return bns
+	} else {
+		bns := SplitBST(root.Left, v)
+		root.Left = bns[1]
+		bns[1] = root
+		return bns
+	}
+}
