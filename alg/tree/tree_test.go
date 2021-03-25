@@ -1590,3 +1590,115 @@ func IsCompleteTree(root *TreeNode) bool {
 	}
 	return true
 }
+
+/*给你二叉树的根结点 root ，请你将它展开为一个单链表：
+
+展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+展开后的单链表应该与二叉树 先序遍历 顺序相同。
+
+
+示例 1：
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+
+1 > 2 > 3 > 4 > 5 > 6
+
+输入：root = [1,2,5,3,4,null,6]
+输出：[1,null,2,null,3,null,4,null,5,null,6]
+示例 2：
+
+输入：root = []
+输出：[]
+示例 3：
+
+输入：root = [0]
+输出：[0]
+
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestFlatten(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 5, 3, 4, nil, 6})
+	Flatten(root)
+	fmt.Println(TreeToArray(root))
+}
+
+func Flatten(root *TreeNode) {
+	cur := root
+	for cur != nil {
+		if cur.Left != nil {
+			pre := cur.Left
+			next := pre
+			for next.Right != nil {
+				next = next.Right
+			}
+			next.Right = cur.Right
+			cur.Left = nil
+			cur.Right = pre
+		}
+		cur = cur.Right
+	}
+}
+
+/*给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 这条路径可以经过也可以不经过根节点。
+
+注意：两个节点之间的路径长度由它们之间的边数表示。
+
+示例 1:
+输入:
+
+    5
+   / \
+  4   5
+ / \   \
+1   1   5
+
+输出:
+2
+
+示例 2:
+输入:
+
+    1
+   / \
+  4   5
+ / \   \
+4   4   5
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-univalue-path
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestLongestUniValuePath(t *testing.T) {
+	root1 := ArrayToTree([]interface{}{5, 4, 5, 1, 1, nil, 5})
+	root2 := ArrayToTree([]interface{}{1, 4, 5, 4, 4, nil, 5})
+	fmt.Println(LongestUniValuePath(root1))
+	fmt.Println(LongestUniValuePath(root2))
+}
+
+func LongestUniValuePath(root *TreeNode) int {
+	res := 0
+	var arrowLength func(*TreeNode) int
+	arrowLength = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+		l, r := arrowLength(root.Left), arrowLength(root.Right)
+		var arrowL, arrowR int
+		if root.Left != nil && root.Left.Val == root.Val {
+			arrowL += l + 1
+		}
+		if root.Right != nil && root.Right.Val == root.Val {
+			arrowR += r + 1
+		}
+		res = Max(res, arrowL+arrowR)
+		return Max(arrowL, arrowR)
+	}
+	arrowLength(root)
+	return res
+}
