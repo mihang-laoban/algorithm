@@ -237,3 +237,13 @@ func TestRemoveDuplicate(t *testing.T) {
 //		<-dog
 //	}
 //}
+
+func TestMissingNumber(t *testing.T) {
+	nums := []int{0, 1, 3, 4, 6}
+	//b  := []int{1,3,4,2,8,7,9,5}
+	a, i := 0, 0
+	for ; i < len(nums); i++ {
+		a = a ^ i ^ nums[i]
+		fmt.Println(a ^ i)
+	}
+}

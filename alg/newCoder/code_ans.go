@@ -257,16 +257,18 @@ func AddStrings(s string, t string) string {
 }
 
 func LowestCommonAncestor(root, p, q *tree.TreeNode) *tree.TreeNode {
-	ans := root
-	for {
-		if p.Val < ans.Val && q.Val < ans.Val {
-			ans = ans.Right
-		} else if p.Val > ans.Val && q.Val > ans.Val {
-			ans = ans.Left
-		} else {
-			return ans
-		}
+	if root == nil || root.Val == q.Val || root.Val == p.Val {
+		return root
 	}
+	l := LowestCommonAncestor(root.Left, p, q)
+	r := LowestCommonAncestor(root.Right, p, q)
+	if l == nil {
+		return r
+	}
+	if r == nil {
+		return l
+	}
+	return root
 }
 
 func LowestCommonAncestor2(root *tree.TreeNode, c1, c2 int) int {
