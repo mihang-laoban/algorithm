@@ -1541,9 +1541,8 @@ func BuildTreeInPost(inOrder []int, postOrder []int) *TreeNode {
 
 		// 根据 cur 在中序遍历的位置，将中序遍历划分成左右两颗子树
 		// 由于我们每次都从后序遍历的末尾取元素，所以要先遍历右子树再遍历左子树
-		inRootIndex := idxMap[cur]
-		root.Right = build(inRootIndex+1, inRight)
-		root.Left = build(inLeft, inRootIndex-1)
+		root.Right = build(idxMap[cur]+1, inRight)
+		root.Left = build(inLeft, idxMap[cur]-1)
 		return root
 	}
 	return build(0, len(inOrder)-1)
@@ -1884,4 +1883,182 @@ func DeleteNode(root *TreeNode, key int) *TreeNode {
 		}
 	}
 	return root
+}
+
+/*给定一个不含重复元素的整数数组 nums 。一个以此数组直接递归构建的 最大二叉树 定义如下：
+
+二叉树的根是数组 nums 中的最大元素。
+左子树是通过数组中 最大值左边部分 递归构造出的最大二叉树。
+右子树是通过数组中 最大值右边部分 递归构造出的最大二叉树。
+返回有给定数组 nums 构建的 最大二叉树 。
+
+示例 1：
+
+   6
+  / \
+ /   \
+3     5
+ \   /
+  2 0
+   \
+    1
+
+输入：nums = [3,2,1,6,0,5]
+输出：[6,3,5,null,2,0,null,null,1]
+解释：递归调用如下所示：
+- [3,2,1,6,0,5] 中的最大值是 6 ，左边部分是 [3,2,1] ，右边部分是 [0,5] 。
+- [3,2,1] 中的最大值是 3 ，左边部分是 [] ，右边部分是 [2,1] 。
+- 空数组，无子节点。
+- [2,1] 中的最大值是 2 ，左边部分是 [] ，右边部分是 [1] 。
+- 空数组，无子节点。
+- 只有一个元素，所以子节点是一个值为 1 的节点。
+- [0,5] 中的最大值是 5 ，左边部分是 [0] ，右边部分是 [] 。
+- 只有一个元素，所以子节点是一个值为 0 的节点。
+- 空数组，无子节点。
+
+示例 2：
+输入：nums = [3,2,1]
+输出：[3,null,2,null,1]
+
+3
+ \
+  2
+   \
+    1
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/maximum-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestConstructMaximumBinaryTree(t *testing.T) {
+	fmt.Println(TreeToArray(ConstructMaximumBinaryTree([]int{3, 2, 1, 6, 0, 5})))
+}
+
+func ConstructMaximumBinaryTree(nums []int) *TreeNode {
+	return construct(nums, 0, len(nums))
+}
+
+func construct(nums []int, l, r int) *TreeNode {
+	if l == r {
+		return nil
+	}
+	ma := max(nums, l, r)
+	root := &TreeNode{Val: nums[ma]}
+	root.Left = construct(nums, l, ma)
+	root.Right = construct(nums, ma+1, r)
+	return root
+}
+
+func max(nums []int, l, r int) int {
+	maxi := l
+	for i := l; i < r; i++ {
+		if nums[maxi] < nums[i] {
+			maxi = i
+		}
+	}
+	return maxi
+}
+
+/*给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）。
+
+示例 1：
+
+  3
+ / \
+1   4
+ \
+  2
+
+输入：root = [3,1,4,null,2], k = 1
+输出：1
+示例 2：
+
+      5
+     / \
+    3   6
+   / \
+  2   4
+ /
+1
+
+输入：root = [5,3,6,2,4,null,null,1], k = 3
+输出：3
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestKthSmallest(t *testing.T) {
+	root := ArrayToTree([]interface{}{5, 3, 6, 2, 4, nil, nil, 1})
+	fmt.Println(KthSmallest(root, 3))
+}
+
+func KthSmallest(root *TreeNode, k int) int {
+	stack := []*TreeNode{}
+	for root != nil || len(stack) > 0 {
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		k--
+		if k == 0 {
+			return root.Val
+		}
+		root = root.Right
+	}
+	return root.Val
+}
+
+/*给定一个二叉树，它的每个结点都存放着一个整数值。
+找出路径和等于给定数值的路径总数。
+路径不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+二叉树不超过1000个节点，且节点数值范围是 [-1000000,1000000] 的整数。
+
+示例：
+root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
+
+      10
+     /  \
+    5   -3
+   / \    \
+  3   2   11
+ / \   \
+3  -2   1
+
+返回 3。和等于 8 的路径有:
+
+1.  5 -> 3
+2.  5 -> 2 -> 1
+3.  -3 -> 11
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/path-sum-iii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestPathSum(t *testing.T) {
+	root := ArrayToTree([]interface{}{10, 5, -3, 3, 2, nil, 11, 3, -2, nil, 1})
+	fmt.Println(PathSum(root, 8))
+}
+
+func PathSum(root *TreeNode, sum int) int {
+	res := 0
+	prefix := map[int]int{0: 1}
+	var dfs func(*TreeNode, int, int)
+	dfs = func(root *TreeNode, sum, curSum int) {
+		if root == nil {
+			return
+		}
+		curSum += root.Val
+		if _, ok := prefix[curSum-sum]; ok {
+			res += prefix[curSum-sum]
+		}
+		prefix[curSum]++
+		dfs(root.Left, sum, curSum)
+		dfs(root.Right, sum, curSum)
+		prefix[curSum]--
+	}
+	dfs(root, sum, 0)
+	return res
 }
