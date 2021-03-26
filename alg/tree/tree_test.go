@@ -1515,7 +1515,6 @@ func BuildTree1(pre, in []int) *TreeNode {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-// todo
 func TestBuildTreeInPost(t *testing.T) {
 	inOrder := []int{9, 3, 15, 20, 7}
 	postOrder := []int{9, 15, 7, 20, 3}
@@ -1529,9 +1528,9 @@ func BuildTreeInPost(inOrder []int, postOrder []int) *TreeNode {
 		idxMap[v] = k
 	}
 	var build func(int, int) *TreeNode
-	build = func(inorderLeft, inorderRight int) *TreeNode {
+	build = func(inLeft, inRight int) *TreeNode {
 		// 无剩余节点
-		if inorderLeft > inorderRight {
+		if inLeft > inRight {
 			return nil
 		}
 
@@ -1543,8 +1542,8 @@ func BuildTreeInPost(inOrder []int, postOrder []int) *TreeNode {
 		// 根据 cur 在中序遍历的位置，将中序遍历划分成左右两颗子树
 		// 由于我们每次都从后序遍历的末尾取元素，所以要先遍历右子树再遍历左子树
 		inRootIndex := idxMap[cur]
-		root.Right = build(inRootIndex+1, inorderRight)
-		root.Left = build(inorderLeft, inRootIndex-1)
+		root.Right = build(inRootIndex+1, inRight)
+		root.Left = build(inLeft, inRootIndex-1)
 		return root
 	}
 	return build(0, len(inOrder)-1)
@@ -1761,35 +1760,6 @@ func TrimBST(root *TreeNode, low int, high int) *TreeNode {
 	return root
 }
 
-/*根据一棵树的中序遍历与后序遍历构造二叉树。
-
-注意:
-你可以假设树中没有重复的元素。
-
-例如，给出
-
-中序遍历 inorder = [9,3,15,20,7]
-后序遍历 postorder = [9,15,7,20,3]
-返回如下的二叉树：
-
-  3
- / \
-9  20
-  /  \
- 15   7
-
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
-
-//func TestBuildTreeInPost(t *testing.T) {
-//
-//}
-//
-//func BuildTree(inorder []int, postorder []int) *TreeNode {
-//
-//}
-
 /*给你一棵二叉搜索树（BST）、它的根结点 root 以及目标值 V。
 请将该树按要求拆分为两个子树：其中一个子树结点的值都必须小于等于给定的目标值 V；另一个子树结点的值都必须大于目标值 V；树中并非一定要存在值为 V 的结点。
 除此之外，树中大部分结构都需要保留，也就是说原始树中父节点 P 的任意子节点 C，假如拆分后它们仍在同一个子树中，那么结点 P 应仍为 C 的父结点。
@@ -1843,4 +1813,75 @@ func SplitBST(root *TreeNode, v int) []*TreeNode {
 		bns[1] = root
 		return bns
 	}
+}
+
+/*给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key 对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。
+
+一般来说，删除节点可分为两个步骤：
+
+首先找到需要删除的节点；
+如果找到了，删除它。
+说明： 要求算法时间复杂度为 O(h)，h 为树的高度。
+
+示例:
+
+root = [5,3,6,2,4,null,7]
+key = 3
+
+    5
+   / \
+  3   6
+ / \   \
+2   4   7
+
+给定需要删除的节点值是 3，所以我们首先找到 3 这个节点，然后删除它。
+
+一个正确的答案是 [5,4,6,2,null,null,7], 如下图所示。
+
+    5
+   / \
+  4   6
+ /     \
+2       7
+
+另一个正确答案是 [5,2,6,null,4,null,7]。
+
+  5
+ / \
+2   6
+ \   \
+  4   7
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/delete-node-in-a-bst
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestDeleteNode(t *testing.T) {
+	root := ArrayToTree([]interface{}{5, 3, 6, 2, 4, nil, 7})
+	fmt.Println(TreeToArray(DeleteNode(root, 3)))
+}
+
+func DeleteNode(root *TreeNode, key int) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	if key < root.Val {
+		root.Left = DeleteNode(root.Left, key)
+	} else if key > root.Val {
+		root.Right = DeleteNode(root.Right, key)
+	} else {
+		if root.Right == nil {
+			return root.Left
+		} else if root.Left == nil {
+			return root.Right
+		} else {
+			cur := root.Right
+			for cur.Left != nil {
+				cur = cur.Left
+			}
+			cur.Left = root.Left
+			return root.Right
+		}
+	}
+	return root
 }
