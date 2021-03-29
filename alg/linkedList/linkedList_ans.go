@@ -974,12 +974,12 @@ func RotateRight(head *ListNode, k int) *ListNode {
 	if head == nil {
 		return nil
 	}
-	length, last := 1, head
-	for last.Next != nil {
+	length, cur := 1, head
+	for cur.Next != nil {
 		length++
-		last = last.Next
+		cur = cur.Next
 	}
-	last.Next = head
+	cur.Next = head
 	newHead := head
 	for i := 1; i < length-k%length; i++ {
 		newHead = newHead.Next

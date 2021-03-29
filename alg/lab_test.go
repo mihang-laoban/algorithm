@@ -237,3 +237,8 @@ func TestRemoveDuplicate(t *testing.T) {
 //		<-dog
 //	}
 //}
+
+func TestLab(t *testing.T) {
+	h, _ := strconv.ParseInt("123", 10, 64)
+	fmt.Println(h)
+}
