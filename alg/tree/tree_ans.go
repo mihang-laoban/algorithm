@@ -812,7 +812,7 @@ func SortedArrayToBST(nums []int) *TreeNode {
 		if start > end {
 			return nil
 		}
-		mid := (start + end) >> 1
+		mid := start + (end-start)>>1
 		root := &TreeNode{Val: nums[mid]}
 		root.Left = find(nums, start, mid-1)
 		root.Right = find(nums, mid+1, end)
@@ -866,17 +866,17 @@ func DiameterOfBinaryTree(root *TreeNode) int {
 	return res
 }
 
-func MergeTreesR(t1 *TreeNode, t2 *TreeNode) *TreeNode {
-	if t1 == nil {
-		return t2
+func MergeTreesR(root1 *TreeNode, root2 *TreeNode) *TreeNode {
+	if root1 == nil {
+		return root2
 	}
-	if t2 == nil {
-		return t1
+	if root2 == nil {
+		return root1
 	}
-	t1.Val += t2.Val
-	t1.Left = MergeTreesR(t1.Left, t2.Left)
-	t1.Right = MergeTreesR(t1.Right, t2.Right)
-	return t1
+	root1.Val += root2.Val
+	root1.Left = MergeTreesR(root1.Left, root2.Left)
+	root1.Right = MergeTreesR(root1.Right, root2.Right)
+	return root1
 }
 
 func MergeTreesL(t1 *TreeNode, t2 *TreeNode) *TreeNode {
@@ -1014,16 +1014,17 @@ func HasPathSum(root *TreeNode, targetSum int) bool {
 }
 
 func FindSecondMinimumValue(root *TreeNode) int {
-	var find func(*TreeNode, int) int
-	find = func(root *TreeNode, mi int) int {
+	val := root.Val
+	var find func(*TreeNode) int
+	find = func(root *TreeNode) int {
 		if root == nil {
 			return -1
 		}
-		if root.Val > mi {
+		if root.Val > val {
 			return root.Val
 		}
-		left := find(root.Left, mi)
-		right := find(root.Right, mi)
+		left := find(root.Left)
+		right := find(root.Right)
 		if left == -1 {
 			return right
 		}
@@ -1032,11 +1033,11 @@ func FindSecondMinimumValue(root *TreeNode) int {
 		}
 		return Min(right, left)
 	}
-	return find(root, root.Val)
+	return find(root)
 }
 
 func MinDiffInBSTL(root *TreeNode) int {
-	mi, pre := math.MaxInt64, -1
+	mi, pre := math.MaxInt64, math.MaxInt64
 	stack := []*TreeNode{}
 	for len(stack) > 0 || root != nil {
 		for root != nil {
@@ -1045,7 +1046,7 @@ func MinDiffInBSTL(root *TreeNode) int {
 		}
 		root = stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
-		if pre != -1 {
+		if pre != math.MaxInt64 {
 			mi = Min(mi, root.Val-pre)
 		}
 		pre = root.Val
@@ -1142,6 +1143,7 @@ func FindMode(root *TreeNode) (answer []int) {
 		} else {
 			base, count = x, 1
 		}
+
 		if count == maxCount {
 			answer = append(answer, base)
 		} else if count > maxCount {

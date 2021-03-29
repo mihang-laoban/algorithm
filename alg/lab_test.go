@@ -238,7 +238,12 @@ func TestRemoveDuplicate(t *testing.T) {
 //	}
 //}
 
-func TestLab(t *testing.T) {
-	h, _ := strconv.ParseInt("123", 10, 64)
-	fmt.Println(h)
+func TestMissingNumber(t *testing.T) {
+	nums := []int{0, 1, 3, 4, 6}
+	//b  := []int{1,3,4,2,8,7,9,5}
+	a, i := 0, 0
+	for ; i < len(nums); i++ {
+		a = a ^ i ^ nums[i]
+		fmt.Println(a ^ i)
+	}
 }

@@ -434,3 +434,105 @@ func RemoveDuplicate(nums []int) interface{} {
 	}
 	return nums[:slow+1]
 }
+
+/*数组nums包含从0到n的所有整数，但其中缺了一个。请编写代码找出那个缺失的整数。你有办法在O(n)时间内完成吗？
+
+注意：本题相对书上原题稍作改动
+
+示例 1：
+
+输入：[3,0,1]
+输出：2
+
+
+示例 2：
+
+输入：[9,6,4,2,3,5,7,0,1]
+输出：8
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/missing-number-lcci
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestMissingNumber(t *testing.T) {
+	fmt.Println(MissingNumber1([]int{9, 6, 4, 2, 3, 5, 7, 0, 1}))
+	fmt.Println(MissingNumber2([]int{9, 6, 4, 2, 3, 5, 7, 0, 1}))
+}
+
+func MissingNumber1(nums []int) int {
+	a, i := 0, 0
+	for ; i < len(nums); i++ {
+		a = a ^ i ^ nums[i]
+	}
+	return a ^ i
+}
+
+func MissingNumber2(nums []int) int {
+	n := len(nums) + 1
+	sum := (n - 1) * n >> 1
+	for k := range nums {
+		sum -= nums[k]
+	}
+	return sum
+}
+
+/*给定一个数组，包含从 1 到 N 所有的整数，但其中缺了两个数字。你能在 O(N) 时间内只用 O(1) 的空间找到它们吗？
+
+以任意顺序返回这两个数字均可。
+
+示例 1:
+
+输入: [1]
+输出: [2,3]
+示例 2:
+
+输入: [2,3]
+输出: [1,4]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/missing-two-lcci
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestMissingTwo(t *testing.T) {
+	fmt.Println(MissingTwo1([]int{1, 3, 4, 6}))
+	fmt.Println(MissingTwo2([]int{1, 3, 4, 6}))
+}
+
+func MissingTwo1(nums []int) []int {
+	sum, n := 0, len(nums)+2
+	for _, x := range nums {
+		sum += x
+	}
+	sumTwo := n*(n+1)>>1 - sum
+	limits := sumTwo >> 1
+	sum = 0
+	for _, x := range nums {
+		if x <= limits {
+			sum += x
+		}
+	}
+	one := limits*(limits+1)>>1 - sum
+	return []int{one, sumTwo - one}
+}
+
+func MissingTwo2(nums []int) []int {
+	ans, n := 0, len(nums)
+	for i := 1; i <= n+2; i++ {
+		ans ^= i
+	}
+	for _, value := range nums {
+		ans ^= value
+	}
+	one, diff := 0, ans&-ans
+	for i := 1; i <= n+2; i++ {
+		if diff&i != 0 {
+			one ^= i
+		}
+	}
+	for _, value := range nums {
+		if diff&value != 0 {
+			one ^= value
+		}
+	}
+	return []int{one, one ^ ans}
+}

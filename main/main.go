@@ -2,11 +2,7 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"io"
-	"os"
-	"regexp"
-	"strconv"
 	"strings"
 )
 
@@ -29,31 +25,7 @@ func solve(ar []int32) int32 {
 }
 
 func main() {
-	reader := bufio.NewReaderSize(os.Stdin, 16*1024*1024)
 
-	stdout, err := os.Create("./main/test")
-	checkError(err)
-
-	defer stdout.Close()
-
-	writer := bufio.NewWriterSize(stdout, 16*1024*1024)
-	delimiter := regexp.MustCompile(` `)
-
-	ar_size, err := strconv.ParseInt(strings.TrimSpace(readLine(reader)), 10, 64)
-	checkError(err)
-	var ar []int32
-	ar_items := delimiter.Split(strings.TrimSpace(readLine(reader)), -1)
-
-	for i := 0; i < int(ar_size); i++ {
-		ar_Item_Temp, err := strconv.ParseInt(ar_items[i], 10, 64)
-		checkError(err)
-		ar_Item := int32(ar_Item_Temp)
-		ar = append(ar, ar_Item)
-	}
-
-	output := solve(ar)
-	fmt.Fprint(writer, output)
-	writer.Flush()
 }
 
 func readLine(reader *bufio.Reader) string {

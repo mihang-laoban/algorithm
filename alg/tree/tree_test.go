@@ -735,7 +735,7 @@ Tree 1                     Tree 2				Tree 3
 func TestMergeTrees(t *testing.T) {
 	root1 := ArrayToTree([]interface{}{1, 3, 2, 5})
 	root2 := ArrayToTree([]interface{}{2, 1, 3, 4, 7})
-	MergeTreesL(root1, root2)
+	MergeTreesR(root1, root2)
 	fmt.Println(TreeToArray(root1))
 	//fmt.Println(TreeToArray(MergeTreesL(root1, root2)))
 }
@@ -907,6 +907,7 @@ func TestFindSecondMinimumValue(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestMinDiffInBST(t *testing.T) {
+
 	//root := ArrayToTree([]interface{}{4, 2, 6, 1, 3, nil, nil})
 	root := ArrayToTree([]interface{}{90, 69, nil, 49, 89, nil, 52})
 	//root := ArrayToTree([]interface{}{1, 0, 48, nil, nil, 12, 49})
@@ -1514,7 +1515,6 @@ func BuildTree1(pre, in []int) *TreeNode {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
 
-// todo
 func TestBuildTreeInPost(t *testing.T) {
 	inOrder := []int{9, 3, 15, 20, 7}
 	postOrder := []int{9, 15, 7, 20, 3}
@@ -1528,9 +1528,9 @@ func BuildTreeInPost(inOrder []int, postOrder []int) *TreeNode {
 		idxMap[v] = k
 	}
 	var build func(int, int) *TreeNode
-	build = func(inorderLeft, inorderRight int) *TreeNode {
+	build = func(inLeft, inRight int) *TreeNode {
 		// 无剩余节点
-		if inorderLeft > inorderRight {
+		if inLeft > inRight {
 			return nil
 		}
 
@@ -1541,9 +1541,8 @@ func BuildTreeInPost(inOrder []int, postOrder []int) *TreeNode {
 
 		// 根据 cur 在中序遍历的位置，将中序遍历划分成左右两颗子树
 		// 由于我们每次都从后序遍历的末尾取元素，所以要先遍历右子树再遍历左子树
-		inRootIndex := idxMap[cur]
-		root.Right = build(inRootIndex+1, inorderRight)
-		root.Left = build(inorderLeft, inRootIndex-1)
+		root.Right = build(idxMap[cur]+1, inRight)
+		root.Left = build(inLeft, idxMap[cur]-1)
 		return root
 	}
 	return build(0, len(inOrder)-1)
@@ -1588,4 +1587,478 @@ func IsCompleteTree(root *TreeNode) bool {
 		pre = cur
 	}
 	return true
+}
+
+/*给你二叉树的根结点 root ，请你将它展开为一个单链表：
+
+展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+展开后的单链表应该与二叉树 先序遍历 顺序相同。
+
+
+示例 1：
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+
+1 > 2 > 3 > 4 > 5 > 6
+
+输入：root = [1,2,5,3,4,null,6]
+输出：[1,null,2,null,3,null,4,null,5,null,6]
+示例 2：
+
+输入：root = []
+输出：[]
+示例 3：
+
+输入：root = [0]
+输出：[0]
+
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestFlatten(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 5, 3, 4, nil, 6})
+	Flatten(root)
+	fmt.Println(TreeToArray(root))
+}
+
+func Flatten(root *TreeNode) {
+	cur := root
+	for cur != nil {
+		if cur.Left != nil {
+			pre := cur.Left
+			next := pre
+			for next.Right != nil {
+				next = next.Right
+			}
+			next.Right = cur.Right
+			cur.Left = nil
+			cur.Right = pre
+		}
+		cur = cur.Right
+	}
+}
+
+/*给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 这条路径可以经过也可以不经过根节点。
+
+注意：两个节点之间的路径长度由它们之间的边数表示。
+
+示例 1:
+输入:
+
+    5
+   / \
+  4   5
+ / \   \
+1   1   5
+
+输出:
+2
+
+示例 2:
+输入:
+
+    1
+   / \
+  4   5
+ / \   \
+4   4   5
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-univalue-path
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestLongestUniValuePath(t *testing.T) {
+	root1 := ArrayToTree([]interface{}{5, 4, 5, 1, 1, nil, 5})
+	root2 := ArrayToTree([]interface{}{1, 4, 5, 4, 4, nil, 5})
+	fmt.Println(LongestUniValuePath(root1))
+	fmt.Println(LongestUniValuePath(root2))
+}
+
+func LongestUniValuePath(root *TreeNode) int {
+	res := 0
+	var arrowLength func(*TreeNode) int
+	arrowLength = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+		l, r := arrowLength(root.Left), arrowLength(root.Right)
+		var arrowL, arrowR int
+		if root.Left != nil && root.Left.Val == root.Val {
+			arrowL += l + 1
+		}
+		if root.Right != nil && root.Right.Val == root.Val {
+			arrowR += r + 1
+		}
+		res = Max(res, arrowL+arrowR)
+		return Max(arrowL, arrowR)
+	}
+	arrowLength(root)
+	return res
+}
+
+/*给你二叉搜索树的根节点 root ，同时给定最小边界low 和最大边界 high。通过修剪二叉搜索树，使得所有节点的值在[low, high]中。修剪树不应该改变保留在树中的元素的相对结构（即，如果没有被移除，原有的父代子代关系都应当保留）。 可以证明，存在唯一的答案。
+所以结果应当返回修剪好的二叉搜索树的新的根节点。注意，根节点可能会根据给定的边界发生改变。
+
+示例 1：
+  1
+ / \
+0   2
+输入：root = [1,0,2], low = 1, high = 2
+输出：[1,null,2]
+
+示例 2：
+  3
+ / \
+0   4
+ \
+  2
+ /
+1
+
+输入：root = [3,0,4,null,2,null,null,1], low = 1, high = 3
+输出：[3,2,null,1]
+
+示例 3：
+输入：root = [1], low = 1, high = 2
+输出：[1]
+
+示例 4：
+输入：root = [1,null,2], low = 1, high = 3
+输出：[1,null,2]
+
+示例 5：
+输入：root = [1,null,2], low = 2, high = 4
+输出：[2]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/trim-a-binary-search-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestTrimBST(t *testing.T) {
+	root := ArrayToTree([]interface{}{3, 0, 4, nil, 2, nil, nil, 1})
+	fmt.Println(TreeToArray(TrimBST(root, 1, 3)))
+}
+
+func TrimBST(root *TreeNode, low int, high int) *TreeNode {
+	if root == nil {
+		return root
+	}
+	if root.Val > high {
+		return TrimBST(root.Left, low, high)
+	}
+	if root.Val < low {
+		return TrimBST(root.Right, low, high)
+	}
+	root.Left = TrimBST(root.Left, low, high)
+	root.Right = TrimBST(root.Right, low, high)
+	return root
+}
+
+/*给你一棵二叉搜索树（BST）、它的根结点 root 以及目标值 V。
+请将该树按要求拆分为两个子树：其中一个子树结点的值都必须小于等于给定的目标值 V；另一个子树结点的值都必须大于目标值 V；树中并非一定要存在值为 V 的结点。
+除此之外，树中大部分结构都需要保留，也就是说原始树中父节点 P 的任意子节点 C，假如拆分后它们仍在同一个子树中，那么结点 P 应仍为 C 的父结点。
+你需要返回拆分后两个子树的根结点 TreeNode，顺序随意。
+
+示例：
+输入：root = [4,2,6,1,3,5,7], V = 2
+输出：[[2,1],[4,3,6,null,null,5,7]]
+解释：
+注意根结点 output[0] 和 output[1] 都是 TreeNode 对象，不是数组。
+
+给定的树 [4,2,6,1,3,5,7] 可化为如下示意图：
+
+    4
+   / \
+  2   6
+ / \ / \
+1  3 5  7
+
+输出的示意图如下：
+
+  4
+ / \
+3   6       和    2
+   / \           /
+  5   7         1
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/split-bst
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestSplitBST(t *testing.T) {
+	root := ArrayToTree([]interface{}{4, 2, 6, 1, 3, 5, 7})
+	roots := SplitBST(root, 2)
+	for _, value := range roots {
+		fmt.Println(TreeToArray(value))
+	}
+}
+
+func SplitBST(root *TreeNode, v int) []*TreeNode {
+	if root == nil {
+		return []*TreeNode{nil, nil}
+	} else if root.Val <= v {
+		bns := SplitBST(root.Right, v)
+		root.Right = bns[0]
+		bns[0] = root
+		return bns
+	} else {
+		bns := SplitBST(root.Left, v)
+		root.Left = bns[1]
+		bns[1] = root
+		return bns
+	}
+}
+
+/*给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key 对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。
+
+一般来说，删除节点可分为两个步骤：
+
+首先找到需要删除的节点；
+如果找到了，删除它。
+说明： 要求算法时间复杂度为 O(h)，h 为树的高度。
+
+示例:
+
+root = [5,3,6,2,4,null,7]
+key = 3
+
+    5
+   / \
+  3   6
+ / \   \
+2   4   7
+
+给定需要删除的节点值是 3，所以我们首先找到 3 这个节点，然后删除它。
+
+一个正确的答案是 [5,4,6,2,null,null,7], 如下图所示。
+
+    5
+   / \
+  4   6
+ /     \
+2       7
+
+另一个正确答案是 [5,2,6,null,4,null,7]。
+
+  5
+ / \
+2   6
+ \   \
+  4   7
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/delete-node-in-a-bst
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestDeleteNode(t *testing.T) {
+	root := ArrayToTree([]interface{}{5, 3, 6, 2, 4, nil, 7})
+	fmt.Println(TreeToArray(DeleteNode(root, 3)))
+}
+
+func DeleteNode(root *TreeNode, key int) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	if key < root.Val {
+		root.Left = DeleteNode(root.Left, key)
+	} else if key > root.Val {
+		root.Right = DeleteNode(root.Right, key)
+	} else {
+		if root.Right == nil {
+			return root.Left
+		} else if root.Left == nil {
+			return root.Right
+		} else {
+			cur := root.Right
+			for cur.Left != nil {
+				cur = cur.Left
+			}
+			cur.Left = root.Left
+			return root.Right
+		}
+	}
+	return root
+}
+
+/*给定一个不含重复元素的整数数组 nums 。一个以此数组直接递归构建的 最大二叉树 定义如下：
+
+二叉树的根是数组 nums 中的最大元素。
+左子树是通过数组中 最大值左边部分 递归构造出的最大二叉树。
+右子树是通过数组中 最大值右边部分 递归构造出的最大二叉树。
+返回有给定数组 nums 构建的 最大二叉树 。
+
+示例 1：
+
+   6
+  / \
+ /   \
+3     5
+ \   /
+  2 0
+   \
+    1
+
+输入：nums = [3,2,1,6,0,5]
+输出：[6,3,5,null,2,0,null,null,1]
+解释：递归调用如下所示：
+- [3,2,1,6,0,5] 中的最大值是 6 ，左边部分是 [3,2,1] ，右边部分是 [0,5] 。
+- [3,2,1] 中的最大值是 3 ，左边部分是 [] ，右边部分是 [2,1] 。
+- 空数组，无子节点。
+- [2,1] 中的最大值是 2 ，左边部分是 [] ，右边部分是 [1] 。
+- 空数组，无子节点。
+- 只有一个元素，所以子节点是一个值为 1 的节点。
+- [0,5] 中的最大值是 5 ，左边部分是 [0] ，右边部分是 [] 。
+- 只有一个元素，所以子节点是一个值为 0 的节点。
+- 空数组，无子节点。
+
+示例 2：
+输入：nums = [3,2,1]
+输出：[3,null,2,null,1]
+
+3
+ \
+  2
+   \
+    1
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/maximum-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestConstructMaximumBinaryTree(t *testing.T) {
+	fmt.Println(TreeToArray(ConstructMaximumBinaryTree([]int{3, 2, 1, 6, 0, 5})))
+}
+
+func ConstructMaximumBinaryTree(nums []int) *TreeNode {
+	return construct(nums, 0, len(nums))
+}
+
+func construct(nums []int, l, r int) *TreeNode {
+	if l == r {
+		return nil
+	}
+	ma := max(nums, l, r)
+	root := &TreeNode{Val: nums[ma]}
+	root.Left = construct(nums, l, ma)
+	root.Right = construct(nums, ma+1, r)
+	return root
+}
+
+func max(nums []int, l, r int) int {
+	maxi := l
+	for i := l; i < r; i++ {
+		if nums[maxi] < nums[i] {
+			maxi = i
+		}
+	}
+	return maxi
+}
+
+/*给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）。
+
+示例 1：
+
+  3
+ / \
+1   4
+ \
+  2
+
+输入：root = [3,1,4,null,2], k = 1
+输出：1
+示例 2：
+
+      5
+     / \
+    3   6
+   / \
+  2   4
+ /
+1
+
+输入：root = [5,3,6,2,4,null,null,1], k = 3
+输出：3
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestKthSmallest(t *testing.T) {
+	root := ArrayToTree([]interface{}{5, 3, 6, 2, 4, nil, nil, 1})
+	fmt.Println(KthSmallest(root, 3))
+}
+
+func KthSmallest(root *TreeNode, k int) int {
+	stack := []*TreeNode{}
+	for root != nil || len(stack) > 0 {
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+		}
+		root = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		k--
+		if k == 0 {
+			return root.Val
+		}
+		root = root.Right
+	}
+	return root.Val
+}
+
+/*给定一个二叉树，它的每个结点都存放着一个整数值。
+找出路径和等于给定数值的路径总数。
+路径不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+二叉树不超过1000个节点，且节点数值范围是 [-1000000,1000000] 的整数。
+
+示例：
+root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
+
+      10
+     /  \
+    5   -3
+   / \    \
+  3   2   11
+ / \   \
+3  -2   1
+
+返回 3。和等于 8 的路径有:
+
+1.  5 -> 3
+2.  5 -> 2 -> 1
+3.  -3 -> 11
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/path-sum-iii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestPathSum(t *testing.T) {
+	root := ArrayToTree([]interface{}{10, 5, -3, 3, 2, nil, 11, 3, -2, nil, 1})
+	fmt.Println(PathSum(root, 8))
+}
+
+func PathSum(root *TreeNode, sum int) int {
+	res := 0
+	prefix := map[int]int{0: 1}
+	var dfs func(*TreeNode, int, int)
+	dfs = func(root *TreeNode, sum, curSum int) {
+		if root == nil {
+			return
+		}
+		curSum += root.Val
+		if _, ok := prefix[curSum-sum]; ok {
+			res += prefix[curSum-sum]
+		}
+		prefix[curSum]++
+		dfs(root.Left, sum, curSum)
+		dfs(root.Right, sum, curSum)
+		prefix[curSum]--
+	}
+	dfs(root, sum, 0)
+	return res
 }
