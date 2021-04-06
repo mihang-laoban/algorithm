@@ -125,3 +125,97 @@ func MinWindow(s string, t string) string {
 		return s[start : start+winSize]
 	}
 }
+
+/*给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。
+换句话说，第一个字符串的排列之一是第二个字符串的 子串 。
+
+示例 1：
+输入: s1 = "ab" s2 = "eidbaooo"
+输出: True
+解释: s2 包含 s1 的排列之一 ("ba").
+
+示例 2：
+输入: s1= "ab" s2 = "eidboaoo"
+输出: False
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/permutation-in-string
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestCheckInclusion(t *testing.T) {
+	fmt.Println(CheckInclusion("ab", "eidbaooo"))
+	fmt.Println(CheckInclusion("ab", "eidbaooo"))
+	fmt.Println(CheckInclusion("ba", "eidboaoo"))
+	fmt.Println(CheckInclusion1("ba", "eidboaoo"))
+}
+
+func CheckInclusion1(s1 string, s2 string) bool {
+	size1, size2 := len(s1), len(s2)
+	if size1 > size2 {
+		return false
+	}
+	var n, m [26]int
+	for key, value := range s1 {
+		n[value-'a']++
+		m[s2[key]-'a']++
+	}
+	if n == m {
+		return true
+	}
+	for i := size1; i < size2; i++ {
+		m[s2[i]-'a']++
+		m[s2[i-size1]-'a']--
+		if n == m {
+			return true
+		}
+	}
+	return false
+}
+
+func CheckInclusion(s1, s2 string) bool {
+	n, m := len(s1), len(s2)
+	if n > m {
+		return false
+	}
+	cnt := [26]int{}
+	for i, ch := range s1 {
+		cnt[ch-'a']--
+		cnt[s2[i]-'a']++
+	}
+	diff := 0
+	for _, c := range cnt {
+		if c != 0 {
+			diff++
+		}
+	}
+	if diff == 0 {
+		return true
+	}
+	for i := n; i < m; i++ {
+		l, r := s2[i]-'a', s2[i-n]-'a'
+		if l == r {
+			continue
+		}
+
+		if cnt[l] == 0 {
+			diff++
+		}
+		cnt[l]++
+		if cnt[l] == 0 {
+			diff--
+		}
+
+		if cnt[r] == 0 {
+			diff++
+		}
+		cnt[r]--
+		if cnt[r] == 0 {
+			diff--
+		}
+
+		if diff == 0 {
+			return true
+		}
+	}
+	return false
+}
