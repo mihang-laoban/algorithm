@@ -227,3 +227,87 @@ func TestH(t *testing.T) {
 	fmt.Println(tools.Int2bit(256))
 	fmt.Println(256 * 256)
 }
+
+func Test2(t *testing.T) {
+	var once1 sync.Once
+	var once2 sync.Once
+	once1.Do(h)
+	once2.Do(na)
+	var a []int
+	a = append(a, 123)
+	println(a[0])
+}
+
+func h() {
+	var n int32
+	var wg sync.WaitGroup
+	for i := 0; i < 1000; i++ {
+		wg.Add(1)
+		go func() {
+			atomic.AddInt32(&n, -1)
+			//n++
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+
+	fmt.Println(atomic.LoadInt32(&n)) // 1000
+}
+
+func na() {
+
+}
+
+type Obj interface {
+	Name()
+	Age()
+}
+
+type one struct {
+	name string
+	age  int
+}
+
+func (this *one) Name() {
+	fmt.Println(this.name)
+}
+
+func (this *one) Age() {
+	fmt.Println(this.age)
+}
+
+type two struct {
+	name string
+	age  int
+}
+
+func (this *two) Name() {
+	fmt.Println(this.name)
+}
+
+func (this *two) Age() {
+	fmt.Println(this.age)
+}
+
+func printObj(obj Obj) {
+	obj.Age()
+	obj.Name()
+}
+
+func TestPhmorph(t *testing.T) {
+	test := []interface{}{
+		&one{name: "one", age: 1},
+		&two{name: "two", age: 2},
+	}
+	//printObj(&one{name: "one", age: 1})
+	//printObj(&two{name: "two", age: 2})
+	//printObj(test[0].(*one))
+	for i := 0; i < len(test); i++ {
+		switch test[i].(type) {
+		case *one:
+			printObj(test[i].(*one))
+		case *two:
+			printObj(test[i].(*two))
+		}
+	}
+}
