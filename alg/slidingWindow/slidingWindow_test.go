@@ -246,19 +246,19 @@ func CheckInclusion(s1, s2 string) bool {
 */
 
 func TestCharacterReplacement(t *testing.T) {
-	fmt.Println(CharacterReplacement("AABCABBB", 2))
-	fmt.Println(CharacterReplacement("ABAB", 2))
-	fmt.Println(CharacterReplacement("AABABBA", 1))
+	fmt.Println(CharacterReplacement1("AABCABBB", 2))
+	fmt.Println(CharacterReplacement1("ABAB", 2))
+	fmt.Println(CharacterReplacement1("AABABBA", 1))
 }
 
-func CharacterReplacement(s string, k int) int {
+func CharacterReplacement1(s string, k int) int {
 	var memo [26]int
 	size := len(s)
 	max := math.MinInt64
 	l := 0
-	for r := 0; r < size; r++ {
-		memo[s[r]-'A']++
-		max = Max(max, memo[s[r]-'A'])
+	for r, v := range s {
+		memo[v-'A']++
+		max = Max(max, memo[v-'A'])
 		if r-l+1 > max+k {
 			memo[s[l]-'A']--
 			l++
