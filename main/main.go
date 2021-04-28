@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"strings"
 )
@@ -25,7 +26,7 @@ func solve(ar []int32) int32 {
 }
 
 func main() {
-
+	fmt.Println(123)
 }
 
 func readLine(reader *bufio.Reader) string {

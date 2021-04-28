@@ -227,3 +227,33 @@ func TestH(t *testing.T) {
 	fmt.Println(tools.Int2bit(256))
 	fmt.Println(256 * 256)
 }
+
+func Test2(t *testing.T) {
+	var once1 sync.Once
+	var once2 sync.Once
+	once1.Do(h)
+	once2.Do(na)
+	var a []int
+	a = append(a, 123)
+	println(a[0])
+}
+
+func h() {
+	var n int32
+	var wg sync.WaitGroup
+	for i := 0; i < 1000; i++ {
+		wg.Add(1)
+		go func() {
+			atomic.AddInt32(&n, -1)
+			//n++
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+
+	fmt.Println(atomic.LoadInt32(&n)) // 1000
+}
+
+func na() {
+
+}

@@ -4,6 +4,8 @@ import (
 	. "dp/tools"
 	"fmt"
 	"math"
+	"sync"
+	"sync/atomic"
 	"testing"
 )
 
@@ -124,4 +126,145 @@ func MinWindow(s string, t string) string {
 	} else {
 		return s[start : start+winSize]
 	}
+}
+
+/*给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。
+换句话说，第一个字符串的排列之一是第二个字符串的 子串 。
+
+示例 1：
+输入: s1 = "ab" s2 = "eidbaooo"
+输出: True
+解释: s2 包含 s1 的排列之一 ("ba").
+
+示例 2：
+输入: s1= "ab" s2 = "eidboaoo"
+输出: False
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/permutation-in-string
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestCheckInclusion(t *testing.T) {
+	fmt.Println(CheckInclusion("ab", "eidbaooo"))
+	fmt.Println(CheckInclusion("ab", "eidbaooo"))
+	fmt.Println(CheckInclusion("ba", "eidboaoo"))
+	fmt.Println(CheckInclusion1("ba", "eidboaoo"))
+}
+
+func CheckInclusion1(s1 string, s2 string) bool {
+	size1, size2 := len(s1), len(s2)
+	if size1 > size2 {
+		return false
+	}
+	var n, m [26]int
+	for key, value := range s1 {
+		n[value-'a']++
+		m[s2[key]-'a']++
+	}
+	if n == m {
+		return true
+	}
+	for i := size1; i < size2; i++ {
+		m[s2[i]-'a']++
+		m[s2[i-size1]-'a']--
+		if n == m {
+			return true
+		}
+	}
+	return false
+}
+
+func CheckInclusion(s1, s2 string) bool {
+	n, m := len(s1), len(s2)
+	if n > m {
+		return false
+	}
+	cnt := [26]int{}
+	for i, ch := range s1 {
+		cnt[ch-'a']--
+		cnt[s2[i]-'a']++
+	}
+	diff := 0
+	for _, c := range cnt {
+		if c != 0 {
+			diff++
+		}
+	}
+	if diff == 0 {
+		return true
+	}
+	for i := n; i < m; i++ {
+		l, r := s2[i]-'a', s2[i-n]-'a'
+		if l == r {
+			continue
+		}
+
+		if cnt[l] == 0 {
+			diff++
+		}
+		cnt[l]++
+		if cnt[l] == 0 {
+			diff--
+		}
+
+		if cnt[r] == 0 {
+			diff++
+		}
+		cnt[r]--
+		if cnt[r] == 0 {
+			diff--
+		}
+
+		if diff == 0 {
+			return true
+		}
+	}
+	return false
+}
+
+/*
+给你一个仅由大写英文字母组成的字符串，你可以将任意位置上的字符替换成另外的字符，总共可最多替换 k 次。在执行上述操作后，找到包含重复字母的最长子串的长度。
+
+注意：字符串长度 和 k 不会超过 104。
+
+
+
+示例 1：
+
+输入：s = "ABAB", k = 2
+输出：4
+解释：用两个'A'替换为两个'B',反之亦然。
+示例 2：
+
+输入：s = "AABABBA", k = 1
+输出：4
+解释：
+将中间的一个'A'替换为'B',字符串变为 "AABBBBA"。
+子串 "BBBB" 有最长重复字母, 答案为 4。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-repeating-character-replacement
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+
+func TestCharacterReplacement(t *testing.T) {
+	fmt.Println(CharacterReplacement1("AABCABBB", 2))
+	fmt.Println(CharacterReplacement1("ABAB", 2))
+	fmt.Println(CharacterReplacement1("AABABBA", 1))
+}
+
+func CharacterReplacement1(s string, k int) int {
+	var memo [26]int
+	size := len(s)
+	max := math.MinInt64
+	l := 0
+	for r, v := range s {
+		memo[v-'A']++
+		max = Max(max, memo[v-'A'])
+		if r-l+1 > max+k {
+			memo[s[l]-'A']--
+			l++
+		}
+	}
+	return size - l
 }
