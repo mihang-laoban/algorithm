@@ -1573,3 +1573,31 @@ func RightSideViewBFS(root *TreeNode) []int {
 	}
 	return res
 }
+
+type item struct {
+	idx int
+	*TreeNode
+}
+
+func WidthOfBinaryTree(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	ans, queue := 1, []item{{0, root}}
+	for len(queue) > 0 {
+		if l := queue[len(queue)-1].idx - queue[0].idx + 1; l > ans {
+			ans = l
+		}
+		tmp := []item{}
+		for _, q := range queue {
+			if q.Left != nil {
+				tmp = append(tmp, item{q.idx << 1, q.Left})
+			}
+			if q.Right != nil {
+				tmp = append(tmp, item{q.idx<<1 + 1, q.Right})
+			}
+		}
+		queue = tmp
+	}
+	return ans
+}

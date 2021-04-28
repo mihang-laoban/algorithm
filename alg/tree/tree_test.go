@@ -2062,3 +2062,229 @@ func PathSum(root *TreeNode, sum int) int {
 	dfs(root, sum, 0)
 	return res
 }
+
+/*给定一个二叉树，编写一个函数来获取这个树的最大宽度。树的宽度是所有层中的最大宽度。这个二叉树与满二叉树（full binary tree）结构相同，但一些节点为空。
+每一层的宽度被定义为两个端点（该层最左和最右的非空节点，两端点间的null节点也计入长度）之间的长度。
+
+示例 1:
+输入:
+
+    1
+   / \
+  3   2
+ / \   \
+5   3   9
+输出: 4
+解释: 最大值出现在树的第 3 层，宽度为 4 (5,3,null,9)。
+
+示例 2:
+输入:
+
+    1
+   /
+  3
+ / \
+5   3
+
+输出: 2
+解释: 最大值出现在树的第 3 层，宽度为 2 (5,3)。
+示例 3:
+
+输入:
+
+    1
+   / \
+  3   2
+ /
+5
+
+输出: 2
+解释: 最大值出现在树的第 2 层，宽度为 2 (3,2)。
+示例 4:
+
+输入:
+
+      1
+     / \
+    3   2
+   /     \
+  5       9
+ /         \
+6           7
+输出: 8
+解释: 最大值出现在树的第 4 层，宽度为 8 (6,null,null,null,null,null,null,7)。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/maximum-width-of-binary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestWidthOfBinaryTree(t *testing.T) {
+	root1 := ArrayToTree([]interface{}{6, 3, 2, 5, nil, nil, 9, 6, nil, nil, nil, nil, nil, nil, 7})
+	root2 := ArrayToTree([]interface{}{1, 3, 2, 5, 3, nil, 9})
+	fmt.Println(WidthOfBinaryTree(root1))
+	fmt.Println(WidthOfBinaryTree1(root2))
+	fmt.Println(WidthOfBinaryTree(root2))
+}
+
+func WidthOfBinaryTree1(root *TreeNode) int {
+	return 0
+}
+
+/*给定一个二叉树，在树的最后一行找到最左边的值。
+
+示例 1:
+
+输入:
+  2
+ / \
+1   3
+输出:
+1
+
+
+示例 2:
+
+输入:
+    1
+   / \
+  2   3
+ /   / \
+4   5   6
+   /
+  7
+输出:
+7
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/find-bottom-left-tree-value
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestFindBottomLeftValue(t *testing.T) {
+	root := ArrayToTree([]interface{}{1, 2, 3, 4, nil, 5, 6, nil, nil, nil, nil, 7})
+	fmt.Println(FindBottomLeftValue(root))
+}
+
+func FindBottomLeftValue(root *TreeNode) int {
+	cur, q := &TreeNode{}, []*TreeNode{root}
+	for len(q) > 0 {
+		cur = q[0]
+		q = q[1:]
+		if cur.Right != nil {
+			q = append(q, cur.Right)
+		}
+		if cur.Left != nil {
+			q = append(q, cur.Left)
+		}
+	}
+	return cur.Val
+}
+
+/*返回与给定前序遍历 preorder 相匹配的二叉搜索树（binary search tree）的根结点。
+(回想一下，二叉搜索树是二叉树的一种，其每个节点都满足以下规则，对于 node.left 的任何后代，值总 < node.val，而 node.right 的任何后代，值总 > node.val。此外，前序遍历首先显示节点 node 的值，然后遍历 node.left，接着遍历 node.right。）
+题目保证，对于给定的测试用例，总能找到满足要求的二叉搜索树。
+
+示例：
+
+输入：[8,5,1,7,10,12]
+输出：[8,5,10,1,7,null,12]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/construct-binary-search-tree-from-preorder-traversal
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestBstFromPreorder(t *testing.T) {
+	fmt.Println(TreeToArray(BstFromPreorder([]int{8, 5, 1, 7, 10, 12})))
+}
+
+func BstFromPreorder(preorder []int) *TreeNode {
+	root := &TreeNode{Val: preorder[0]}
+
+	var insert func(int, *TreeNode) *TreeNode
+	insert = func(val int, root *TreeNode) *TreeNode {
+		if root == nil {
+			return &TreeNode{Val: val}
+		} else if val > root.Val {
+			root.Right = insert(val, root.Right)
+		} else if val < root.Val {
+			root.Left = insert(val, root.Left)
+		}
+		return root
+	}
+
+	for i := 1; i < len(preorder); i++ {
+		insert(preorder[i], root)
+	}
+	return root
+}
+
+/*给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+struct Node {
+	int val;
+	Node *left;
+	Node *right;
+	Node *next;
+}
+填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+初始状态下，所有 next 指针都被设置为 NULL。
+
+进阶：
+
+你只能使用常量级额外空间。
+使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。
+
+示例：
+    1
+   / \
+  2   3
+ / \ / \
+4  5 6  7
+
+输入：root = [1,2,3,4,5,6,7]
+输出：[1,#,2,3,#,4,5,6,7,#]
+解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestConnect(t *testing.T) {
+	type Node struct {
+		Val   int
+		Left  *Node
+		Right *Node
+		Next  *Node
+	}
+
+	root := &Node{Val: 1}
+	root.Left = &Node{Val: 2}
+	root.Left.Left = &Node{Val: 4}
+	root.Left.Right = &Node{Val: 5}
+	root.Right = &Node{Val: 3}
+	root.Right.Left = &Node{Val: 6}
+	root.Right.Right = &Node{Val: 7}
+
+	var connect func(*Node) *Node
+	connect = func(root *Node) *Node {
+		if root == nil {
+			return root
+		}
+		// 每次循环从该层的最左侧节点开始
+		for leftmost := root; leftmost.Left != nil; leftmost = leftmost.Left {
+			// 通过 Next 遍历这一层节点，为下一层的节点更新 Next 指针
+			for node := leftmost; node != nil; node = node.Next {
+				// 左节点指向右节点
+				node.Left.Next = node.Right
+
+				// 右节点指向下一个左节点
+				if node.Next != nil {
+					node.Right.Next = node.Next.Left
+				}
+			}
+		}
+		// 返回根节点
+		return root
+	}
+
+	res := connect(root)
+	fmt.Println(res)
+}

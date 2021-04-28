@@ -89,7 +89,8 @@ index 是一个正整数，它的值小于或等于链表的长度。
 
 func TestReverseKGroup(t *testing.T) {
 	head := ArrayToLinkedList([]int{1, 2, 3, 4, 5})
-	fmt.Println(LinkedListToArray(ReverseKGroup(head, 3)))
+	//fmt.Println(LinkedListToArray(ReverseKGroup(head, 3)))
+	fmt.Println(LinkedListToArray(ReverseKGroup1(head, 3)))
 
 	head2 := ArrayToLinkedList([]int{1, 2, 3, 4, 5, 6, 7})
 	cur := head2
@@ -99,6 +100,25 @@ func TestReverseKGroup(t *testing.T) {
 		count++
 	}
 	fmt.Println(LinkedListToArray(reverseKGroup(head2, 3, 5)))
+}
+
+func ReverseKGroup1(root *ListNode, k int) *ListNode {
+	dum := &ListNode{Next: root}
+	pre, cur := dum, dum
+	for cur != nil {
+		for i := 0; cur != nil && i < k; i++ {
+			cur = cur.Next
+		}
+		if cur == nil {
+			break
+		}
+		first, second := pre.Next, cur.Next
+		cur.Next = nil
+		pre.Next = reverse(first)
+		first.Next = second
+		pre, cur = first, first
+	}
+	return dum.Next
 }
 
 func reverseKGroup(head *ListNode, m, n int) *ListNode {
