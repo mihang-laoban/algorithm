@@ -37,14 +37,9 @@ func init() {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestLengthOfLongestSubstring(t *testing.T) {
-	fmt.Println(LengthOfLongestSubstring("abcabcbb"))
-	//fmt.Println(LengthOfLongestSubstring2("abcabcbb"))
+	fmt.Println(LengthOfLongestSubstring("aaxqaamksoaqpsaaa"))
+	fmt.Println(LengthOfLongestSubstring2("aaxqaamksoaqpsaaa"))
 }
-
-//func LengthOfLongestSubstring2(s string) int {
-//	// 双
-//}
-//
 
 /*给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
 
@@ -60,7 +55,7 @@ func TestLengthOfLongestSubstring(t *testing.T) {
 */
 
 func TestMinWindow(t *testing.T) {
-	fmt.Println(MinWindow2("ADOBECODEBANC", "ABC"))
+	fmt.Println(MinWindow("ADOBECODEBANC", "ABC"))
 }
 
 func MinWindow2(s string, t string) string {

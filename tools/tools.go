@@ -213,3 +213,7 @@ func Room(n int) {
 	}
 	fmt.Println()
 }
+
+func Ele(str string, index int) string {
+	return string(str[index])
+}

@@ -25,6 +25,32 @@ func LengthOfLongestSubstring(s string) int {
 	return ans
 }
 
+func LengthOfLongestSubstring2(s string) int {
+	// l，r记录左右，c记录容器长度（初始条件）
+	var (
+		l, r, res int
+		c         = map[string]bool{}
+		n         = len(s)
+	)
+	for r < n {
+		// 如果容器中不存在当前元素，则添加并移动右边界
+		if !c[Ele(s, r)] {
+			c[Ele(s, r)] = true
+			r++
+		} else {
+			// 如果当前右边界所志向的元素已经存在于容器中，并且左边界还没有超过右边界
+			for l < r && c[Ele(s, r)] {
+				// 则移动左边界并移除左边界所指向的元素
+				delete(c, Ele(s, l))
+				l++
+			}
+		}
+		// 更新结果
+		res = Max(res, r-l)
+	}
+	return res
+}
+
 func CharacterReplacement1(s string, k int) int {
 	var memo [26]int
 	size := len(s)
