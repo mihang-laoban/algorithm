@@ -181,3 +181,82 @@ func MinWindow(s string, t string) string {
 		return s[start : start+winSize]
 	}
 }
+
+func MyMaxSlidingWindow(nums []int, k int) (res []int) {
+	queue := []int{}
+	for i := 0; i < len(nums); i++ {
+		queue = push(queue, nums[i])
+		// K个元素之后开始添加最大值到结果集
+		if i >= k-1 {
+			res = append(res, queue[0])
+			// 如果队列不为空，并且队列头部与数组当前元素相等，则弹出队头
+			if len(queue) > 0 && queue[0] == nums[i-k+1] {
+				queue = queue[1:]
+			}
+		}
+	}
+	return
+}
+
+func push(arr []int, v int) []int {
+	for len(arr) > 0 && arr[len(arr)-1] < v {
+		arr = arr[:len(arr)-1]
+	}
+	return append(arr, v)
+}
+
+func MaxSlidingWindow(nums []int, k int) []int {
+	q := []int{}
+	push := func(i int) {
+		// 队列不为空，并且当前元素大于等于队尾元素，则弹出最后一个元素
+		for len(q) > 0 && nums[i] >= nums[q[len(q)-1]] {
+			q = q[:len(q)-1]
+		}
+		// 入队
+		q = append(q, i)
+	}
+
+	// 前K个元素入队
+	for i := 0; i < k; i++ {
+		push(i)
+	}
+
+	n := len(nums)
+	ans := make([]int, 1, n-k+1)
+	// 前K个元素的最大值为队头
+	ans[0] = nums[q[0]]
+	for i := k; i < n; i++ {
+		push(i)
+		// 栈中最大元素小于等于元素，弹出队头元素
+		for q[0] <= i-k {
+			q = q[1:]
+		}
+		// 添加最大元素到结果集
+		ans = append(ans, nums[q[0]])
+	}
+	return ans
+}
+
+func SlidingWindow(nums []int, k int) (res []int) {
+	queue := make([]int, 0, k)
+	push := func(v int) {
+		for len(queue) > 0 && v > queue[len(queue)-1] {
+			queue = queue[:len(queue)-1]
+		}
+		queue = append(queue, v)
+	}
+
+	pop := func(v int) {
+		if len(queue) > 0 && queue[0] == v {
+			queue = queue[1:]
+		}
+	}
+	for i := 0; i < len(nums); i++ {
+		push(nums[i])
+		if i >= k-1 {
+			res = append(res, queue[0])
+			pop(nums[i-k+1])
+		}
+	}
+	return
+}
