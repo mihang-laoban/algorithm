@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-/*给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
+/*给你一个包含 n 个整数的数组nums，判断nums中是否存在三个元素 a，b，c ，使得a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
 
 注意：答案中不可以包含重复的三元组。
 
@@ -64,7 +64,7 @@ func three(nums []int) (res [][]int) {
 	return
 }
 
-/*给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+/*给定一个整数数组 nums和一个目标值 target，请你在该数组中找出和为目标值的那两个整数，并返回他们的数组下标。
 
 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
 
@@ -109,12 +109,12 @@ func move0(nums []int) []int {
 	return nums
 }
 
-/*给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+/*给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点(i,ai) 。在坐标内画 n 条垂直线，垂直线 i的两个端点分别为(i,ai) 和 (i, 0) 。找出其中的两条线，使得它们与x轴共同构成的容器可以容纳最多的水。
 说明：你不能倾斜容器。
 
 输入：[1,8,6,2,5,4,8,3,7]
 输出：49
-解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
+解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为49。
 示例 2：
 
 输入：height = [1,1]
@@ -137,7 +137,7 @@ func TestLargestContainer(t *testing.T) {
 	fmt.Println(LargeCon([]int{1, 8, 6, 2, 5, 4, 8, 3, 7}))
 }
 
-/*假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+/*假设你正在爬楼梯。需要 n阶你才能到达楼顶。
 
 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
 
@@ -182,142 +182,17 @@ func TestLargestRectangle(t *testing.T) {
 	fmt.Println(MyLargestRectangleArea([]int{2, 1, 5, 6, 2, 3}))
 }
 
-/*
-给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
-返回滑动窗口中的最大值。
-
-
-示例 1：
-输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
-输出：[3,3,5,5,6,7]
-解释：
-滑动窗口的位置                最大值
----------------               -----
-[1  3  -1] -3  5  3  6  7       3
-1 [3  -1  -3] 5  3  6  7       3
-1  3 [-1  -3  5] 3  6  7       5
-1  3  -1 [-3  5  3] 6  7       5
-1  3  -1  -3 [5  3  6] 7       6
-1  3  -1  -3  5 [3  6  7]      7
-
-示例 2：
-输入：nums = [1], k = 1
-输出：[1]
-
-示例 3：
-输入：nums = [1,-1], k = 1
-输出：[1,-1]
-
-示例 4：
-输入：nums = [9,11], k = 2
-输出：[11]
-
-示例 5：
-输入：nums = [4,-2], k = 2
-输出：[4]
-
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/sliding-window-maximum
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
-
-func TestSliding(t *testing.T) {
-	fmt.Println(MaxSlidingWindow([]int{7, 2, 4}, 2))
-	fmt.Println(MyMaxSlidingWindow([]int{7, 2, 4}, 2))
-	fmt.Println(MaxSlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
-	fmt.Println(MyMaxSlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
-	fmt.Println(SlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
-}
-
-func SlidingWindow(nums []int, k int) (res []int) {
-	queue := make([]int, 0, k)
-	push := func(v int) {
-		for len(queue) > 0 && v > queue[len(queue)-1] {
-			queue = queue[:len(queue)-1]
-		}
-		queue = append(queue, v)
-	}
-
-	pop := func(v int) {
-		if len(queue) > 0 && queue[0] == v {
-			queue = queue[1:]
-		}
-	}
-	for i := 0; i < len(nums); i++ {
-		push(nums[i])
-		if i >= k-1 {
-			res = append(res, queue[0])
-			pop(nums[i-k+1])
-		}
-	}
-	return
-}
-
-func push(arr []int, v int) []int {
-	for len(arr) > 0 && arr[len(arr)-1] < v {
-		arr = arr[:len(arr)-1]
-	}
-	return append(arr, v)
-}
-
-func MyMaxSlidingWindow(nums []int, k int) (res []int) {
-	queue := []int{}
-	for i := 0; i < len(nums); i++ {
-		queue = push(queue, nums[i])
-		// K个元素之后开始添加最大值到结果集
-		if i >= k-1 {
-			res = append(res, queue[0])
-			// 如果队列不为空，并且队列头部与数组当前元素相等，则弹出队头
-			if len(queue) > 0 && queue[0] == nums[i-k+1] {
-				queue = queue[1:]
-			}
-		}
-	}
-	return
-}
-
-func MaxSlidingWindow(nums []int, k int) []int {
-	q := []int{}
-	push := func(i int) {
-		// 队列不为空，并且当前元素大于等于队尾元素，则弹出最后一个元素
-		for len(q) > 0 && nums[i] >= nums[q[len(q)-1]] {
-			q = q[:len(q)-1]
-		}
-		// 入队
-		q = append(q, i)
-	}
-
-	// 前K个元素入队
-	for i := 0; i < k; i++ {
-		push(i)
-	}
-
-	n := len(nums)
-	ans := make([]int, 1, n-k+1)
-	// 前K个元素的最大值为队头
-	ans[0] = nums[q[0]]
-	for i := k; i < n; i++ {
-		push(i)
-		// 栈中最大元素小于等于元素，弹出队头元素
-		for q[0] <= i-k {
-			q = q[1:]
-		}
-		// 添加最大元素到结果集
-		ans = append(ans, nums[q[0]])
-	}
-	return ans
-}
-
-/*实现 pow(x, n) ，即计算 x 的 n 次幂函数。
+/*实现pow(x, n)，即计算 x 的 n 次幂函数。
 
 示例 1:
 
 输入: 2.00000, 10
 输出: 1024.00000
-示例 2:
+示例2:
 
 输入: 2.10000, 3
 输出: 9.26100
-示例 3:
+示例3:
 
 输入: 2.00000, -2
 输出: 0.25000
@@ -354,9 +229,9 @@ func q(f float64, i int) float64 {
 }
 
 /*
-实现 int sqrt(int x) 函数。
+实现int sqrt(int x)函数。
 
-计算并返回 x 的平方根，其中 x 是非负整数。
+计算并返回x的平方根，其中x 是非负整数。
 
 由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
 
@@ -368,7 +243,7 @@ func q(f float64, i int) float64 {
 输入: 8
 输出: 2
 说明: 8 的平方根是 2.82842...,
-     由于返回类型是整数，小数部分将被舍去。
+    由于返回类型是整数，小数部分将被舍去。
 
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/sqrtx
@@ -385,14 +260,14 @@ func TestBinarySearch(t *testing.T) {
 }
 
 /*
-升序排列的整数数组 nums 在预先未知的某个点上进行了旋转（例如， [0,1,2,4,5,6,7] 经旋转后可能变为 [4,5,6,7,0,1,2] ）。
-请你在数组中搜索 target ，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
+升序排列的整数数组 nums 在预先未知的某个点上进行了旋转（例如， [0,1,2,4,5,6,7] 经旋转后可能变为[4,5,6,7,0,1,2] ）。
+请你在数组中搜索target ，如果数组中存在这个目标值，则返回它的索引，否则返回-1。
 
 示例 1：
 输入：nums = [4,5,6,7,0,1,2], target = 0
 输出：4
 
-示例 2：
+示例2：
 输入：nums = [4,5,6,7,0,1,2], target = 3
 输出：-1
 
