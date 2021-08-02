@@ -39,12 +39,12 @@ func TestLongestPalindrome(t *testing.T) {
 	fmt.Println(LongestPalindrome2("babad"))
 }
 
-/*给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+/*给定一个整数数组 nums，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 
 示例 1：
 输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
 输出：6
-解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+解释：连续子数组[4,-1,2,1] 的和最大，为6 。
 
 示例 2：
 输入：nums = [1]
@@ -71,7 +71,7 @@ func TestMaxSubArray(t *testing.T) {
 	fmt.Println(MaxSubArray([]int{1, 2}))
 }
 
-/*给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+/*给定n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
 
 示例 1：
 输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
@@ -91,13 +91,13 @@ func TestTrap(t *testing.T) {
 	fmt.Println(Trap2([]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}))
 }
 
-/*给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
+/*给你两个单词word1 和word2，请你计算出将word1转换成word2 所使用的最少操作数。
 你可以对一个单词进行如下三种操作：
 插入一个字符
 删除一个字符
 替换一个字符
 
-示例 1：
+示例1：
 
 输入：word1 = "horse", word2 = "ros"
 输出：3
@@ -107,7 +107,7 @@ horse -> rorse (将 'h' 替换为 'r')
 rorse -> rose (删除 'r')
 rose -> ros (删除 'e')
 
-示例 2：
+示例2：
 输入：word1 = "intention", word2 = "execution"
 输出：5
 
@@ -131,18 +131,18 @@ func minDistance(word1, word2 string) int {
 	return 0
 }
 
-/*给定一个整数 n，生成所有由 1 ... n 为节点所组成的 二叉搜索树 。
+/*给定一个整数 n，生成所有由 1 ...n 为节点所组成的 二叉搜索树 。
 
 示例：
 todo
 输入：3
 输出：
 [
-  [1,null,3,2],
-  [3,2,null,1],
-  [3,1,null,null,2],
-  [2,1,3],
-  [1,null,2,null,3]
+ [1,null,3,2],
+ [3,2,null,1],
+ [3,1,null,null,2],
+ [2,1,3],
+ [1,null,2,null,3]
 ]
 解释：
 以上的输出对应以下 5 种不同结构的二叉搜索树：
@@ -195,7 +195,7 @@ func GenerateTrees(n int) []*TreeNode {
 	return helper(1, n)
 }
 
-/*给定一个整数 n，求以 1 ... n 为节点组成的二叉搜索树有多少种？
+/*给定一个整数 n，求以1 ...n为节点组成的二叉搜索树有多少种？
 todo
 示例:
 
