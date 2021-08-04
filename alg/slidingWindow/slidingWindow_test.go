@@ -157,4 +157,36 @@ func TestCharacterReplacement(t *testing.T) {
 func TestMaxSlidingWindow(t *testing.T) {
 	fmt.Println(MaxSlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
 	fmt.Println(MaxSlidingWindow([]int{7, 2, 4}, 2))
+	fmt.Println(MyMaxSlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
+}
+
+func MyMaxSlidingWindow(nums []int, k int) (res []int) {
+	var (
+		size = len(nums)
+		q    = make([]int, 0, k)
+		push = func(v int) {
+			for len(q) > 0 && v > q[len(q)-1] {
+				q = q[:len(q)-1]
+			}
+			q = append(q, v)
+		}
+		pop = func(v int) {
+			if len(q) > 0 && q[0] == v {
+				q = q[1:]
+			}
+		}
+	)
+	if size == 0 || k <= 0 {
+		return
+	}
+	for i := 0; i < size; i++ {
+		push(nums[i])
+		var containerCur = i + 1 - k
+		if containerCur < 0 {
+			continue
+		}
+		res = append(res, q[0])
+		pop(nums[containerCur])
+	}
+	return
 }

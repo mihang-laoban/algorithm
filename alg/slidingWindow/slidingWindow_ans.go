@@ -183,25 +183,32 @@ func MinWindow(s string, t string) string {
 }
 
 func MaxSlidingWindow(nums []int, k int) (res []int) {
-	queue := make([]int, 0, k)
-	push := func(v int) {
-		for len(queue) > 0 && v > queue[len(queue)-1] {
-			queue = queue[:len(queue)-1]
+	var (
+		size = len(nums)
+		q    = make([]int, 0, k)
+		push = func(v int) {
+			for len(q) > 0 && v > q[len(q)-1] {
+				q = q[:len(q)-1]
+			}
+			q = append(q, v)
 		}
-		queue = append(queue, v)
-	}
-
-	pop := func(v int) {
-		if len(queue) > 0 && queue[0] == v {
-			queue = queue[1:]
+		pop = func(v int) {
+			if len(q) > 0 && q[0] == v {
+				q = q[1:]
+			}
 		}
+	)
+	if size == 0 || k <= 0 {
+		return
 	}
-	for i := 0; i < len(nums); i++ {
+	for i := 0; i < size; i++ {
 		push(nums[i])
-		if i >= i-k+1 {
-			res = append(res, queue[0])
-			pop(nums[i-k+1])
+		var containerCur = i + 1 - k
+		if containerCur < 0 {
+			continue
 		}
+		res = append(res, q[0])
+		pop(nums[containerCur])
 	}
 	return
 }
