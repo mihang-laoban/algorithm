@@ -62,52 +62,39 @@ func TestMinWindow(t *testing.T) {
 
 func MinWindowOfficial2(s string, t string) string {
 	var (
-		sSize, tSize = len(s), len(t)
-		l, r, start  = 0, 0, 0
-		count        = tSize
-		winSize      = math.MaxInt32
-		need         = make([]int, 128)
+		l, r           = 0, 0
+		sSize, tSize   = len(s), len(t)
+		start, winSize = 0, math.MaxInt32
+		win            = make([]int, 128)
+		count          = tSize
 	)
-	if sSize == 0 || tSize == 0 {
-		return ""
+	for i := 0; i < tSize; i++ {
+		win[t[i]]++
 	}
-	for i := 0; i < count; i++ {
-		need[t[i]]++
-	}
-	// 右边界到达S字符串的末尾为止
 	for r < sSize {
-		// 如果S字符串中的字符在T字符串中存在，则计数器标记找到了一个字符
-		if need[s[r]] > 0 {
+		if win[s[r]] > 0 {
 			count--
 		}
-		// 标记S字符串中存在的字符，负数为不需要的字符
-		need[s[r]]--
-		// 如果所有的字符全部找到
+		win[s[r]]--
 		if count == 0 {
-			// 右指针与左指针之间还存在空隙，并且当前左指针指向的字符串已经被标记为多余字符，则移动左边界
-			for l < r && need[s[l]] < 0 {
-				need[s[l]]++
+			for l < r && win[s[l]] < 0 {
+				win[s[l]]++
 				l++
 			}
-			// 如果当前窗口小于现有记录则更新窗口大小和左边界
-			var curSize = r - l + 1
+			var curSize = r + 1 - l
 			if curSize < winSize {
-				winSize = curSize
-				start = l
+				winSize, start = curSize, l
 			}
-			// 移动左边界，需要重新寻找丢失的字符
-			need[s[l]]++
-			l++
+			win[s[l]]++
 			count++
+			l++
 		}
-		// 每次都要移动右边界
 		r++
 	}
 	if winSize == math.MaxInt32 {
 		return ""
-	} else {
-		return s[start : start+winSize]
 	}
+	return s[start : start+winSize]
 }
 
 /*给定两个字符串s1和s2，写一个函数来判断 s2 是否包含 s1的排列。
@@ -246,4 +233,39 @@ func TestFindSubstring(t *testing.T) {
 
 func FindSubstring(s string, words []string) (res []int) {
 	return
+}
+
+/*209. 长度最小的子数组
+给定一个含有 n 个正整数的数组和一个正整数 target 。
+
+找出该数组中满足其和 ≥ target 的长度最小的 连续子数组 [numsl, numsl+1, ..., numsr-1, numsr] ，并返回其长度。如果不存在符合条件的子数组，返回 0 。
+
+示例 1：
+输入：target = 7, nums = [2,3,1,2,4,3]
+输出：2
+解释：子数组 [4,3] 是该条件下的长度最小的子数组。
+
+示例 2：
+输入：target = 4, nums = [1,4,4]
+输出：1
+
+示例 3：
+输入：target = 11, nums = [1,1,1,1,1,1,1,1]
+输出：0
+
+提示：
+1 <= target <= 109
+1 <= nums.length <= 105
+1 <= nums[i] <= 105
+
+进阶：
+如果你已经实现 O(n) 时间复杂度的解法, 请尝试设计一个 O(n log(n)) 时间复杂度的解法。
+*/
+
+func TestMinSubArrayLen(t *testing.T) {
+
+}
+
+func minSubArrayLen(target int, nums []int) int {
+	return 0
 }
