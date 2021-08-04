@@ -139,11 +139,16 @@ func CheckInclusion1(s1 string, s2 string) bool {
 }
 
 func MinWindow(s string, t string) string {
-	sSize, tSize := len(s), len(t)
+	var (
+		sSize, tSize = len(s), len(t)
+		l, r, start  = 0, 0, 0
+		count        = tSize
+		winSize      = math.MaxInt32
+		need         = make([]int, 128)
+	)
 	if sSize == 0 || tSize == 0 {
 		return ""
 	}
-	l, r, start, count, winSize, need := 0, 0, 0, tSize, math.MaxInt32, make([]int, 128)
 	for i := 0; i < count; i++ {
 		need[t[i]]++
 	}
@@ -163,8 +168,9 @@ func MinWindow(s string, t string) string {
 				l++
 			}
 			// 如果当前窗口小于现有记录则更新窗口大小和左边界
-			if r-l+1 < winSize {
-				winSize = r - l + 1
+			var curSize = r - l + 1
+			if curSize < winSize {
+				winSize = curSize
 				start = l
 			}
 			// 移动左边界，需要重新寻找丢失的字符
