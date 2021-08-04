@@ -182,7 +182,7 @@ func MinWindow(s string, t string) string {
 	}
 }
 
-func SlidingWindow(nums []int, k int) (res []int) {
+func MaxSlidingWindow(nums []int, k int) (res []int) {
 	queue := make([]int, 0, k)
 	push := func(v int) {
 		for len(queue) > 0 && v > queue[len(queue)-1] {
