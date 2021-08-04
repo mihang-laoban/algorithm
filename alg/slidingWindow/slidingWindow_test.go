@@ -155,9 +155,6 @@ func TestCharacterReplacement(t *testing.T) {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestSliding(t *testing.T) {
-	fmt.Println(MaxSlidingWindow([]int{7, 2, 4}, 2))
-	fmt.Println(MyMaxSlidingWindow([]int{7, 2, 4}, 2))
-	fmt.Println(MaxSlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
-	fmt.Println(MyMaxSlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
 	fmt.Println(SlidingWindow([]int{1, 3, -1, -3, 5, 3, 6, 7}, 3))
+	fmt.Println(SlidingWindow([]int{7, 2, 4}, 2))
 }
