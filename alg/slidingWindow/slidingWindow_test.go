@@ -321,8 +321,8 @@ func TestLongestOnes(t *testing.T) {
 
 func longestOnes(nums []int, k int) (ans int) {
 	var left, lSum, rSum int
-	for right, v := range nums {
-		rSum += 1 - v
+	for right, _ := range nums {
+		rSum += 1 - nums[right]
 		for lSum < rSum-k {
 			lSum += 1 - nums[left]
 			left++
