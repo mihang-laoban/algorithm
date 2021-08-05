@@ -218,3 +218,30 @@ func MaxSlidingWindow(nums []int, k int) (res []int) {
 	}
 	return
 }
+
+func MinSubArrayLen(target int, nums []int) int {
+	var (
+		l, r, cur, curSize int
+		size               = len(nums)
+		winSize            = math.MaxInt32
+	)
+	for r < size {
+		cur += nums[r]
+		curSize++
+		if cur >= target {
+			for l < r && cur-nums[l] >= target {
+				cur -= nums[l]
+				curSize--
+				l++
+			}
+			if curSize <= winSize {
+				winSize = curSize
+			}
+		}
+		r++
+	}
+	if winSize == math.MaxInt32 {
+		return 0
+	}
+	return winSize
+}

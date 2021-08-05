@@ -263,9 +263,9 @@ func FindSubstring(s string, words []string) (res []int) {
 */
 
 func TestMinSubArrayLen(t *testing.T) {
-
-}
-
-func minSubArrayLen(target int, nums []int) int {
-	return 0
+	fmt.Println(MinSubArrayLen(7, []int{2, 3, 1, 2, 4, 3}))        // 2
+	fmt.Println(MinSubArrayLen(4, []int{1, 4, 4}))                 // 1
+	fmt.Println(MinSubArrayLen(11, []int{1, 1, 1, 1, 1, 1, 1, 1})) // 0
+	fmt.Println(MinSubArrayLen(11, []int{1, 2, 3, 4, 5}))          // 3
+	fmt.Println(MinSubArrayLen(15, []int{1, 2, 3, 4, 5}))          // 5
 }
