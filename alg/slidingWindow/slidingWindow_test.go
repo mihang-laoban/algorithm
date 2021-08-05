@@ -38,8 +38,8 @@ func init() {
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
 
 func TestLengthOfLongestSubstring(t *testing.T) {
-	fmt.Println(LengthOfLongestSubstring("aaxqaamksoaqpsaaa"))
-	fmt.Println(LengthOfLongestSubstring2("aaxqaamksoaqpsaaa"))
+	fmt.Println(LengthOfLongestSubstring(""))
+	fmt.Println(LengthOfLongestSubstring2(""))
 }
 
 /*给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。

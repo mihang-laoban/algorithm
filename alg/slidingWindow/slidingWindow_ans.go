@@ -46,7 +46,9 @@ func LengthOfLongestSubstring2(s string) int {
 			}
 		}
 		// 更新结果
-		res = Max(res, r-l)
+		if res < r-l {
+			res = r - l
+		}
 	}
 	return res
 }
