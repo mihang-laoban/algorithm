@@ -247,3 +247,16 @@ func MinSubArrayLen(target int, nums []int) int {
 	}
 	return winSize
 }
+
+func ContainsNearbyDuplicate(nums []int, k int) bool {
+	var w = map[int]int{}
+	for key, val := range nums {
+		if _, ok := w[val]; ok {
+			if key-w[val] <= k {
+				return true
+			}
+		}
+		w[val] = key
+	}
+	return false
+}

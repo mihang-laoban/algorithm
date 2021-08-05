@@ -269,3 +269,65 @@ func TestMinSubArrayLen(t *testing.T) {
 	fmt.Println(MinSubArrayLen(11, []int{1, 2, 3, 4, 5}))          // 3
 	fmt.Println(MinSubArrayLen(15, []int{1, 2, 3, 4, 5}))          // 5
 }
+
+/*219. 存在重复元素 II
+给定一个整数数组和一个整数 k，判断数组中是否存在两个不同的索引 i 和 j，使得 nums [i] = nums [j]，并且 i 和 j 的差的 绝对值 至多为 k。
+
+示例 1:
+输入: nums = [1,2,3,1], k = 3
+输出: true
+
+示例 2:
+输入: nums = [1,0,1,1], k = 1
+输出: true
+
+示例 3:
+输入: nums = [1,2,3,1,2,3], k = 2
+输出: false
+*/
+
+func TestContainsNearbyDuplicate(t *testing.T) {
+	fmt.Println(ContainsNearbyDuplicate([]int{1, 2, 3, 1}, 3))
+	fmt.Println(ContainsNearbyDuplicate([]int{1, 0, 1, 1}, 1))
+	fmt.Println(ContainsNearbyDuplicate([]int{1, 2, 3, 1, 2, 3}, 2))
+}
+
+/* 给定一个由若干 0 和 1 组成的数组A，我们最多可以将K个值从 0 变成 1 。
+返回仅包含 1 的最长（连续）子数组的长度。
+
+示例 1：
+输入：A = [1,1,1,0,0,0,1,1,1,1,0], K = 2
+输出：6
+解释：
+[1,1,1,0,0,1,1,1,1,1,1]
+粗体数字从 0 翻转到 1，最长的子数组长度为 6。
+
+示例 2：
+输入：A = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], K = 3
+输出：10
+解释：
+[0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1]
+粗体数字从 0 翻转到 1，最长的子数组长度为 10。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/max-consecutive-ones-iii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+func TestLongestOnes(t *testing.T) {
+	//fmt.Println(longestOnes([]int{1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0}, 2))                         // 6
+	fmt.Println(longestOnes([]int{0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1}, 3)) // 10
+	//fmt.Println(longestOnes([]int{0, 0, 1, 1, 0, 1}, 3))                                        // 6
+}
+
+func longestOnes(nums []int, k int) (ans int) {
+	var left, lSum, rSum int
+	for right, v := range nums {
+		rSum += 1 - v
+		for lSum < rSum-k {
+			lSum += 1 - nums[left]
+			left++
+		}
+		ans = Max(ans, right-left+1)
+	}
+	return
+}
