@@ -7,6 +7,15 @@ import (
 	"testing"
 )
 
+/****************************************
+滑动窗口解题模版：
+	1.初始化：左边界，右边界，窗口
+	2.循环移动右边界
+	3.明确什么时候开始移动左边界 -> 移动左边界
+	4.什么时候更新结果 -> 优化结果
+	5.返回结果
+*****************************************/
+
 func init() {
 	Max(1, 2)
 }
@@ -320,14 +329,17 @@ func TestLongestOnes(t *testing.T) {
 }
 
 func longestOnes(nums []int, k int) (ans int) {
-	var left, lSum, rSum int
-	for right, _ := range nums {
+	var left, right, lSum, rSum int
+	// 循环移动右边界
+	for right < len(nums) {
 		rSum += 1 - nums[right]
+		// 什么时候开始移动左边界
 		for lSum < rSum-k {
 			lSum += 1 - nums[left]
 			left++
 		}
-		ans = Max(ans, right-left+1)
+		ans = Max(ans, right-left+1) // 更新结果
+		right++
 	}
 	return
 }
