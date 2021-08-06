@@ -221,6 +221,22 @@ func MaxSlidingWindow(nums []int, k int) (res []int) {
 	return
 }
 
+func LongestOnes(nums []int, k int) (ans int) {
+	var left, right, lSum, rSum int
+	// 循环移动右边界
+	for right < len(nums) {
+		rSum += 1 - nums[right]
+		// 什么时候开始移动左边界
+		for lSum < rSum-k {
+			lSum += 1 - nums[left]
+			left++
+		}
+		ans = Max(ans, right-left+1) // 更新结果
+		right++
+	}
+	return
+}
+
 func MinSubArrayLen(target int, nums []int) int {
 	var (
 		l, r, cur, curSize int
