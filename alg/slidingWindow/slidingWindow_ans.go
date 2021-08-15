@@ -276,3 +276,31 @@ func ContainsNearbyDuplicate(nums []int, k int) bool {
 	}
 	return false
 }
+
+func FindAnagrams(s string, p string) []int {
+	var (
+		sSize = len(s)
+		pSize = len(p)
+		pWin  = [26]int{}
+		sWin  = [26]int{}
+		res   = []int{}
+	)
+	if sSize < pSize {
+		return res
+	}
+	for i := 0; i < pSize; i++ {
+		pWin[p[i]-'a']++
+	}
+	for l, r := 0, 0; r < sSize; r++ {
+		sWin[s[r]-'a']++
+		// 如果S串中当前元素的数量大于P串中的，则移动S串的左边界并在窗口中对应元素的数量减一
+		for sWin[s[r]-'a'] > pWin[s[r]-'a'] {
+			sWin[s[l]-'a']--
+			l++
+		}
+		if r-l+1 == pSize {
+			res = append(res, l)
+		}
+	}
+	return res
+}

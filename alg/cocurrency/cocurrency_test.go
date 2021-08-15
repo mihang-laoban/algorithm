@@ -1,7 +1,9 @@
 package cocurrency
 
 import (
+	"context"
 	"fmt"
+	"math/rand"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -107,4 +109,43 @@ func AsynService() chan string {
 		fmt.Println("service exited")
 	}()
 	return retCH
+}
+
+func TestContextTimeOut(t *testing.T) {
+	// 超时控制
+	fmt.Println(jobTimeOut())
+}
+
+func jobTimeOut() error {
+	ctx, _ := context.WithTimeout(context.Background(), time.Second*1)
+	done := make(chan struct{})
+	go func() {
+		time.Sleep(time.Millisecond * 1500)
+		done <- struct{}{}
+	}()
+
+	select {
+	case <-done:
+		return nil
+	case <-ctx.Done():
+		return fmt.Errorf("timeout")
+	}
+}
+
+func job() int {
+	rand.Seed(time.Now().UnixNano())
+	res := rand.Intn(5)
+	fmt.Println(res)
+	time.Sleep(time.Second * time.Duration(res))
+	return res
+}
+
+func TestGetFaster(t *testing.T) {
+	c := make(chan int)
+	for i := 0; i < 5; i++ {
+		go func() {
+			c <- job()
+		}()
+	}
+	fmt.Println("Fastest: ", <-c, "second")
 }

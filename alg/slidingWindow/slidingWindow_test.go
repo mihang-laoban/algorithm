@@ -353,34 +353,6 @@ s 和 p 仅包含小写字母
 */
 
 func TestFindAnagrams(t *testing.T) {
+	fmt.Println(FindAnagrams("cbaebabacd", "abc"))
 	fmt.Println(FindAnagrams("abab", "ab"))
-}
-
-func FindAnagrams(s string, p string) []int {
-	var (
-		l, r, diff int
-		sSize      = len(s)
-		win        = [128]int{}
-		res        []int
-	)
-	for i := 0; i < len(p); i++ {
-		win[p[i]]++
-		diff++
-	}
-	for r < sSize {
-		if win[s[r]] > 0 {
-			diff--
-		}
-		win[s[r]]--
-		if diff == 0 {
-
-		}
-		l++
-		// 如果目标元素全部存在于窗口中，记录当前下标
-		// 左右边界一起移动，窗口中移除最左元素，加入最右元素
-		// 如果加入的元素不存在于目标串
-		r++
-	}
-
-	return res
 }

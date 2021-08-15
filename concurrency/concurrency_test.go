@@ -10,8 +10,8 @@ import (
 )
 
 func TestSimple(t *testing.T) {
-	testSimple()
-	//testClose()
+	//testSimple()
+	testClose()
 	//testMergeInput()¬
 	//testQuit()
 	//testPCB()
