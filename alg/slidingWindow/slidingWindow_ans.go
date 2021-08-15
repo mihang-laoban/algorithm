@@ -304,3 +304,35 @@ func FindAnagrams(s string, p string) []int {
 	}
 	return res
 }
+
+func MaxSatisfied(customers []int, grumpy []int, minutes int) int {
+	var (
+		ans, tmp int
+		n        = len(customers)
+	)
+	// 统计没有抑制情绪时满意的客户数量
+	for i := 0; i < n; i++ {
+		if grumpy[i] == 0 {
+			ans += customers[i]
+		}
+	}
+	// 滑动窗口
+	tmp = ans
+	for l, r := 0, 0; r < n; r++ {
+		// 仅在生气的情况下，需要调整
+		if grumpy[r] == 1 {
+			// 窗口值大于minutes，缩小窗口
+			for r-l+1 > minutes {
+				if grumpy[l] == 1 {
+					tmp -= customers[l]
+				}
+				l++
+			}
+			tmp += customers[r]
+			if tmp > ans {
+				ans = tmp
+			}
+		}
+	}
+	return ans
+}

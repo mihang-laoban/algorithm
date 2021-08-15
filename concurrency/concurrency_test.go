@@ -48,18 +48,15 @@ func testClose() {
 		close(ch)
 		fmt.Println("the channel is closed")
 		sign <- 0
-
 	}()
 
 	go func() {
 		for {
 			i, ok := <-ch
 			fmt.Printf("%d, %v \n", i, ok)
-
 			if !ok {
 				break
 			}
-
 			time.Sleep(time.Second * 2)
 		}
 		sign <- 1
